@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane stylesheets="@../styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="lk.ijse.theserenitymentalhealththerapycenter.controller.PatientManagementController">
+    <VBox spacing="15" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+        <VBox spacing="12" styleClass="card">
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <VBox spacing="4" HBox.hgrow="ALWAYS"><Label text="Patient ID" styleClass="form-label"/><TextField fx:id="txtId" promptText="P001" styleClass="text-field-custom" prefHeight="35"/></VBox>
+                <VBox spacing="4" HBox.hgrow="ALWAYS"><Label text="Name" styleClass="form-label"/><TextField fx:id="txtName" promptText="Full name" styleClass="text-field-custom" prefHeight="35"/></VBox>
+                <VBox spacing="4"><Label text="Date of Birth" styleClass="form-label"/><TextField fx:id="txtDob" promptText="YYYY-MM-DD" styleClass="text-field-custom" prefHeight="35" prefWidth="130"/></VBox>
+            </HBox>
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <VBox spacing="4" HBox.hgrow="ALWAYS"><Label text="Contact" styleClass="form-label"/><TextField fx:id="txtContact" promptText="Phone number" styleClass="text-field-custom" prefHeight="35"/></VBox>
+                <VBox spacing="4" HBox.hgrow="ALWAYS"><Label text="Email" styleClass="form-label"/><TextField fx:id="txtEmail" promptText="Email" styleClass="text-field-custom" prefHeight="35"/></VBox>
+                <VBox spacing="4"><Label text="Reg. Date" styleClass="form-label"/><TextField fx:id="txtRegDate" promptText="YYYY-MM-DD" styleClass="text-field-custom" prefHeight="35" prefWidth="130"/></VBox>
+            </HBox>
+            <VBox spacing="4"><Label text="Medical History" styleClass="form-label"/><TextArea fx:id="txtMedicalHistory" promptText="Medical history..." prefRowCount="2" styleClass="text-field-custom"/></VBox>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Button text="Save" styleClass="btn-primary" onAction="#handleSave" prefWidth="90"/>
+                <Button text="Update" styleClass="btn-secondary" onAction="#handleUpdate" prefWidth="90"/>
+                <Button text="Delete" styleClass="btn-danger" onAction="#handleDelete" prefWidth="90"/>
+                <Button text="Clear" styleClass="btn-secondary" onAction="#handleClear" prefWidth="90"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <TextField fx:id="txtSearch" promptText="🔍 Search..." styleClass="search-field" prefWidth="200" prefHeight="35" onKeyReleased="#handleSearch"/>
+            </HBox>
+        </VBox>
+        <TableView fx:id="tblPatients" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colId" text="ID" prefWidth="70"><cellValueFactory><PropertyValueFactory property="id"/></cellValueFactory></TableColumn>
+                <TableColumn fx:id="colName" text="Name" prefWidth="150"><cellValueFactory><PropertyValueFactory property="name"/></cellValueFactory></TableColumn>
+                <TableColumn fx:id="colDob" text="DOB" prefWidth="100"><cellValueFactory><PropertyValueFactory property="dob"/></cellValueFactory></TableColumn>
+                <TableColumn fx:id="colContact" text="Contact" prefWidth="110"><cellValueFactory><PropertyValueFactory property="contactNumber"/></cellValueFactory></TableColumn>
+                <TableColumn fx:id="colEmail" text="Email" prefWidth="160"><cellValueFactory><PropertyValueFactory property="email"/></cellValueFactory></TableColumn>
+                <TableColumn fx:id="colRegDate" text="Reg. Date" prefWidth="100"><cellValueFactory><PropertyValueFactory property="registrationDate"/></cellValueFactory></TableColumn>
+            </columns>
+        </TableView>
+    </VBox>
+</AnchorPane>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane stylesheets="@../styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="lk.ijse.theserenitymentalhealththerapycenter.controller.SessionManagementController">
+    <VBox spacing="15" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+        <VBox spacing="12" styleClass="card">
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <VBox spacing="4" HBox.hgrow="ALWAYS"><Label text="Session ID" styleClass="form-label"/><TextField fx:id="txtSessionId" promptText="S001" styleClass="text-field-custom" prefHeight="35"/></VBox>
+                <VBox spacing="4"><Label text="Date" styleClass="form-label"/><TextField fx:id="txtDate" promptText="YYYY-MM-DD" styleClass="text-field-custom" prefHeight="35" prefWidth="130"/></VBox>
+                <VBox spacing="4"><Label text="Time" styleClass="form-label"/><TextField fx:id="txtTime" promptText="HH:MM" styleClass="text-field-custom" prefHeight="35" prefWidth="100"/></VBox>
+                <VBox spacing="4"><Label text="Status" styleClass="form-label"/><ComboBox fx:id="cmbStatus" promptText="Status" styleClass="combo-box-custom" prefHeight="35" prefWidth="140"/></VBox>
+            </HBox>
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <VBox spacing="4" HBox.hgrow="ALWAYS"><Label text="Patient" styleClass="form-label"/><ComboBox fx:id="cmbPatient" promptText="Select Patient" styleClass="combo-box-custom" prefHeight="35" maxWidth="1.7976931348623157E308"/></VBox>
+                <VBox spacing="4" HBox.hgrow="ALWAYS"><Label text="Therapist" styleClass="form-label"/><ComboBox fx:id="cmbTherapist" promptText="Select Therapist" styleClass="combo-box-custom" prefHeight="35" maxWidth="1.7976931348623157E308"/></VBox>
+                <VBox spacing="4" HBox.hgrow="ALWAYS"><Label text="Program" styleClass="form-label"/><ComboBox fx:id="cmbProgram" promptText="Select Program" styleClass="combo-box-custom" prefHeight="35" maxWidth="1.7976931348623157E308"/></VBox>
+            </HBox>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Button text="Save" styleClass="btn-primary" onAction="#handleSave" prefWidth="90"/>
+                <Button text="Update" styleClass="btn-secondary" onAction="#handleUpdate" prefWidth="90"/>
+                <Button text="Delete" styleClass="btn-danger" onAction="#handleDelete" prefWidth="90"/>
+                <Button text="Clear" styleClass="btn-secondary" onAction="#handleClear" prefWidth="90"/>
+            </HBox>
+        </VBox>
+        <TableView fx:id="tblSessions" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colId" text="ID" prefWidth="70"><cellValueFactory><PropertyValueFactory property="sessionId"/></cellValueFactory></TableColumn>
+                <TableColumn fx:id="colDate" text="Date" prefWidth="100"><cellValueFactory><PropertyValueFactory property="date"/></cellValueFactory></TableColumn>
+                <TableColumn fx:id="colTime" text="Time" prefWidth="70"><cellValueFactory><PropertyValueFactory property="time"/></cellValueFactory></TableColumn>
+                <TableColumn fx:id="colStatus" text="Status" prefWidth="100"><cellValueFactory><PropertyValueFactory property="status"/></cellValueFactory></TableColumn>
+                <TableColumn fx:id="colPatient" text="Patient" prefWidth="130"><cellValueFactory><PropertyValueFactory property="patientName"/></cellValueFactory></TableColumn>
+                <TableColumn fx:id="colTherapist" text="Therapist" prefWidth="130"><cellValueFactory><PropertyValueFactory property="therapistName"/></cellValueFactory></TableColumn>
+                <TableColumn fx:id="colProgram" text="Program" prefWidth="130"><cellValueFactory><PropertyValueFactory property="programName"/></cellValueFactory></TableColumn>
+            </columns>
+        </TableView>
+    </VBox>
+</AnchorPane>

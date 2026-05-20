@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="500.0" prefWidth="800.0" styleClass="login-root"
+            stylesheets="@../styles.css"
+            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="lk.ijse.theserenitymentalhealththerapycenter.controller.LoginController">
+
+    <VBox alignment="CENTER" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+          AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+
+        <VBox alignment="CENTER" spacing="20" styleClass="login-card" maxWidth="400" maxHeight="420">
+            <padding><Insets top="40" right="40" bottom="40" left="40"/></padding>
+
+            <!-- Logo / Title -->
+            <Label text="🌿 Serenity" styleClass="login-title"/>
+            <Label text="Mental Health Therapy Center" styleClass="login-subtitle">
+                <VBox.margin><Insets bottom="10"/></VBox.margin>
+            </Label>
+
+            <!-- Username -->
+            <VBox spacing="6" alignment="CENTER_LEFT">
+                <Label text="Username" styleClass="form-label"/>
+                <TextField fx:id="txtUsername" promptText="Enter username" styleClass="text-field-custom" prefHeight="38"/>
+            </VBox>
+
+            <!-- Password -->
+            <VBox spacing="6" alignment="CENTER_LEFT">
+                <Label text="Password" styleClass="form-label"/>
+                <PasswordField fx:id="txtPassword" promptText="Enter password" styleClass="password-field-custom" prefHeight="38"/>
+            </VBox>
+
+            <!-- Error Label -->
+            <Label fx:id="lblError" textFill="#c62828" visible="false"/>
+
+            <!-- Login Button -->
+            <Button fx:id="btnLogin" text="Sign In" styleClass="btn-primary" prefWidth="200" prefHeight="40"
+                    onAction="#handleLogin">
+                <VBox.margin><Insets top="10"/></VBox.margin>
+            </Button>
+        </VBox>
+    </VBox>
+</AnchorPane>

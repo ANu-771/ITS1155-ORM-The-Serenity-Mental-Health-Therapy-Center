@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane stylesheets="@../styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="lk.ijse.theserenitymentalhealththerapycenter.controller.TherapyProgramManagementController">
+    <VBox spacing="15" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+        <VBox spacing="12" styleClass="card">
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <VBox spacing="4" HBox.hgrow="ALWAYS"><Label text="Program ID" styleClass="form-label"/><TextField fx:id="txtProgramId" promptText="MT1001" styleClass="text-field-custom" prefHeight="35"/></VBox>
+                <VBox spacing="4" HBox.hgrow="ALWAYS"><Label text="Program Name" styleClass="form-label"/><TextField fx:id="txtName" promptText="Program name" styleClass="text-field-custom" prefHeight="35"/></VBox>
+                <VBox spacing="4"><Label text="Duration" styleClass="form-label"/><TextField fx:id="txtDuration" promptText="e.g. 12 weeks" styleClass="text-field-custom" prefHeight="35" prefWidth="140"/></VBox>
+                <VBox spacing="4"><Label text="Fee (LKR)" styleClass="form-label"/><TextField fx:id="txtFee" promptText="80000.00" styleClass="text-field-custom" prefHeight="35" prefWidth="130"/></VBox>
+            </HBox>
+            <VBox spacing="4"><Label text="Description" styleClass="form-label"/><TextArea fx:id="txtDescription" promptText="Program description..." prefRowCount="2" styleClass="text-field-custom"/></VBox>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Button text="Save" styleClass="btn-primary" onAction="#handleSave" prefWidth="90"/>
+                <Button text="Update" styleClass="btn-secondary" onAction="#handleUpdate" prefWidth="90"/>
+                <Button text="Delete" styleClass="btn-danger" onAction="#handleDelete" prefWidth="90"/>
+                <Button text="Clear" styleClass="btn-secondary" onAction="#handleClear" prefWidth="90"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <TextField fx:id="txtSearch" promptText="🔍 Search..." styleClass="search-field" prefWidth="200" prefHeight="35" onKeyReleased="#handleSearch"/>
+            </HBox>
+        </VBox>
+        <TableView fx:id="tblPrograms" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colId" text="Program ID" prefWidth="90"><cellValueFactory><PropertyValueFactory property="programId"/></cellValueFactory></TableColumn>
+                <TableColumn fx:id="colName" text="Name" prefWidth="200"><cellValueFactory><PropertyValueFactory property="name"/></cellValueFactory></TableColumn>
+                <TableColumn fx:id="colDuration" text="Duration" prefWidth="100"><cellValueFactory><PropertyValueFactory property="duration"/></cellValueFactory></TableColumn>
+                <TableColumn fx:id="colFee" text="Fee (LKR)" prefWidth="120"><cellValueFactory><PropertyValueFactory property="fee"/></cellValueFactory></TableColumn>
+                <TableColumn fx:id="colDescription" text="Description" prefWidth="200"><cellValueFactory><PropertyValueFactory property="description"/></cellValueFactory></TableColumn>
+            </columns>
+        </TableView>
+    </VBox>
+</AnchorPane>
