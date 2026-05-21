@@ -369,3 +369,15 @@
     -fx-text-fill: #e53935;
     -fx-font-size: 12px;
 }
+
+/* ===== SHOW PASSWORD CHECKBOX ===== */
+.show-password-check {
+    -fx-font-size: 11px;
+    -fx-text-fill: #78909c;
+    -fx-cursor: hand;
+    -fx-padding: 4 0 0 0;
+}
+
+.show-password-check:hover {
+    -fx-text-fill: #1A73E8;
+}

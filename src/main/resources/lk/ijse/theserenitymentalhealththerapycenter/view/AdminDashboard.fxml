@@ -32,6 +32,9 @@
 
             <Region VBox.vgrow="ALWAYS"/>
 
+            <Button fx:id="btnChangeCredentials" text="Change Credentials" styleClass="nav-btn" maxWidth="1.7976931348623157E308" onAction="#handleChangeCredentials">
+                <VBox.margin><Insets bottom="8"/></VBox.margin>
+            </Button>
             <Button fx:id="btnLogout" text="Logout" styleClass="logout-btn" maxWidth="1.7976931348623157E308" onAction="#handleLogout"/>
         </VBox>
     </left>

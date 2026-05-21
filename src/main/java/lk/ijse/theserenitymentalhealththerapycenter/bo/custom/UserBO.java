@@ -13,4 +13,5 @@ public interface UserBO {
     UserDTO authenticateUser(String username, String password) throws Exception;
     void createDefaultAdmin() throws Exception;
     String getNextId() throws Exception;
+    boolean changeCredentials(String userId, String currentPassword, String newUsername, String newPassword) throws Exception;
 }

@@ -51,8 +51,14 @@ public class ReceptionistDashboardController implements Initializable {
     }
 
     @FXML
+    public void handleChangeCredentials(ActionEvent event) {
+        loadContent("view/ChangeCredentials.fxml", "Change Credentials", "Update your username or password");
+    }
+
+    @FXML
     public void handleLogout(ActionEvent event) {
         try {
+            lk.ijse.theserenitymentalhealththerapycenter.util.SessionContext.clear();
             Stage stage = (Stage) contentPane.getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("view/Login.fxml"));
             Scene scene = new Scene(loader.load());

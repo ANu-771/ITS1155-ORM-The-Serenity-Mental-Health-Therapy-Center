@@ -14,9 +14,9 @@
         <![CDATA[
             SELECT p.payment_id, p.amount, p.payment_date, p.payment_method, p.status,
                    pat.name AS patient_name, tp.name AS program_name
-            FROM payment p
-            JOIN patient pat ON p.patient_id = pat.id
-            JOIN therapy_program tp ON p.program_id = tp.program_id
+            FROM payments p
+            JOIN patients pat ON p.patient_id = pat.id
+            JOIN therapy_programs tp ON p.program_id = tp.program_id
             ORDER BY p.payment_date DESC
         ]]>
     </queryString>

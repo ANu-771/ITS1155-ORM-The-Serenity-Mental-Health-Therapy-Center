@@ -138,4 +138,35 @@ public class UserBOImpl implements UserBO {
         String lastId = userDAO.getLastId();
         return lk.ijse.theserenitymentalhealththerapycenter.util.IdGenerator.generateNextId("U", lastId);
     }
+
+    @Override
+    public boolean changeCredentials(String userId, String currentPassword, String newUsername, String newPassword) throws Exception {
+        // 1. Get the current user
+        User user = userDAO.search(userId);
+        if (user == null) {
+            throw new AuthenticationException("User not found");
+        }
+
+        // 2. Verify current password
+        if (!BCrypt.checkpw(currentPassword, user.getPassword())) {
+            throw new AuthenticationException("Current password is incorrect");
+        }
+
+        // 3. If username changed, check for duplicates
+        if (newUsername != null && !newUsername.trim().isEmpty() && !newUsername.equals(user.getUsername())) {
+            User existing = userDAO.findByUsername(newUsername);
+            if (existing != null) {
+                throw new DuplicateEntryException("Username '" + newUsername + "' already exists");
+            }
+            user.setUsername(newUsername.trim());
+        }
+
+        // 4. If new password provided, hash it
+        if (newPassword != null && !newPassword.trim().isEmpty()) {
+            user.setPassword(BCrypt.hashpw(newPassword, BCrypt.gensalt()));
+        }
+
+        return userDAO.update(user);
+    }
 }
+
