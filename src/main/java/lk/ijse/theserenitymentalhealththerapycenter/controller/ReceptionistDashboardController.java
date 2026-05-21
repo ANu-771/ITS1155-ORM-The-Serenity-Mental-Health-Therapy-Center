@@ -61,9 +61,10 @@ public class ReceptionistDashboardController implements Initializable {
             lk.ijse.theserenitymentalhealththerapycenter.util.SessionContext.clear();
             Stage stage = (Stage) contentPane.getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("view/Login.fxml"));
-            Scene scene = new Scene(loader.load());
+            Scene scene = new Scene(loader.load(), 1280, 720);
             stage.setScene(scene);
             stage.setTitle("Serenity - Login");
+            stage.setResizable(true);
             stage.centerOnScreen();
         } catch (Exception e) {
             e.printStackTrace();

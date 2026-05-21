@@ -22,7 +22,6 @@ public class AdminDashboardContentController implements Initializable {
     @FXML private Label lblActiveTherapists;
     @FXML private Label lblTotalPrograms;
     @FXML private Label lblTotalRevenue;
-    @FXML private TableView<RecentActivityTM> tblRecentActivity;
 
     private final PatientBO patientBO = BOFactory.getInstance().getBO(BOFactory.BOType.PATIENT);
     private final TherapistBO therapistBO = BOFactory.getInstance().getBO(BOFactory.BOType.THERAPIST);
@@ -32,7 +31,6 @@ public class AdminDashboardContentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         loadStats();
-        loadRecentActivity();
     }
 
     private void loadStats() {
@@ -43,28 +41,6 @@ public class AdminDashboardContentController implements Initializable {
 
             double total = paymentBO.getAllPayments().stream().mapToDouble(PaymentDTO::getAmount).sum();
             lblTotalRevenue.setText(String.format("LKR %,.0f", total));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void loadRecentActivity() {
-        try {
-            ObservableList<RecentActivityTM> list = FXCollections.observableArrayList();
-
-            // Load recent therapists
-            List<TherapistDTO> therapists = therapistBO.getAllTherapists();
-            for (TherapistDTO t : therapists) {
-                list.add(new RecentActivityTM(t.getId(), t.getName(), "Therapist", t.getSpecialization()));
-            }
-
-            // Load recent programs
-            List<TherapyProgramDTO> programs = programBO.getAllPrograms();
-            for (TherapyProgramDTO p : programs) {
-                list.add(new RecentActivityTM(p.getProgramId(), p.getName(), "Program", p.getDuration()));
-            }
-
-            tblRecentActivity.setItems(list);
         } catch (Exception e) {
             e.printStackTrace();
         }

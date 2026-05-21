@@ -57,9 +57,10 @@ public class LoginController {
             }
 
             FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource(fxmlFile));
-            Scene scene = new Scene(loader.load());
+            Scene scene = new Scene(loader.load(), 1280, 720);
             stage.setScene(scene);
             stage.setTitle("Serenity - " + user.getRole() + " Dashboard");
+            stage.setResizable(true);
             stage.centerOnScreen();
 
         } catch (AuthenticationException e) {

@@ -48,30 +48,5 @@
             </VBox>
         </HBox>
 
-        <!-- ===== Today's Schedule Table ===== -->
-        <VBox spacing="12" style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 8, 0, 0, 2); -fx-padding: 20;">
-            <Label text="Today's Schedule" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #1a1a2e;"/>
-
-            <TableView fx:id="tblTodaySchedule" prefHeight="280">
-                <placeholder><Label text="No sessions scheduled for today"/></placeholder>
-                <columns>
-                    <TableColumn fx:id="colTime" text="Time" prefWidth="80">
-                        <cellValueFactory><PropertyValueFactory property="time"/></cellValueFactory>
-                    </TableColumn>
-                    <TableColumn fx:id="colPatient" text="Patient Name" prefWidth="160">
-                        <cellValueFactory><PropertyValueFactory property="patientName"/></cellValueFactory>
-                    </TableColumn>
-                    <TableColumn fx:id="colTherapist" text="Assigned Therapist" prefWidth="160">
-                        <cellValueFactory><PropertyValueFactory property="therapistName"/></cellValueFactory>
-                    </TableColumn>
-                    <TableColumn fx:id="colProgram" text="Therapy Program" prefWidth="160">
-                        <cellValueFactory><PropertyValueFactory property="programName"/></cellValueFactory>
-                    </TableColumn>
-                    <TableColumn fx:id="colPayStatus" text="Payment Status" prefWidth="110">
-                        <cellValueFactory><PropertyValueFactory property="status"/></cellValueFactory>
-                    </TableColumn>
-                </columns>
-            </TableView>
-        </VBox>
     </VBox>
 </ScrollPane>

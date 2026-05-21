@@ -21,7 +21,6 @@ public class ReceptionistDashboardContentController implements Initializable {
     @FXML private Label lblTodaySessions;
     @FXML private Label lblPendingPayments;
     @FXML private Label lblNewPatients;
-    @FXML private TableView<TherapySessionDTO> tblTodaySchedule;
 
     private final TherapySessionBO sessionBO = BOFactory.getInstance().getBO(BOFactory.BOType.THERAPY_SESSION);
     private final PaymentBO paymentBO = BOFactory.getInstance().getBO(BOFactory.BOType.PAYMENT);
@@ -30,7 +29,6 @@ public class ReceptionistDashboardContentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         loadStats();
-        loadTodaySchedule();
     }
 
     private void loadStats() {
@@ -49,24 +47,6 @@ public class ReceptionistDashboardContentController implements Initializable {
 
             // Total patients
             lblNewPatients.setText(String.valueOf(patientBO.getAllPatients().size()));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void loadTodaySchedule() {
-        try {
-            String today = LocalDate.now().toString();
-            List<TherapySessionDTO> allSessions = sessionBO.getAllSessions();
-            ObservableList<TherapySessionDTO> todaySessions = FXCollections.observableArrayList();
-
-            for (TherapySessionDTO s : allSessions) {
-                if (today.equals(s.getDate())) {
-                    todaySessions.add(s);
-                }
-            }
-
-            tblTodaySchedule.setItems(todaySessions);
         } catch (Exception e) {
             e.printStackTrace();
         }
