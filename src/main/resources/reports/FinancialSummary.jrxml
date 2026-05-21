@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports
+              http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="FinancialSummary" pageWidth="595" pageHeight="842"
+              columnWidth="535" leftMargin="30" rightMargin="30"
+              topMargin="30" bottomMargin="30">
+
+    <parameter name="fromDate" class="java.lang.String"/>
+    <parameter name="toDate" class="java.lang.String"/>
+
+    <queryString>
+        <![CDATA[
+            SELECT p.payment_id, p.amount, p.payment_date, p.payment_method, p.status,
+                   pat.name AS patient_name, tp.name AS program_name
+            FROM payment p
+            JOIN patient pat ON p.patient_id = pat.id
+            JOIN therapy_program tp ON p.program_id = tp.program_id
+            ORDER BY p.payment_date DESC
+        ]]>
+    </queryString>
+
+    <field name="payment_id" class="java.lang.String"/>
+    <field name="amount" class="java.lang.Double"/>
+    <field name="payment_date" class="java.lang.String"/>
+    <field name="payment_method" class="java.lang.String"/>
+    <field name="status" class="java.lang.String"/>
+    <field name="patient_name" class="java.lang.String"/>
+    <field name="program_name" class="java.lang.String"/>
+
+    <variable name="totalAmount" class="java.lang.Double" calculation="Sum">
+        <variableExpression><![CDATA[$F{amount}]]></variableExpression>
+    </variable>
+
+    <title>
+        <band height="60">
+            <staticText>
+                <reportElement x="0" y="0" width="535" height="35"/>
+                <textElement textAlignment="Center">
+                    <font size="18" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Serenity Mental Health Therapy Center]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="0" y="35" width="535" height="20"/>
+                <textElement textAlignment="Center">
+                    <font size="12"/>
+                </textElement>
+                <text><![CDATA[Financial Summary Report]]></text>
+            </staticText>
+        </band>
+    </title>
+
+    <columnHeader>
+        <band height="25">
+            <staticText><reportElement x="0" y="0" width="70" height="25"/><textElement><font isBold="true" size="9"/></textElement><text><![CDATA[ID]]></text></staticText>
+            <staticText><reportElement x="70" y="0" width="100" height="25"/><textElement><font isBold="true" size="9"/></textElement><text><![CDATA[Patient]]></text></staticText>
+            <staticText><reportElement x="170" y="0" width="110" height="25"/><textElement><font isBold="true" size="9"/></textElement><text><![CDATA[Program]]></text></staticText>
+            <staticText><reportElement x="280" y="0" width="70" height="25"/><textElement><font isBold="true" size="9"/></textElement><text><![CDATA[Amount]]></text></staticText>
+            <staticText><reportElement x="350" y="0" width="80" height="25"/><textElement><font isBold="true" size="9"/></textElement><text><![CDATA[Date]]></text></staticText>
+            <staticText><reportElement x="430" y="0" width="55" height="25"/><textElement><font isBold="true" size="9"/></textElement><text><![CDATA[Method]]></text></staticText>
+            <staticText><reportElement x="485" y="0" width="50" height="25"/><textElement><font isBold="true" size="9"/></textElement><text><![CDATA[Status]]></text></staticText>
+        </band>
+    </columnHeader>
+
+    <detail>
+        <band height="20">
+            <textField><reportElement x="0" y="0" width="70" height="20"/><textElement><font size="8"/></textElement><textFieldExpression><![CDATA[$F{payment_id}]]></textFieldExpression></textField>
+            <textField><reportElement x="70" y="0" width="100" height="20"/><textElement><font size="8"/></textElement><textFieldExpression><![CDATA[$F{patient_name}]]></textFieldExpression></textField>
+            <textField><reportElement x="170" y="0" width="110" height="20"/><textElement><font size="8"/></textElement><textFieldExpression><![CDATA[$F{program_name}]]></textFieldExpression></textField>
+            <textField><reportElement x="280" y="0" width="70" height="20"/><textElement><font size="8"/></textElement><textFieldExpression><![CDATA["LKR " + String.format("%,.2f", $F{amount})]]></textFieldExpression></textField>
+            <textField><reportElement x="350" y="0" width="80" height="20"/><textElement><font size="8"/></textElement><textFieldExpression><![CDATA[$F{payment_date}]]></textFieldExpression></textField>
+            <textField><reportElement x="430" y="0" width="55" height="20"/><textElement><font size="8"/></textElement><textFieldExpression><![CDATA[$F{payment_method}]]></textFieldExpression></textField>
+            <textField><reportElement x="485" y="0" width="50" height="20"/><textElement><font size="8"/></textElement><textFieldExpression><![CDATA[$F{status}]]></textFieldExpression></textField>
+        </band>
+    </detail>
+
+    <summary>
+        <band height="30">
+            <staticText><reportElement x="170" y="5" width="110" height="20"/><textElement textAlignment="Right"><font size="10" isBold="true"/></textElement><text><![CDATA[TOTAL:]]></text></staticText>
+            <textField><reportElement x="280" y="5" width="100" height="20"/><textElement><font size="10" isBold="true"/></textElement><textFieldExpression><![CDATA["LKR " + String.format("%,.2f", $V{totalAmount})]]></textFieldExpression></textField>
+        </band>
+    </summary>
+</jasperReport>

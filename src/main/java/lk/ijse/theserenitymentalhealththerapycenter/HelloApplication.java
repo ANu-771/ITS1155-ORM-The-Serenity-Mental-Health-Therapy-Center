@@ -26,7 +26,7 @@ public class HelloApplication extends Application {
 
         // Load Login screen
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("view/Login.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 800, 500);
+        Scene scene = new Scene(fxmlLoader.load(), 1280, 720);
         stage.setTitle("Serenity Mental Health Therapy Center");
         stage.setScene(scene);
         stage.setResizable(true);

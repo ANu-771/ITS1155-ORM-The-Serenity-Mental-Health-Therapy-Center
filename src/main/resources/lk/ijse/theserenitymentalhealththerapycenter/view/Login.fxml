@@ -1,47 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="500.0" prefWidth="800.0" styleClass="login-root"
-            stylesheets="@../styles.css"
-            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="lk.ijse.theserenitymentalhealththerapycenter.controller.LoginController">
+<HBox prefHeight="550.0" prefWidth="900.0" stylesheets="@../styles.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.theserenitymentalhealththerapycenter.controller.LoginController">
 
-    <VBox alignment="CENTER" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
-          AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+    <!-- ===== LEFT SIDE — Login Form ===== -->
+    <VBox alignment="CENTER" styleClass="login-left-panel" HBox.hgrow="ALWAYS">
+        <padding><Insets bottom="50" left="60" right="60" top="50" /></padding>
 
-        <VBox alignment="CENTER" spacing="20" styleClass="login-card" maxWidth="400" maxHeight="420">
-            <padding><Insets top="40" right="40" bottom="40" left="40"/></padding>
-
-            <!-- Logo / Title -->
-            <Label text="🌿 Serenity" styleClass="login-title"/>
-            <Label text="Mental Health Therapy Center" styleClass="login-subtitle">
-                <VBox.margin><Insets bottom="10"/></VBox.margin>
-            </Label>
+        <VBox alignment="CENTER_LEFT" maxWidth="340" spacing="24">
+            <!-- Header -->
+            <VBox spacing="6">
+                <Label styleClass="login-card-title" text="Welcome Back" />
+                <Label styleClass="login-card-subtitle" text="Sign in to continue to your dashboard" />
+            </VBox>
 
             <!-- Username -->
-            <VBox spacing="6" alignment="CENTER_LEFT">
-                <Label text="Username" styleClass="form-label"/>
-                <TextField fx:id="txtUsername" promptText="Enter username" styleClass="text-field-custom" prefHeight="38"/>
+            <VBox spacing="5">
+                <Label styleClass="form-label" text="Username" />
+                <TextField fx:id="txtUsername" prefHeight="40" promptText="Enter your username" styleClass="text-field-modern" />
             </VBox>
 
             <!-- Password -->
-            <VBox spacing="6" alignment="CENTER_LEFT">
-                <Label text="Password" styleClass="form-label"/>
-                <PasswordField fx:id="txtPassword" promptText="Enter password" styleClass="password-field-custom" prefHeight="38"/>
+            <VBox spacing="5">
+                <Label styleClass="form-label" text="Password" />
+                <PasswordField fx:id="txtPassword" prefHeight="40" promptText="Enter your password" styleClass="password-field-modern" />
             </VBox>
 
-            <!-- Error Label -->
-            <Label fx:id="lblError" textFill="#c62828" visible="false"/>
+            <!-- Forgot Password -->
+            <HBox alignment="CENTER_RIGHT">
+                <Hyperlink styleClass="forgot-password-link" text="Forgot Password?" />
+            </HBox>
+
+            <!-- Error Message -->
+            <Label fx:id="lblError" styleClass="error-label" visible="false" wrapText="true" />
 
             <!-- Login Button -->
-            <Button fx:id="btnLogin" text="Sign In" styleClass="btn-primary" prefWidth="200" prefHeight="40"
-                    onAction="#handleLogin">
-                <VBox.margin><Insets top="10"/></VBox.margin>
-            </Button>
+            <Button fx:id="btnLogin" onAction="#handleLogin" prefHeight="44" prefWidth="340" styleClass="btn-login" text="Sign In" />
         </VBox>
     </VBox>
-</AnchorPane>
+
+    <!-- ===== RIGHT SIDE — Brand Panel with Image Container ===== -->
+    <VBox alignment="CENTER" spacing="20" styleClass="login-right-panel" HBox.hgrow="ALWAYS">
+        <padding><Insets bottom="40" left="40" right="40" top="40" /></padding>
+
+        <!-- Image Container — place your logo/image asset here -->
+        <ImageView fx:id="imgLogo" fitHeight="180" fitWidth="180" preserveRatio="true">
+         <image>
+            <Image url="@../image/mental-health.png" />
+         </image></ImageView>
+
+        <Label styleClass="login-brand-title" text="Serenity Mental Health&#10;Therapy Center" textAlignment="CENTER" />
+        <Label styleClass="login-brand-slogan" text="Nurturing minds, restoring peace.&#10;Your journey to wellness begins here." textAlignment="CENTER" />
+    </VBox>
+</HBox>

@@ -3,39 +3,45 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 
-<BorderPane prefHeight="600.0" prefWidth="1000.0"
+<BorderPane prefHeight="650.0" prefWidth="1100.0"
             stylesheets="@../styles.css"
             xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="lk.ijse.theserenitymentalhealththerapycenter.controller.ReceptionistDashboardController">
 
-    <!-- Sidebar -->
     <left>
-        <VBox prefWidth="220" styleClass="sidebar" spacing="4">
-            <padding><Insets top="20" right="12" bottom="20" left="12"/></padding>
+        <VBox prefWidth="250" styleClass="sidebar" spacing="12">
+            <padding><Insets top="24" right="16" bottom="24" left="16"/></padding>
 
-            <Label text="🌿 Serenity" styleClass="sidebar-title"/>
-            <Label text="Receptionist Dashboard" styleClass="sidebar-subtitle">
-                <VBox.margin><Insets bottom="30"/></VBox.margin>
+            <Label text="Serenity Center" styleClass="sidebar-brand"/>
+            <Label text="RECEPTIONIST" styleClass="sidebar-role">
+                <VBox.margin><Insets bottom="8"/></VBox.margin>
             </Label>
 
-            <Button fx:id="btnDashboard" text="📊  Dashboard" styleClass="sidebar-btn" maxWidth="1.7976931348623157E308" onAction="#handleDashboard"/>
-            <Button fx:id="btnPatients" text="🧑  Patient Management" styleClass="sidebar-btn" maxWidth="1.7976931348623157E308" onAction="#handlePatients"/>
-            <Button fx:id="btnSessions" text="📅  Sessions" styleClass="sidebar-btn" maxWidth="1.7976931348623157E308" onAction="#handleSessions"/>
-            <Button fx:id="btnPayments" text="💳  Payments" styleClass="sidebar-btn" maxWidth="1.7976931348623157E308" onAction="#handlePayments"/>
+            <Region styleClass="sidebar-divider">
+                <VBox.margin><Insets bottom="16"/></VBox.margin>
+            </Region>
+
+            <Button fx:id="btnDashboard" text="Dashboard Home" styleClass="nav-btn" maxWidth="1.7976931348623157E308" onAction="#handleDashboard"/>
+            <Button fx:id="btnPatients" text="Patient Management" styleClass="nav-btn" maxWidth="1.7976931348623157E308" onAction="#handlePatients"/>
+            <Button fx:id="btnSessions" text="Session Scheduling" styleClass="nav-btn" maxWidth="1.7976931348623157E308" onAction="#handleSessions"/>
+            <Button fx:id="btnPayments" text="Payments" styleClass="nav-btn" maxWidth="1.7976931348623157E308" onAction="#handlePayments"/>
+            <Button fx:id="btnReports" text="Reports" styleClass="nav-btn" maxWidth="1.7976931348623157E308" onAction="#handleReports"/>
 
             <Region VBox.vgrow="ALWAYS"/>
 
-            <Button fx:id="btnLogout" text="🚪  Logout" styleClass="sidebar-btn-logout" maxWidth="1.7976931348623157E308" onAction="#handleLogout"/>
+            <Button fx:id="btnLogout" text="Logout" styleClass="logout-btn" maxWidth="1.7976931348623157E308" onAction="#handleLogout"/>
         </VBox>
     </left>
 
     <center>
         <VBox styleClass="content-area">
-            <padding><Insets top="20" right="25" bottom="20" left="25"/></padding>
+            <padding><Insets top="24" right="28" bottom="20" left="28"/></padding>
 
-            <Label fx:id="lblHeader" text="Dashboard" styleClass="content-header">
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <Label fx:id="lblHeader" text="Dashboard Home" styleClass="content-header"/>
+            </HBox>
+            <Label fx:id="lblSubheader" text="Welcome back, Receptionist" styleClass="content-subheader">
                 <VBox.margin><Insets bottom="20"/></VBox.margin>
             </Label>
 

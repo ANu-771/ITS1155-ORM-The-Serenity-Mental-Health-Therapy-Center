@@ -7,49 +7,51 @@
 <AnchorPane stylesheets="@../styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="lk.ijse.theserenitymentalhealththerapycenter.controller.UserManagementController">
 
-    <VBox spacing="15" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+    <VBox spacing="18" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
 
         <!-- Form Card -->
-        <VBox spacing="12" styleClass="card">
-            <HBox spacing="15" alignment="CENTER_LEFT">
+        <VBox spacing="16" styleClass="card">
+            <Label text="User Details" styleClass="card-header"/>
+
+            <HBox spacing="16" alignment="CENTER_LEFT">
                 <VBox spacing="4" HBox.hgrow="ALWAYS">
                     <Label text="User ID" styleClass="form-label"/>
-                    <TextField fx:id="txtId" promptText="U001" styleClass="text-field-custom" prefHeight="35"/>
+                    <TextField fx:id="txtId" promptText="U001" styleClass="text-field-modern" prefHeight="38"/>
                 </VBox>
                 <VBox spacing="4" HBox.hgrow="ALWAYS">
                     <Label text="Username" styleClass="form-label"/>
-                    <TextField fx:id="txtUsername" promptText="Enter username" styleClass="text-field-custom" prefHeight="35"/>
+                    <TextField fx:id="txtUsername" promptText="Enter username" styleClass="text-field-modern" prefHeight="38"/>
                 </VBox>
                 <VBox spacing="4" HBox.hgrow="ALWAYS">
                     <Label text="Password" styleClass="form-label"/>
-                    <PasswordField fx:id="txtPassword" promptText="Enter password" styleClass="password-field-custom" prefHeight="35"/>
+                    <PasswordField fx:id="txtPassword" promptText="Enter password" styleClass="password-field-modern" prefHeight="38"/>
                 </VBox>
                 <VBox spacing="4">
                     <Label text="Role" styleClass="form-label"/>
-                    <ComboBox fx:id="cmbRole" promptText="Select Role" styleClass="combo-box-custom" prefHeight="35" prefWidth="150"/>
+                    <ComboBox fx:id="cmbRole" promptText="Select Role" styleClass="combo-modern" prefHeight="38" prefWidth="160"/>
                 </VBox>
             </HBox>
 
             <HBox spacing="10" alignment="CENTER_LEFT">
-                <Button text="Save" styleClass="btn-primary" onAction="#handleSave" prefWidth="90"/>
-                <Button text="Update" styleClass="btn-secondary" onAction="#handleUpdate" prefWidth="90"/>
-                <Button text="Delete" styleClass="btn-danger" onAction="#handleDelete" prefWidth="90"/>
-                <Button text="Clear" styleClass="btn-secondary" onAction="#handleClear" prefWidth="90"/>
+                <Button text="Save" styleClass="btn-save" onAction="#handleSave" prefWidth="100"/>
+                <Button text="Update" styleClass="btn-update" onAction="#handleUpdate" prefWidth="100"/>
+                <Button text="Delete" styleClass="btn-delete" onAction="#handleDelete" prefWidth="100"/>
+                <Button text="Clear" styleClass="btn-clear" onAction="#handleClear" prefWidth="100"/>
                 <Region HBox.hgrow="ALWAYS"/>
-                <TextField fx:id="txtSearch" promptText="🔍 Search by ID..." styleClass="search-field" prefWidth="200" prefHeight="35" onKeyReleased="#handleSearch"/>
+                <TextField fx:id="txtSearch" promptText="🔍  Search by ID..." styleClass="search-field" prefWidth="220" prefHeight="36" onKeyReleased="#handleSearch"/>
             </HBox>
         </VBox>
 
         <!-- Table -->
         <TableView fx:id="tblUsers" VBox.vgrow="ALWAYS">
             <columns>
-                <TableColumn fx:id="colId" text="ID" prefWidth="80">
+                <TableColumn fx:id="colId" text="ID" prefWidth="100">
                     <cellValueFactory><PropertyValueFactory property="id"/></cellValueFactory>
                 </TableColumn>
-                <TableColumn fx:id="colUsername" text="Username" prefWidth="200">
+                <TableColumn fx:id="colUsername" text="Username" prefWidth="250">
                     <cellValueFactory><PropertyValueFactory property="username"/></cellValueFactory>
                 </TableColumn>
-                <TableColumn fx:id="colRole" text="Role" prefWidth="150">
+                <TableColumn fx:id="colRole" text="Role" prefWidth="180">
                     <cellValueFactory><PropertyValueFactory property="role"/></cellValueFactory>
                 </TableColumn>
             </columns>

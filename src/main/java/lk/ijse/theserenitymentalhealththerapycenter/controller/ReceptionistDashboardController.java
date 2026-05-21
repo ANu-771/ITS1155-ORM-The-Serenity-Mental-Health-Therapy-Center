@@ -14,26 +14,33 @@ public class ReceptionistDashboardController {
 
     @FXML private AnchorPane contentPane;
     @FXML private Label lblHeader;
+    @FXML private Label lblSubheader;
 
     @FXML
     public void handleDashboard(ActionEvent event) {
-        lblHeader.setText("Dashboard");
+        lblHeader.setText("Dashboard Home");
+        lblSubheader.setText("Welcome back, Receptionist");
         contentPane.getChildren().clear();
     }
 
     @FXML
     public void handlePatients(ActionEvent event) {
-        loadContent("view/PatientManagement.fxml", "Patient Management");
+        loadContent("view/PatientManagement.fxml", "Patient Management", "Register and manage patient records");
     }
 
     @FXML
     public void handleSessions(ActionEvent event) {
-        loadContent("view/SessionManagement.fxml", "Session Management");
+        loadContent("view/SessionScheduling.fxml", "Session Scheduling", "Book and manage therapy sessions");
     }
 
     @FXML
     public void handlePayments(ActionEvent event) {
-        loadContent("view/PaymentManagement.fxml", "Payment Management");
+        loadContent("view/PaymentManagement.fxml", "Payment Management", "Process and track payments");
+    }
+
+    @FXML
+    public void handleReports(ActionEvent event) {
+        loadContent("view/Reports.fxml", "Reports & Analytics", "View financial and session statistics");
     }
 
     @FXML
@@ -50,9 +57,10 @@ public class ReceptionistDashboardController {
         }
     }
 
-    private void loadContent(String fxmlFile, String title) {
+    private void loadContent(String fxmlFile, String title, String subtitle) {
         try {
             lblHeader.setText(title);
+            lblSubheader.setText(subtitle);
             Node node = FXMLLoader.load(HelloApplication.class.getResource(fxmlFile));
             contentPane.getChildren().clear();
             contentPane.getChildren().add(node);

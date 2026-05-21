@@ -6,6 +6,8 @@ module lk.ijse.theserenitymentalhealththerapycenter {
     requires java.naming;
     requires jbcrypt;
     requires java.sql;
+    requires jasperreports;
+    requires java.desktop;
 
     opens lk.ijse.theserenitymentalhealththerapycenter to javafx.fxml;
     opens lk.ijse.theserenitymentalhealththerapycenter.entity to org.hibernate.orm.core;

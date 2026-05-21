@@ -6,33 +6,36 @@
 
 <AnchorPane stylesheets="@../styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="lk.ijse.theserenitymentalhealththerapycenter.controller.TherapistManagementController">
-    <VBox spacing="15" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
-        <VBox spacing="12" styleClass="card">
-            <HBox spacing="15" alignment="CENTER_LEFT">
-                <VBox spacing="4" HBox.hgrow="ALWAYS"><Label text="Therapist ID" styleClass="form-label"/><TextField fx:id="txtId" promptText="T001" styleClass="text-field-custom" prefHeight="35"/></VBox>
-                <VBox spacing="4" HBox.hgrow="ALWAYS"><Label text="Name" styleClass="form-label"/><TextField fx:id="txtName" promptText="Full name" styleClass="text-field-custom" prefHeight="35"/></VBox>
-                <VBox spacing="4" HBox.hgrow="ALWAYS"><Label text="Specialization" styleClass="form-label"/><TextField fx:id="txtSpecialization" promptText="Specialization" styleClass="text-field-custom" prefHeight="35"/></VBox>
+    <VBox spacing="18" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+
+        <VBox spacing="16" styleClass="card">
+            <Label text="Therapist Details" styleClass="card-header"/>
+            <HBox spacing="16" alignment="CENTER_LEFT">
+                <VBox spacing="4" HBox.hgrow="ALWAYS"><Label text="Therapist ID" styleClass="form-label"/><TextField fx:id="txtId" promptText="T001" styleClass="text-field-modern" prefHeight="38"/></VBox>
+                <VBox spacing="4" HBox.hgrow="ALWAYS"><Label text="Full Name" styleClass="form-label"/><TextField fx:id="txtName" promptText="Dr. John Smith" styleClass="text-field-modern" prefHeight="38"/></VBox>
+                <VBox spacing="4" HBox.hgrow="ALWAYS"><Label text="Specialization" styleClass="form-label"/><TextField fx:id="txtSpecialization" promptText="Cognitive Therapy" styleClass="text-field-modern" prefHeight="38"/></VBox>
             </HBox>
-            <HBox spacing="15" alignment="CENTER_LEFT">
-                <VBox spacing="4" HBox.hgrow="ALWAYS"><Label text="Contact" styleClass="form-label"/><TextField fx:id="txtContact" promptText="Phone number" styleClass="text-field-custom" prefHeight="35"/></VBox>
-                <VBox spacing="4" HBox.hgrow="ALWAYS"><Label text="Email" styleClass="form-label"/><TextField fx:id="txtEmail" promptText="Email address" styleClass="text-field-custom" prefHeight="35"/></VBox>
+            <HBox spacing="16" alignment="CENTER_LEFT">
+                <VBox spacing="4" HBox.hgrow="ALWAYS"><Label text="Contact Number" styleClass="form-label"/><TextField fx:id="txtContact" promptText="+94 77 123 4567" styleClass="text-field-modern" prefHeight="38"/></VBox>
+                <VBox spacing="4" HBox.hgrow="ALWAYS"><Label text="Email" styleClass="form-label"/><TextField fx:id="txtEmail" promptText="doctor@serenity.lk" styleClass="text-field-modern" prefHeight="38"/></VBox>
             </HBox>
             <HBox spacing="10" alignment="CENTER_LEFT">
-                <Button text="Save" styleClass="btn-primary" onAction="#handleSave" prefWidth="90"/>
-                <Button text="Update" styleClass="btn-secondary" onAction="#handleUpdate" prefWidth="90"/>
-                <Button text="Delete" styleClass="btn-danger" onAction="#handleDelete" prefWidth="90"/>
-                <Button text="Clear" styleClass="btn-secondary" onAction="#handleClear" prefWidth="90"/>
+                <Button text="Save" styleClass="btn-save" onAction="#handleSave" prefWidth="100"/>
+                <Button text="Update" styleClass="btn-update" onAction="#handleUpdate" prefWidth="100"/>
+                <Button text="Delete" styleClass="btn-delete" onAction="#handleDelete" prefWidth="100"/>
+                <Button text="Clear" styleClass="btn-clear" onAction="#handleClear" prefWidth="100"/>
                 <Region HBox.hgrow="ALWAYS"/>
-                <TextField fx:id="txtSearch" promptText="🔍 Search..." styleClass="search-field" prefWidth="200" prefHeight="35" onKeyReleased="#handleSearch"/>
+                <TextField fx:id="txtSearch" promptText="🔍  Search..." styleClass="search-field" prefWidth="220" prefHeight="36" onKeyReleased="#handleSearch"/>
             </HBox>
         </VBox>
+
         <TableView fx:id="tblTherapists" VBox.vgrow="ALWAYS">
             <columns>
-                <TableColumn fx:id="colId" text="ID" prefWidth="70"><cellValueFactory><PropertyValueFactory property="id"/></cellValueFactory></TableColumn>
-                <TableColumn fx:id="colName" text="Name" prefWidth="160"><cellValueFactory><PropertyValueFactory property="name"/></cellValueFactory></TableColumn>
-                <TableColumn fx:id="colSpecialization" text="Specialization" prefWidth="160"><cellValueFactory><PropertyValueFactory property="specialization"/></cellValueFactory></TableColumn>
-                <TableColumn fx:id="colContact" text="Contact" prefWidth="120"><cellValueFactory><PropertyValueFactory property="contactNumber"/></cellValueFactory></TableColumn>
-                <TableColumn fx:id="colEmail" text="Email" prefWidth="180"><cellValueFactory><PropertyValueFactory property="email"/></cellValueFactory></TableColumn>
+                <TableColumn fx:id="colId" text="ID" prefWidth="80"><cellValueFactory><PropertyValueFactory property="id"/></cellValueFactory></TableColumn>
+                <TableColumn fx:id="colName" text="Name" prefWidth="180"><cellValueFactory><PropertyValueFactory property="name"/></cellValueFactory></TableColumn>
+                <TableColumn fx:id="colSpecialization" text="Specialization" prefWidth="180"><cellValueFactory><PropertyValueFactory property="specialization"/></cellValueFactory></TableColumn>
+                <TableColumn fx:id="colContact" text="Contact" prefWidth="130"><cellValueFactory><PropertyValueFactory property="contactNumber"/></cellValueFactory></TableColumn>
+                <TableColumn fx:id="colEmail" text="Email" prefWidth="200"><cellValueFactory><PropertyValueFactory property="email"/></cellValueFactory></TableColumn>
             </columns>
         </TableView>
     </VBox>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane stylesheets="@../styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="lk.ijse.theserenitymentalhealththerapycenter.controller.ReportsController">
+    <VBox spacing="20" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+
+        <!-- Stats Cards Row -->
+        <HBox spacing="16">
+            <VBox spacing="6" styleClass="stat-card" HBox.hgrow="ALWAYS" alignment="CENTER">
+                <Label fx:id="lblTotalPatients" text="0" styleClass="stat-value"/>
+                <Label text="Total Patients" styleClass="stat-label"/>
+            </VBox>
+            <VBox spacing="6" styleClass="stat-card" HBox.hgrow="ALWAYS" alignment="CENTER">
+                <Label fx:id="lblTotalSessions" text="0" styleClass="stat-value"/>
+                <Label text="Total Sessions" styleClass="stat-label"/>
+            </VBox>
+            <VBox spacing="6" styleClass="stat-card" HBox.hgrow="ALWAYS" alignment="CENTER">
+                <Label fx:id="lblTotalRevenue" text="LKR 0" styleClass="stat-value"/>
+                <Label text="Total Revenue" styleClass="stat-label"/>
+            </VBox>
+            <VBox spacing="6" styleClass="stat-card" HBox.hgrow="ALWAYS" alignment="CENTER">
+                <Label fx:id="lblTotalTherapists" text="0" styleClass="stat-value"/>
+                <Label text="Active Therapists" styleClass="stat-label"/>
+            </VBox>
+        </HBox>
+
+        <!-- Report Actions -->
+        <VBox spacing="16" styleClass="card">
+            <Label text="Generate Reports" styleClass="card-header"/>
+
+            <HBox spacing="16" alignment="CENTER_LEFT">
+                <VBox spacing="4">
+                    <Label text="From Date" styleClass="form-label"/>
+                    <TextField fx:id="txtFromDate" promptText="YYYY-MM-DD" styleClass="text-field-modern" prefHeight="38" prefWidth="160"/>
+                </VBox>
+                <VBox spacing="4">
+                    <Label text="To Date" styleClass="form-label"/>
+                    <TextField fx:id="txtToDate" promptText="YYYY-MM-DD" styleClass="text-field-modern" prefHeight="38" prefWidth="160"/>
+                </VBox>
+                <VBox spacing="4">
+                    <Label text="Report Type" styleClass="form-label"/>
+                    <ComboBox fx:id="cmbReportType" promptText="Select Type" styleClass="combo-modern" prefHeight="38" prefWidth="200"/>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <VBox alignment="BOTTOM_CENTER">
+                    <Button fx:id="btnGenerate" text="📊  Generate Report" styleClass="btn-report" onAction="#handleGenerate"/>
+                </VBox>
+            </HBox>
+        </VBox>
+
+        <!-- Report Results Table -->
+        <TableView fx:id="tblReport" VBox.vgrow="ALWAYS">
+            <placeholder><Label text="Select a report type and click Generate"/></placeholder>
+        </TableView>
+    </VBox>
+</AnchorPane>

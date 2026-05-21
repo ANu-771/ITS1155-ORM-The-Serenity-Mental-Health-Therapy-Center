@@ -14,26 +14,33 @@ public class AdminDashboardController {
 
     @FXML private AnchorPane contentPane;
     @FXML private Label lblHeader;
+    @FXML private Label lblSubheader;
 
     @FXML
     public void handleDashboard(ActionEvent event) {
-        lblHeader.setText("Dashboard");
+        lblHeader.setText("Dashboard Home");
+        lblSubheader.setText("Welcome back, Admin");
         contentPane.getChildren().clear();
     }
 
     @FXML
     public void handleUserManagement(ActionEvent event) {
-        loadContent("view/UserManagement.fxml", "User Management");
+        loadContent("view/UserManagement.fxml", "User Management", "Manage system users and roles");
     }
 
     @FXML
     public void handleTherapists(ActionEvent event) {
-        loadContent("view/TherapistManagement.fxml", "Therapist Management");
+        loadContent("view/TherapistManagement.fxml", "Therapist Management", "Add and manage therapist profiles");
     }
 
     @FXML
     public void handlePrograms(ActionEvent event) {
-        loadContent("view/TherapyProgramManagement.fxml", "Therapy Programs");
+        loadContent("view/TherapyProgramManagement.fxml", "Therapy Programs", "Configure therapy programs and fees");
+    }
+
+    @FXML
+    public void handleReports(ActionEvent event) {
+        loadContent("view/Reports.fxml", "Reports & Analytics", "View statistics and generate reports");
     }
 
     @FXML
@@ -50,9 +57,10 @@ public class AdminDashboardController {
         }
     }
 
-    private void loadContent(String fxmlFile, String title) {
+    private void loadContent(String fxmlFile, String title, String subtitle) {
         try {
             lblHeader.setText(title);
+            lblSubheader.setText(subtitle);
             Node node = FXMLLoader.load(HelloApplication.class.getResource(fxmlFile));
             contentPane.getChildren().clear();
             contentPane.getChildren().add(node);
