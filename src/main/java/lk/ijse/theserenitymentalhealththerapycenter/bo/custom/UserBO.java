@@ -12,4 +12,5 @@ public interface UserBO {
     List<UserDTO> getAllUsers() throws Exception;
     UserDTO authenticateUser(String username, String password) throws Exception;
     void createDefaultAdmin() throws Exception;
+    String getNextId() throws Exception;
 }

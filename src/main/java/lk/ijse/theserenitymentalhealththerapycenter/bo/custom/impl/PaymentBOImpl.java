@@ -67,4 +67,10 @@ public class PaymentBOImpl implements PaymentBO {
         }
         return dtos;
     }
+
+    @Override
+    public String getNextId() throws Exception {
+        String lastId = paymentDAO.getLastId();
+        return lk.ijse.theserenitymentalhealththerapycenter.util.IdGenerator.generateNextId("PAY", lastId);
+    }
 }

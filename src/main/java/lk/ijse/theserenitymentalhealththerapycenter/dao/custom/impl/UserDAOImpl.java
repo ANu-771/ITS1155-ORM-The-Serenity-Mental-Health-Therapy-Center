@@ -118,4 +118,16 @@ public class UserDAOImpl implements UserDAO {
             session.close();
         }
     }
+
+    @Override
+    public String getLastId() throws Exception {
+        Session session = FactoryConfiguration.getInstance().getSession();
+        try {
+            String id = session.createQuery("SELECT u.id FROM User u ORDER BY u.id DESC", String.class)
+                    .setMaxResults(1).uniqueResult();
+            return id;
+        } finally {
+            session.close();
+        }
+    }
 }

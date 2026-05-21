@@ -70,4 +70,10 @@ public class TherapistBOImpl implements TherapistBO {
             }
         }
     }
+
+    @Override
+    public String getNextId() throws Exception {
+        String lastId = therapistDAO.getLastId();
+        return lk.ijse.theserenitymentalhealththerapycenter.util.IdGenerator.generateNextId("T", lastId);
+    }
 }

@@ -12,6 +12,7 @@ import lk.ijse.theserenitymentalhealththerapycenter.dto.UserDTO;
 import lk.ijse.theserenitymentalhealththerapycenter.dto.tm.UserTM;
 import lk.ijse.theserenitymentalhealththerapycenter.exception.DuplicateEntryException;
 import lk.ijse.theserenitymentalhealththerapycenter.exception.InvalidInputException;
+import lk.ijse.theserenitymentalhealththerapycenter.util.ValidationUtil;
 
 import java.net.URL;
 import java.util.List;
@@ -29,6 +30,8 @@ public class UserManagementController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         cmbRole.setItems(FXCollections.observableArrayList("Admin", "Receptionist"));
+        txtId.setEditable(false);
+        generateNextId();
         loadTable();
         tblUsers.getSelectionModel().selectedItemProperty().addListener((obs, old, newVal) -> {
             if (newVal != null) {
@@ -36,57 +39,98 @@ public class UserManagementController implements Initializable {
                 txtUsername.setText(newVal.getUsername());
                 cmbRole.setValue(newVal.getRole());
                 txtPassword.clear();
+                ValidationUtil.resetStyles(txtId, txtUsername);
             }
         });
     }
 
+    private void generateNextId() {
+        try { txtId.setText(userBO.getNextId()); } catch (Exception e) { e.printStackTrace(); }
+    }
+
     @FXML
     void handleSave(ActionEvent event) {
+        ValidationUtil.resetStyles(txtId, txtUsername);
+
+        // Required fields check
+        boolean allFilled = true;
+        if (!ValidationUtil.validateRequired(txtUsername)) allFilled = false;
+        if (!ValidationUtil.validateRequired(txtPassword)) allFilled = false;
+        if (!ValidationUtil.validateRequired(cmbRole)) allFilled = false;
+
+        if (!allFilled) {
+            ValidationUtil.showRequiredFieldsError();
+            return;
+        }
+
         try {
-            UserDTO dto = new UserDTO(txtId.getText(), txtUsername.getText(), txtPassword.getText(), cmbRole.getValue());
+            UserDTO dto = new UserDTO(txtId.getText().trim(), txtUsername.getText().trim(), txtPassword.getText(), cmbRole.getValue());
             userBO.saveUser(dto);
-            showAlert(Alert.AlertType.INFORMATION, "User saved successfully!");
+            new Alert(Alert.AlertType.INFORMATION, "User saved successfully!").showAndWait();
             loadTable();
             handleClear(null);
+            generateNextId();
         } catch (DuplicateEntryException | InvalidInputException e) {
-            showAlert(Alert.AlertType.WARNING, e.getMessage());
+            new Alert(Alert.AlertType.WARNING, e.getMessage()).showAndWait();
         } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, "Failed to save user: " + e.getMessage());
+            new Alert(Alert.AlertType.ERROR, "Failed to save user: " + e.getMessage()).showAndWait();
         }
     }
 
     @FXML
     void handleUpdate(ActionEvent event) {
+        ValidationUtil.resetStyles(txtId, txtUsername);
+
+        boolean allFilled = true;
+        if (!ValidationUtil.validateRequired(txtId)) allFilled = false;
+        if (!ValidationUtil.validateRequired(txtUsername)) allFilled = false;
+        if (!ValidationUtil.validateRequired(cmbRole)) allFilled = false;
+
+        if (!allFilled) {
+            ValidationUtil.showRequiredFieldsError();
+            return;
+        }
+
+
         try {
-            UserDTO dto = new UserDTO(txtId.getText(), txtUsername.getText(), txtPassword.getText(), cmbRole.getValue());
+            UserDTO dto = new UserDTO(txtId.getText().trim(), txtUsername.getText().trim(), txtPassword.getText(), cmbRole.getValue());
             userBO.updateUser(dto);
-            showAlert(Alert.AlertType.INFORMATION, "User updated successfully!");
+            new Alert(Alert.AlertType.INFORMATION, "User updated successfully!").showAndWait();
             loadTable();
             handleClear(null);
         } catch (DuplicateEntryException | InvalidInputException e) {
-            showAlert(Alert.AlertType.WARNING, e.getMessage());
+            new Alert(Alert.AlertType.WARNING, e.getMessage()).showAndWait();
         } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, "Failed to update user: " + e.getMessage());
+            new Alert(Alert.AlertType.ERROR, "Failed to update user: " + e.getMessage()).showAndWait();
         }
     }
 
     @FXML
     void handleDelete(ActionEvent event) {
         String id = txtId.getText();
-        if (id.isEmpty()) { showAlert(Alert.AlertType.WARNING, "Please select a user to delete"); return; }
+        if (id == null || id.trim().isEmpty()) {
+            new Alert(Alert.AlertType.WARNING, "Please select a user to delete.").showAndWait();
+            return;
+        }
+
+        if (!ValidationUtil.confirmDelete()) return;
+
         try {
-            userBO.deleteUser(id);
-            showAlert(Alert.AlertType.INFORMATION, "User deleted successfully!");
+            userBO.deleteUser(id.trim());
+            new Alert(Alert.AlertType.INFORMATION, "User deleted successfully!").showAndWait();
             loadTable();
             handleClear(null);
         } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, "Failed to delete user: " + e.getMessage());
+            new Alert(Alert.AlertType.ERROR, "Failed to delete user: " + e.getMessage()).showAndWait();
         }
     }
 
     @FXML
     void handleClear(ActionEvent event) {
-        txtId.clear(); txtUsername.clear(); txtPassword.clear(); cmbRole.setValue(null); txtSearch.clear();
+        txtUsername.clear(); txtPassword.clear(); cmbRole.setValue(null);
+        if (txtSearch != null) txtSearch.clear();
+        ValidationUtil.resetStyles(txtId, txtUsername);
+        generateNextId();
     }
 
     @FXML
@@ -108,9 +152,5 @@ public class UserManagementController implements Initializable {
             for (UserDTO u : users) list.add(new UserTM(u.getId(), u.getUsername(), u.getRole()));
             tblUsers.setItems(list);
         } catch (Exception e) { e.printStackTrace(); }
-    }
-
-    private void showAlert(Alert.AlertType type, String msg) {
-        new Alert(type, msg).showAndWait();
     }
 }

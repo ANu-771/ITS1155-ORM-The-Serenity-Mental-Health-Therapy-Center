@@ -13,4 +13,5 @@ public interface PatientBO {
     List<PatientDTO> searchPatientsByName(String name) throws Exception;
     List<PatientDTO> getPatientsWithPrograms() throws Exception;
     List<PatientDTO> getPatientsEnrolledInAllPrograms() throws Exception;
+    String getNextId() throws Exception;
 }

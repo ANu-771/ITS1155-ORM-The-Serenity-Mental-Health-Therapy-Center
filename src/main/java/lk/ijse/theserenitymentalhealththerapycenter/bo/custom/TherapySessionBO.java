@@ -11,4 +11,5 @@ public interface TherapySessionBO {
     TherapySessionDTO searchSession(String id) throws Exception;
     List<TherapySessionDTO> getAllSessions() throws Exception;
     List<TherapySessionDTO> getSessionsByPatient(String patientId) throws Exception;
+    String getNextId() throws Exception;
 }

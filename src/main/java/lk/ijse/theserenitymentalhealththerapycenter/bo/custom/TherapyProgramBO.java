@@ -10,4 +10,5 @@ public interface TherapyProgramBO {
     boolean deleteProgram(String id) throws Exception;
     TherapyProgramDTO searchProgram(String id) throws Exception;
     List<TherapyProgramDTO> getAllPrograms() throws Exception;
+    String getNextId() throws Exception;
 }

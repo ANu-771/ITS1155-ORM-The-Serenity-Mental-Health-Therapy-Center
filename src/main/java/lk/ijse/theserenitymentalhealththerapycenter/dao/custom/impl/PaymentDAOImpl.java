@@ -96,4 +96,15 @@ public class PaymentDAOImpl implements PaymentDAO {
             session.close();
         }
     }
+
+    @Override
+    public String getLastId() throws Exception {
+        Session session = FactoryConfiguration.getInstance().getSession();
+        try {
+            return session.createQuery("SELECT p.paymentId FROM Payment p ORDER BY p.paymentId DESC", String.class)
+                    .setMaxResults(1).uniqueResult();
+        } finally {
+            session.close();
+        }
+    }
 }

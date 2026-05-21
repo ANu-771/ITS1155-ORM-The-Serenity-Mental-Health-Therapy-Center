@@ -14,6 +14,7 @@ import lk.ijse.theserenitymentalhealththerapycenter.dto.*;
 import lk.ijse.theserenitymentalhealththerapycenter.dto.tm.PaymentTM;
 import lk.ijse.theserenitymentalhealththerapycenter.exception.InvalidInputException;
 import lk.ijse.theserenitymentalhealththerapycenter.exception.PaymentException;
+import lk.ijse.theserenitymentalhealththerapycenter.util.ValidationUtil;
 
 import java.net.URL;
 import java.util.List;
@@ -33,10 +34,19 @@ public class PaymentManagementController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         cmbMethod.setItems(FXCollections.observableArrayList("Cash", "Card", "Bank Transfer", "Online"));
         cmbStatus.setItems(FXCollections.observableArrayList("PENDING", "COMPLETED", "FAILED"));
+        txtPaymentId.setEditable(false);
+        generateNextId();
         loadCombos();
         loadTable();
         tblPayments.getSelectionModel().selectedItemProperty().addListener((obs, old, nw) -> {
-            if (nw != null) { txtPaymentId.setText(nw.getPaymentId()); txtAmount.setText(String.valueOf(nw.getAmount())); txtDate.setText(nw.getPaymentDate()); cmbMethod.setValue(nw.getPaymentMethod()); cmbStatus.setValue(nw.getStatus()); }
+            if (nw != null) {
+                txtPaymentId.setText(nw.getPaymentId());
+                txtAmount.setText(String.valueOf(nw.getAmount()));
+                txtDate.setText(nw.getPaymentDate());
+                cmbMethod.setValue(nw.getPaymentMethod());
+                cmbStatus.setValue(nw.getStatus());
+                ValidationUtil.resetStyles(txtPaymentId, txtAmount, txtDate);
+            }
         });
     }
 
@@ -54,40 +64,123 @@ public class PaymentManagementController implements Initializable {
         } catch (Exception e) { e.printStackTrace(); }
     }
 
-    private String extractId(String comboVal) { return comboVal != null ? comboVal.split(" - ")[0] : null; }
+    private String extractId(String comboVal) {
+        return comboVal != null ? comboVal.split(" - ")[0] : null;
+    }
 
-    @FXML void handleSave(ActionEvent e) {
+    private void generateNextId() {
+        try { txtPaymentId.setText(paymentBO.getNextId()); } catch (Exception e) { e.printStackTrace(); }
+    }
+
+    @FXML
+    void handleSave(ActionEvent e) {
+        ValidationUtil.resetStyles(txtPaymentId, txtAmount, txtDate);
+
+        // Required fields
+        boolean allFilled = true;
+        if (!ValidationUtil.validateRequired(txtAmount)) allFilled = false;
+        if (!ValidationUtil.validateRequired(txtDate)) allFilled = false;
+        if (!ValidationUtil.validateRequired(cmbPatient)) allFilled = false;
+        if (!ValidationUtil.validateRequired(cmbProgram)) allFilled = false;
+        if (!ValidationUtil.validateRequired(cmbMethod)) allFilled = false;
+        if (!ValidationUtil.validateRequired(cmbStatus)) allFilled = false;
+
+        if (!allFilled) {
+            ValidationUtil.showRequiredFieldsError();
+            return;
+        }
+
         try {
-            double amount = Double.parseDouble(txtAmount.getText());
-            PaymentDTO dto = new PaymentDTO(txtPaymentId.getText(), amount, txtDate.getText(), cmbMethod.getValue(), cmbStatus.getValue(), extractId(cmbPatient.getValue()), null, extractId(cmbProgram.getValue()), null);
+            double amount = Double.parseDouble(txtAmount.getText().trim());
+            PaymentDTO dto = new PaymentDTO(
+                    txtPaymentId.getText().trim(), amount, txtDate.getText().trim(),
+                    cmbMethod.getValue(), cmbStatus.getValue(),
+                    extractId(cmbPatient.getValue()), null,
+                    extractId(cmbProgram.getValue()), null);
             paymentBO.savePayment(dto);
-            new Alert(Alert.AlertType.INFORMATION, "Payment saved!").showAndWait(); loadTable(); handleClear(null);
-        } catch (NumberFormatException ex) { new Alert(Alert.AlertType.WARNING, "Invalid amount").showAndWait();
-        } catch (PaymentException | InvalidInputException ex) { new Alert(Alert.AlertType.WARNING, ex.getMessage()).showAndWait();
-        } catch (Exception ex) { new Alert(Alert.AlertType.ERROR, "Error: " + ex.getMessage()).showAndWait(); }
+            new Alert(Alert.AlertType.INFORMATION, "Payment saved successfully!").showAndWait();
+            loadTable();
+            handleClear(null);
+            generateNextId();
+        } catch (NumberFormatException ex) {
+            ValidationUtil.setInvalid(txtAmount);
+            new Alert(Alert.AlertType.WARNING, "Invalid amount. Please enter a valid number.").showAndWait();
+        } catch (PaymentException | InvalidInputException ex) {
+            new Alert(Alert.AlertType.WARNING, ex.getMessage()).showAndWait();
+        } catch (Exception ex) {
+            new Alert(Alert.AlertType.ERROR, "Error: " + ex.getMessage()).showAndWait();
+        }
     }
 
-    @FXML void handleUpdate(ActionEvent e) {
+    @FXML
+    void handleUpdate(ActionEvent e) {
+        ValidationUtil.resetStyles(txtPaymentId, txtAmount, txtDate);
+
+        boolean allFilled = true;
+        if (!ValidationUtil.validateRequired(txtPaymentId)) allFilled = false;
+        if (!ValidationUtil.validateRequired(txtAmount)) allFilled = false;
+        if (!ValidationUtil.validateRequired(txtDate)) allFilled = false;
+
+        if (!allFilled) {
+            ValidationUtil.showRequiredFieldsError();
+            return;
+        }
+
         try {
-            double amount = Double.parseDouble(txtAmount.getText());
-            PaymentDTO dto = new PaymentDTO(txtPaymentId.getText(), amount, txtDate.getText(), cmbMethod.getValue(), cmbStatus.getValue(), extractId(cmbPatient.getValue()), null, extractId(cmbProgram.getValue()), null);
+            double amount = Double.parseDouble(txtAmount.getText().trim());
+            PaymentDTO dto = new PaymentDTO(
+                    txtPaymentId.getText().trim(), amount, txtDate.getText().trim(),
+                    cmbMethod.getValue(), cmbStatus.getValue(),
+                    extractId(cmbPatient.getValue()), null,
+                    extractId(cmbProgram.getValue()), null);
             paymentBO.updatePayment(dto);
-            new Alert(Alert.AlertType.INFORMATION, "Payment updated!").showAndWait(); loadTable(); handleClear(null);
-        } catch (Exception ex) { new Alert(Alert.AlertType.ERROR, "Error: " + ex.getMessage()).showAndWait(); }
+            new Alert(Alert.AlertType.INFORMATION, "Payment updated successfully!").showAndWait();
+            loadTable();
+            handleClear(null);
+        } catch (NumberFormatException ex) {
+            ValidationUtil.setInvalid(txtAmount);
+            new Alert(Alert.AlertType.WARNING, "Invalid amount.").showAndWait();
+        } catch (Exception ex) {
+            new Alert(Alert.AlertType.ERROR, "Error: " + ex.getMessage()).showAndWait();
+        }
     }
 
-    @FXML void handleDelete(ActionEvent e) {
-        try { paymentBO.deletePayment(txtPaymentId.getText()); new Alert(Alert.AlertType.INFORMATION, "Deleted!").showAndWait(); loadTable(); handleClear(null);
-        } catch (Exception ex) { new Alert(Alert.AlertType.ERROR, ex.getMessage()).showAndWait(); }
+    @FXML
+    void handleDelete(ActionEvent e) {
+        String id = txtPaymentId.getText();
+        if (id == null || id.trim().isEmpty()) {
+            new Alert(Alert.AlertType.WARNING, "Please select a payment to delete.").showAndWait();
+            return;
+        }
+
+        if (!ValidationUtil.confirmDelete()) return;
+
+        try {
+            paymentBO.deletePayment(id.trim());
+            new Alert(Alert.AlertType.INFORMATION, "Payment deleted successfully!").showAndWait();
+            loadTable();
+            handleClear(null);
+        } catch (Exception ex) {
+            new Alert(Alert.AlertType.ERROR, ex.getMessage()).showAndWait();
+        }
     }
 
-    @FXML void handleClear(ActionEvent e) { txtPaymentId.clear(); txtAmount.clear(); txtDate.clear(); cmbPatient.setValue(null); cmbProgram.setValue(null); cmbMethod.setValue(null); cmbStatus.setValue(null); }
+    @FXML
+    void handleClear(ActionEvent e) {
+        txtPaymentId.clear(); txtAmount.clear(); txtDate.clear();
+        cmbPatient.setValue(null); cmbProgram.setValue(null);
+        cmbMethod.setValue(null); cmbStatus.setValue(null);
+        ValidationUtil.resetStyles(txtPaymentId, txtAmount, txtDate);
+        generateNextId();
+    }
 
     private void loadTable() {
         try {
             List<PaymentDTO> all = paymentBO.getAllPayments();
             ObservableList<PaymentTM> list = FXCollections.observableArrayList();
-            for (PaymentDTO p : all) list.add(new PaymentTM(p.getPaymentId(), p.getAmount(), p.getPaymentDate(), p.getPaymentMethod(), p.getStatus(), p.getPatientName(), p.getProgramName()));
+            for (PaymentDTO p : all) {
+                list.add(new PaymentTM(p.getPaymentId(), p.getAmount(), p.getPaymentDate(), p.getPaymentMethod(), p.getStatus(), p.getPatientName(), p.getProgramName()));
+            }
             tblPayments.setItems(list);
         } catch (Exception e) { e.printStackTrace(); }
     }

@@ -11,4 +11,5 @@ public interface PaymentBO {
     PaymentDTO searchPayment(String id) throws Exception;
     List<PaymentDTO> getAllPayments() throws Exception;
     List<PaymentDTO> getPaymentsByPatient(String patientId) throws Exception;
+    String getNextId() throws Exception;
 }

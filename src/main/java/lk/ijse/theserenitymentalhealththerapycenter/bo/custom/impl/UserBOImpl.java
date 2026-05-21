@@ -132,4 +132,10 @@ public class UserBOImpl implements UserBO {
             System.out.println("Default admin account created (username: admin, password: admin123)");
         }
     }
+
+    @Override
+    public String getNextId() throws Exception {
+        String lastId = userDAO.getLastId();
+        return lk.ijse.theserenitymentalhealththerapycenter.util.IdGenerator.generateNextId("U", lastId);
+    }
 }

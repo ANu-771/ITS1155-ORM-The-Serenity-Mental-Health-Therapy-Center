@@ -4,4 +4,5 @@ import lk.ijse.theserenitymentalhealththerapycenter.dao.CrudDAO;
 import lk.ijse.theserenitymentalhealththerapycenter.entity.Therapist;
 
 public interface TherapistDAO extends CrudDAO<Therapist, String> {
+    String getLastId() throws Exception;
 }

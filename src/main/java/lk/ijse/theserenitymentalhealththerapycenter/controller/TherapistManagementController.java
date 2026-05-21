@@ -11,6 +11,7 @@ import lk.ijse.theserenitymentalhealththerapycenter.bo.custom.TherapistBO;
 import lk.ijse.theserenitymentalhealththerapycenter.dto.TherapistDTO;
 import lk.ijse.theserenitymentalhealththerapycenter.dto.tm.TherapistTM;
 import lk.ijse.theserenitymentalhealththerapycenter.exception.InvalidInputException;
+import lk.ijse.theserenitymentalhealththerapycenter.util.ValidationUtil;
 
 import java.net.URL;
 import java.util.List;
@@ -25,36 +26,141 @@ public class TherapistManagementController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        txtId.setEditable(false);
+        generateNextId();
         loadTable();
         tblTherapists.getSelectionModel().selectedItemProperty().addListener((obs, old, nw) -> {
-            if (nw != null) { txtId.setText(nw.getId()); txtName.setText(nw.getName()); txtSpecialization.setText(nw.getSpecialization()); txtContact.setText(nw.getContactNumber()); txtEmail.setText(nw.getEmail()); }
+            if (nw != null) {
+                txtId.setText(nw.getId());
+                txtName.setText(nw.getName());
+                txtSpecialization.setText(nw.getSpecialization());
+                txtContact.setText(nw.getContactNumber());
+                txtEmail.setText(nw.getEmail());
+                ValidationUtil.resetStyles(txtId, txtName, txtSpecialization, txtContact, txtEmail);
+            }
         });
     }
 
-    @FXML void handleSave(ActionEvent e) {
+    private void generateNextId() {
+        try { txtId.setText(therapistBO.getNextId()); } catch (Exception e) { e.printStackTrace(); }
+    }
+
+    @FXML
+    void handleSave(ActionEvent e) {
+        ValidationUtil.resetStyles(txtId, txtName, txtSpecialization, txtContact, txtEmail);
+
+        // Required fields
+        boolean allFilled = true;
+        if (!ValidationUtil.validateRequired(txtName)) allFilled = false;
+        if (!ValidationUtil.validateRequired(txtSpecialization)) allFilled = false;
+        if (!ValidationUtil.validateRequired(txtContact)) allFilled = false;
+
+        if (!allFilled) {
+            ValidationUtil.showRequiredFieldsError();
+            return;
+        }
+
+        // Regex validation
+        boolean valid = true;
+        if (!ValidationUtil.validateName(txtName)) valid = false;
+        if (!ValidationUtil.validatePhone(txtContact)) valid = false;
+        if (txtEmail.getText() != null && !txtEmail.getText().trim().isEmpty()) {
+            if (!ValidationUtil.validateEmail(txtEmail)) valid = false;
+        }
+
+        if (!valid) {
+            new Alert(Alert.AlertType.WARNING, "Please correct the highlighted fields.").showAndWait();
+            return;
+        }
+
         try {
-            therapistBO.saveTherapist(new TherapistDTO(txtId.getText(), txtName.getText(), txtSpecialization.getText(), txtContact.getText(), txtEmail.getText()));
-            new Alert(Alert.AlertType.INFORMATION, "Therapist saved!").showAndWait(); loadTable(); handleClear(null);
-        } catch (InvalidInputException ex) { new Alert(Alert.AlertType.WARNING, ex.getMessage()).showAndWait();
-        } catch (Exception ex) { new Alert(Alert.AlertType.ERROR, "Error: " + ex.getMessage()).showAndWait(); }
+            therapistBO.saveTherapist(new TherapistDTO(
+                    txtId.getText().trim(), txtName.getText().trim(),
+                    txtSpecialization.getText().trim(), txtContact.getText().trim(),
+                    txtEmail.getText().trim()));
+            new Alert(Alert.AlertType.INFORMATION, "Therapist saved successfully!").showAndWait();
+            loadTable();
+            handleClear(null);
+        } catch (InvalidInputException ex) {
+            new Alert(Alert.AlertType.WARNING, ex.getMessage()).showAndWait();
+        } catch (Exception ex) {
+            new Alert(Alert.AlertType.ERROR, "Error: " + ex.getMessage()).showAndWait();
+        }
     }
 
-    @FXML void handleUpdate(ActionEvent e) {
+    @FXML
+    void handleUpdate(ActionEvent e) {
+        ValidationUtil.resetStyles(txtId, txtName, txtSpecialization, txtContact, txtEmail);
+
+        boolean allFilled = true;
+        if (!ValidationUtil.validateRequired(txtId)) allFilled = false;
+        if (!ValidationUtil.validateRequired(txtName)) allFilled = false;
+        if (!ValidationUtil.validateRequired(txtSpecialization)) allFilled = false;
+        if (!ValidationUtil.validateRequired(txtContact)) allFilled = false;
+
+        if (!allFilled) {
+            ValidationUtil.showRequiredFieldsError();
+            return;
+        }
+
+        boolean valid = true;
+        if (!ValidationUtil.validateName(txtName)) valid = false;
+        if (!ValidationUtil.validatePhone(txtContact)) valid = false;
+        if (txtEmail.getText() != null && !txtEmail.getText().trim().isEmpty()) {
+            if (!ValidationUtil.validateEmail(txtEmail)) valid = false;
+        }
+
+        if (!valid) {
+            new Alert(Alert.AlertType.WARNING, "Please correct the highlighted fields.").showAndWait();
+            return;
+        }
+
         try {
-            therapistBO.updateTherapist(new TherapistDTO(txtId.getText(), txtName.getText(), txtSpecialization.getText(), txtContact.getText(), txtEmail.getText()));
-            new Alert(Alert.AlertType.INFORMATION, "Therapist updated!").showAndWait(); loadTable(); handleClear(null);
-        } catch (InvalidInputException ex) { new Alert(Alert.AlertType.WARNING, ex.getMessage()).showAndWait();
-        } catch (Exception ex) { new Alert(Alert.AlertType.ERROR, "Error: " + ex.getMessage()).showAndWait(); }
+            therapistBO.updateTherapist(new TherapistDTO(
+                    txtId.getText().trim(), txtName.getText().trim(),
+                    txtSpecialization.getText().trim(), txtContact.getText().trim(),
+                    txtEmail.getText().trim()));
+            new Alert(Alert.AlertType.INFORMATION, "Therapist updated successfully!").showAndWait();
+            loadTable();
+            handleClear(null);
+        } catch (InvalidInputException ex) {
+            new Alert(Alert.AlertType.WARNING, ex.getMessage()).showAndWait();
+        } catch (Exception ex) {
+            new Alert(Alert.AlertType.ERROR, "Error: " + ex.getMessage()).showAndWait();
+        }
     }
 
-    @FXML void handleDelete(ActionEvent e) {
-        try { therapistBO.deleteTherapist(txtId.getText()); new Alert(Alert.AlertType.INFORMATION, "Deleted!").showAndWait(); loadTable(); handleClear(null);
-        } catch (Exception ex) { new Alert(Alert.AlertType.ERROR, ex.getMessage()).showAndWait(); }
+    @FXML
+    void handleDelete(ActionEvent e) {
+        String id = txtId.getText();
+        if (id == null || id.trim().isEmpty()) {
+            new Alert(Alert.AlertType.WARNING, "Please select a therapist to delete.").showAndWait();
+            return;
+        }
+
+        if (!ValidationUtil.confirmDelete()) return;
+
+        try {
+            therapistBO.deleteTherapist(id.trim());
+            new Alert(Alert.AlertType.INFORMATION, "Therapist deleted successfully!").showAndWait();
+            loadTable();
+            handleClear(null);
+        } catch (Exception ex) {
+            new Alert(Alert.AlertType.ERROR, "Error: " + ex.getMessage()).showAndWait();
+        }
     }
 
-    @FXML void handleClear(ActionEvent e) { txtId.clear(); txtName.clear(); txtSpecialization.clear(); txtContact.clear(); txtEmail.clear(); if (txtSearch != null) txtSearch.clear(); }
+    @FXML
+    void handleClear(ActionEvent e) {
+        txtName.clear(); txtSpecialization.clear();
+        txtContact.clear(); txtEmail.clear();
+        if (txtSearch != null) txtSearch.clear();
+        ValidationUtil.resetStyles(txtId, txtName, txtSpecialization, txtContact, txtEmail);
+        generateNextId();
+    }
 
-    @FXML void handleSearch(javafx.scene.input.KeyEvent e) {
+    @FXML
+    void handleSearch(javafx.scene.input.KeyEvent e) {
         String id = txtSearch.getText().trim();
         if (id.isEmpty()) { loadTable(); return; }
         try {

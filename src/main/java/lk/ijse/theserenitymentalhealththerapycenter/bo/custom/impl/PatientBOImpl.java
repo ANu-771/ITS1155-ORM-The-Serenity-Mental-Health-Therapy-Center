@@ -97,4 +97,10 @@ public class PatientBOImpl implements PatientBO {
             }
         }
     }
+
+    @Override
+    public String getNextId() throws Exception {
+        String lastId = patientDAO.getLastId();
+        return lk.ijse.theserenitymentalhealththerapycenter.util.IdGenerator.generateNextId("P", lastId);
+    }
 }

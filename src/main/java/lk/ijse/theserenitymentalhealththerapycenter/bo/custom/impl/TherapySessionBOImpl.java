@@ -83,4 +83,10 @@ public class TherapySessionBOImpl implements TherapySessionBO {
         if (dto.getPatientId() == null) throw new InvalidInputException("Patient is required");
         if (dto.getTherapistId() == null) throw new InvalidInputException("Therapist is required");
     }
+
+    @Override
+    public String getNextId() throws Exception {
+        String lastId = sessionDAO.getLastId();
+        return lk.ijse.theserenitymentalhealththerapycenter.util.IdGenerator.generateNextId("S", lastId);
+    }
 }

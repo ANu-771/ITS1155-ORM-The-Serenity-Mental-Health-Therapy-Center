@@ -11,6 +11,7 @@ import lk.ijse.theserenitymentalhealththerapycenter.bo.custom.TherapyProgramBO;
 import lk.ijse.theserenitymentalhealththerapycenter.dto.TherapyProgramDTO;
 import lk.ijse.theserenitymentalhealththerapycenter.dto.tm.TherapyProgramTM;
 import lk.ijse.theserenitymentalhealththerapycenter.exception.InvalidInputException;
+import lk.ijse.theserenitymentalhealththerapycenter.util.ValidationUtil;
 
 import java.net.URL;
 import java.util.List;
@@ -26,40 +27,121 @@ public class TherapyProgramManagementController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        txtProgramId.setEditable(false);
+        generateNextId();
         loadTable();
         tblPrograms.getSelectionModel().selectedItemProperty().addListener((obs, old, nw) -> {
-            if (nw != null) { txtProgramId.setText(nw.getProgramId()); txtName.setText(nw.getName()); txtDuration.setText(nw.getDuration()); txtFee.setText(String.valueOf(nw.getFee())); txtDescription.setText(nw.getDescription()); }
+            if (nw != null) {
+                txtProgramId.setText(nw.getProgramId());
+                txtName.setText(nw.getName());
+                txtDuration.setText(nw.getDuration());
+                txtFee.setText(String.valueOf(nw.getFee()));
+                txtDescription.setText(nw.getDescription());
+                ValidationUtil.resetStyles(txtProgramId, txtName, txtDuration, txtFee);
+            }
         });
     }
 
-    @FXML void handleSave(ActionEvent e) {
+    private void generateNextId() {
+        try { txtProgramId.setText(programBO.getNextId()); } catch (Exception e) { e.printStackTrace(); }
+    }
+
+    @FXML
+    void handleSave(ActionEvent e) {
+        ValidationUtil.resetStyles(txtProgramId, txtName, txtDuration, txtFee);
+
+        boolean allFilled = true;
+        if (!ValidationUtil.validateRequired(txtName)) allFilled = false;
+        if (!ValidationUtil.validateRequired(txtDuration)) allFilled = false;
+        if (!ValidationUtil.validateRequired(txtFee)) allFilled = false;
+
+        if (!allFilled) {
+            ValidationUtil.showRequiredFieldsError();
+            return;
+        }
+
         try {
-            double fee = Double.parseDouble(txtFee.getText());
-            programBO.saveProgram(new TherapyProgramDTO(txtProgramId.getText(), txtName.getText(), txtDuration.getText(), fee, txtDescription.getText()));
-            new Alert(Alert.AlertType.INFORMATION, "Program saved!").showAndWait(); loadTable(); handleClear(null);
-        } catch (NumberFormatException ex) { new Alert(Alert.AlertType.WARNING, "Invalid fee amount").showAndWait();
-        } catch (InvalidInputException ex) { new Alert(Alert.AlertType.WARNING, ex.getMessage()).showAndWait();
-        } catch (Exception ex) { new Alert(Alert.AlertType.ERROR, "Error: " + ex.getMessage()).showAndWait(); }
+            double fee = Double.parseDouble(txtFee.getText().trim());
+            programBO.saveProgram(new TherapyProgramDTO(
+                    txtProgramId.getText().trim(), txtName.getText().trim(),
+                    txtDuration.getText().trim(), fee, txtDescription.getText()));
+            new Alert(Alert.AlertType.INFORMATION, "Program saved successfully!").showAndWait();
+            loadTable();
+            handleClear(null);
+        } catch (NumberFormatException ex) {
+            ValidationUtil.setInvalid(txtFee);
+            new Alert(Alert.AlertType.WARNING, "Invalid fee amount. Please enter a valid number.").showAndWait();
+        } catch (InvalidInputException ex) {
+            new Alert(Alert.AlertType.WARNING, ex.getMessage()).showAndWait();
+        } catch (Exception ex) {
+            new Alert(Alert.AlertType.ERROR, "Error: " + ex.getMessage()).showAndWait();
+        }
     }
 
-    @FXML void handleUpdate(ActionEvent e) {
+    @FXML
+    void handleUpdate(ActionEvent e) {
+        ValidationUtil.resetStyles(txtProgramId, txtName, txtDuration, txtFee);
+
+        boolean allFilled = true;
+        if (!ValidationUtil.validateRequired(txtProgramId)) allFilled = false;
+        if (!ValidationUtil.validateRequired(txtName)) allFilled = false;
+        if (!ValidationUtil.validateRequired(txtDuration)) allFilled = false;
+        if (!ValidationUtil.validateRequired(txtFee)) allFilled = false;
+
+        if (!allFilled) {
+            ValidationUtil.showRequiredFieldsError();
+            return;
+        }
+
         try {
-            double fee = Double.parseDouble(txtFee.getText());
-            programBO.updateProgram(new TherapyProgramDTO(txtProgramId.getText(), txtName.getText(), txtDuration.getText(), fee, txtDescription.getText()));
-            new Alert(Alert.AlertType.INFORMATION, "Program updated!").showAndWait(); loadTable(); handleClear(null);
-        } catch (NumberFormatException ex) { new Alert(Alert.AlertType.WARNING, "Invalid fee amount").showAndWait();
-        } catch (InvalidInputException ex) { new Alert(Alert.AlertType.WARNING, ex.getMessage()).showAndWait();
-        } catch (Exception ex) { new Alert(Alert.AlertType.ERROR, "Error: " + ex.getMessage()).showAndWait(); }
+            double fee = Double.parseDouble(txtFee.getText().trim());
+            programBO.updateProgram(new TherapyProgramDTO(
+                    txtProgramId.getText().trim(), txtName.getText().trim(),
+                    txtDuration.getText().trim(), fee, txtDescription.getText()));
+            new Alert(Alert.AlertType.INFORMATION, "Program updated successfully!").showAndWait();
+            loadTable();
+            handleClear(null);
+        } catch (NumberFormatException ex) {
+            ValidationUtil.setInvalid(txtFee);
+            new Alert(Alert.AlertType.WARNING, "Invalid fee amount. Please enter a valid number.").showAndWait();
+        } catch (InvalidInputException ex) {
+            new Alert(Alert.AlertType.WARNING, ex.getMessage()).showAndWait();
+        } catch (Exception ex) {
+            new Alert(Alert.AlertType.ERROR, "Error: " + ex.getMessage()).showAndWait();
+        }
     }
 
-    @FXML void handleDelete(ActionEvent e) {
-        try { programBO.deleteProgram(txtProgramId.getText()); new Alert(Alert.AlertType.INFORMATION, "Deleted!").showAndWait(); loadTable(); handleClear(null);
-        } catch (Exception ex) { new Alert(Alert.AlertType.ERROR, ex.getMessage()).showAndWait(); }
+    @FXML
+    void handleDelete(ActionEvent e) {
+        String id = txtProgramId.getText();
+        if (id == null || id.trim().isEmpty()) {
+            new Alert(Alert.AlertType.WARNING, "Please select a program to delete.").showAndWait();
+            return;
+        }
+
+        if (!ValidationUtil.confirmDelete()) return;
+
+        try {
+            programBO.deleteProgram(id.trim());
+            new Alert(Alert.AlertType.INFORMATION, "Program deleted successfully!").showAndWait();
+            loadTable();
+            handleClear(null);
+        } catch (Exception ex) {
+            new Alert(Alert.AlertType.ERROR, "Error: " + ex.getMessage()).showAndWait();
+        }
     }
 
-    @FXML void handleClear(ActionEvent e) { txtProgramId.clear(); txtName.clear(); txtDuration.clear(); txtFee.clear(); txtDescription.clear(); if (txtSearch != null) txtSearch.clear(); }
+    @FXML
+    void handleClear(ActionEvent e) {
+        txtName.clear(); txtDuration.clear();
+        txtFee.clear(); txtDescription.clear();
+        if (txtSearch != null) txtSearch.clear();
+        ValidationUtil.resetStyles(txtProgramId, txtName, txtDuration, txtFee);
+        generateNextId();
+    }
 
-    @FXML void handleSearch(javafx.scene.input.KeyEvent e) {
+    @FXML
+    void handleSearch(javafx.scene.input.KeyEvent e) {
         String id = txtSearch.getText().trim();
         if (id.isEmpty()) { loadTable(); return; }
         try {

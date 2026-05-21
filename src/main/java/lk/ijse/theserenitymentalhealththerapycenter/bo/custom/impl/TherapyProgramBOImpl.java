@@ -61,4 +61,10 @@ public class TherapyProgramBOImpl implements TherapyProgramBO {
             throw new InvalidInputException("Fee must be greater than zero");
         }
     }
+
+    @Override
+    public String getNextId() throws Exception {
+        String lastId = programDAO.getLastId();
+        return lk.ijse.theserenitymentalhealththerapycenter.util.IdGenerator.generateNextId("TP", lastId);
+    }
 }

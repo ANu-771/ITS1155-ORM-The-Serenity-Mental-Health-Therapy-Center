@@ -125,4 +125,15 @@ public class TherapySessionDAOImpl implements TherapySessionDAO {
             session.close();
         }
     }
+
+    @Override
+    public String getLastId() throws Exception {
+        Session session = FactoryConfiguration.getInstance().getSession();
+        try {
+            return session.createQuery("SELECT ts.sessionId FROM TherapySession ts ORDER BY ts.sessionId DESC", String.class)
+                    .setMaxResults(1).uniqueResult();
+        } finally {
+            session.close();
+        }
+    }
 }

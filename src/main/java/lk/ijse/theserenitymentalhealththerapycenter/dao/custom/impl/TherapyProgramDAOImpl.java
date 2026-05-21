@@ -82,4 +82,15 @@ public class TherapyProgramDAOImpl implements TherapyProgramDAO {
             session.close();
         }
     }
+
+    @Override
+    public String getLastId() throws Exception {
+        Session session = FactoryConfiguration.getInstance().getSession();
+        try {
+            return session.createQuery("SELECT tp.programId FROM TherapyProgram tp ORDER BY tp.programId DESC", String.class)
+                    .setMaxResults(1).uniqueResult();
+        } finally {
+            session.close();
+        }
+    }
 }

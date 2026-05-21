@@ -10,4 +10,5 @@ public interface TherapistBO {
     boolean deleteTherapist(String id) throws Exception;
     TherapistDTO searchTherapist(String id) throws Exception;
     List<TherapistDTO> getAllTherapists() throws Exception;
+    String getNextId() throws Exception;
 }
