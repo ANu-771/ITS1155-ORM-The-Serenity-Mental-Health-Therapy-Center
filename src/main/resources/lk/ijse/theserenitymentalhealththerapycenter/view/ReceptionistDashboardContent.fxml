@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane fitToWidth="true" stylesheets="@../styles.css"
+            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="lk.ijse.theserenitymentalhealththerapycenter.controller.ReceptionistDashboardContentController"
+            style="-fx-background-color: transparent; -fx-background: transparent;">
+
+    <VBox spacing="24">
+        <padding><Insets top="8" right="4" bottom="20" left="4"/></padding>
+
+        <!-- ===== Stats Cards Row ===== -->
+        <HBox spacing="16">
+            <!-- Today's Sessions -->
+            <VBox alignment="CENTER" spacing="8" HBox.hgrow="ALWAYS"
+                  style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 10, 0, 0, 2); -fx-padding: 22 16;">
+                <HBox alignment="CENTER" prefWidth="44" prefHeight="44"
+                      style="-fx-background-color: #e3f2fd; -fx-background-radius: 10;">
+                    <Label text="📅" style="-fx-font-size: 20px;"/>
+                </HBox>
+                <Label fx:id="lblTodaySessions" text="0" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #1a1a2e;"/>
+                <Label text="Today's Sessions" style="-fx-font-size: 12px; -fx-text-fill: #78909c;"/>
+            </VBox>
+
+            <!-- Pending Payments -->
+            <VBox alignment="CENTER" spacing="8" HBox.hgrow="ALWAYS"
+                  style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 10, 0, 0, 2); -fx-padding: 22 16;">
+                <HBox alignment="CENTER" prefWidth="44" prefHeight="44"
+                      style="-fx-background-color: #e3f2fd; -fx-background-radius: 10;">
+                    <Label text="💳" style="-fx-font-size: 20px;"/>
+                </HBox>
+                <Label fx:id="lblPendingPayments" text="0" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #1a1a2e;"/>
+                <Label text="Pending Payments" style="-fx-font-size: 12px; -fx-text-fill: #78909c;"/>
+            </VBox>
+
+            <!-- New Patients -->
+            <VBox alignment="CENTER" spacing="8" HBox.hgrow="ALWAYS"
+                  style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 10, 0, 0, 2); -fx-padding: 22 16;">
+                <HBox alignment="CENTER" prefWidth="44" prefHeight="44"
+                      style="-fx-background-color: #e3f2fd; -fx-background-radius: 10;">
+                    <Label text="🧑" style="-fx-font-size: 20px;"/>
+                </HBox>
+                <Label fx:id="lblNewPatients" text="0" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #1a1a2e;"/>
+                <Label text="Total Patients" style="-fx-font-size: 12px; -fx-text-fill: #78909c;"/>
+            </VBox>
+        </HBox>
+
+        <!-- ===== Today's Schedule Table ===== -->
+        <VBox spacing="12" style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 8, 0, 0, 2); -fx-padding: 20;">
+            <Label text="Today's Schedule" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #1a1a2e;"/>
+
+            <TableView fx:id="tblTodaySchedule" prefHeight="280">
+                <placeholder><Label text="No sessions scheduled for today"/></placeholder>
+                <columns>
+                    <TableColumn fx:id="colTime" text="Time" prefWidth="80">
+                        <cellValueFactory><PropertyValueFactory property="time"/></cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="colPatient" text="Patient Name" prefWidth="160">
+                        <cellValueFactory><PropertyValueFactory property="patientName"/></cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="colTherapist" text="Assigned Therapist" prefWidth="160">
+                        <cellValueFactory><PropertyValueFactory property="therapistName"/></cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="colProgram" text="Therapy Program" prefWidth="160">
+                        <cellValueFactory><PropertyValueFactory property="programName"/></cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="colPayStatus" text="Payment Status" prefWidth="110">
+                        <cellValueFactory><PropertyValueFactory property="status"/></cellValueFactory>
+                    </TableColumn>
+                </columns>
+            </TableView>
+        </VBox>
+    </VBox>
+</ScrollPane>

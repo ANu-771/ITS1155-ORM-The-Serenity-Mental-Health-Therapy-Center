@@ -8,4 +8,5 @@ import java.util.List;
 public interface PatientDAO extends CrudDAO<Patient, String> {
     List<Patient> searchByName(String name) throws Exception;
     List<Patient> getPatientsWithPrograms() throws Exception;
+    List<Patient> getPatientsEnrolledInAllPrograms() throws Exception;
 }

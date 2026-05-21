@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane fitToWidth="true" stylesheets="@../styles.css"
+            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="lk.ijse.theserenitymentalhealththerapycenter.controller.AdminDashboardContentController"
+            style="-fx-background-color: transparent; -fx-background: transparent;">
+
+    <VBox spacing="24">
+        <padding><Insets top="8" right="4" bottom="20" left="4"/></padding>
+
+        <!-- ===== Stats Cards Row ===== -->
+        <HBox spacing="16">
+            <!-- Total Patients -->
+            <VBox alignment="CENTER" spacing="8" HBox.hgrow="ALWAYS"
+                  style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 10, 0, 0, 2); -fx-padding: 22 16;">
+                <HBox alignment="CENTER" prefWidth="44" prefHeight="44"
+                      style="-fx-background-color: #e8f5e9; -fx-background-radius: 10;">
+                    <Label text="🧑" style="-fx-font-size: 20px;"/>
+                </HBox>
+                <Label fx:id="lblTotalPatients" text="0" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #1a1a2e;"/>
+                <Label text="Total Patients" style="-fx-font-size: 12px; -fx-text-fill: #78909c;"/>
+            </VBox>
+
+            <!-- Active Therapists -->
+            <VBox alignment="CENTER" spacing="8" HBox.hgrow="ALWAYS"
+                  style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 10, 0, 0, 2); -fx-padding: 22 16;">
+                <HBox alignment="CENTER" prefWidth="44" prefHeight="44"
+                      style="-fx-background-color: #e8f5e9; -fx-background-radius: 10;">
+                    <Label text="🩺" style="-fx-font-size: 20px;"/>
+                </HBox>
+                <Label fx:id="lblActiveTherapists" text="0" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #1a1a2e;"/>
+                <Label text="Active Therapists" style="-fx-font-size: 12px; -fx-text-fill: #78909c;"/>
+            </VBox>
+
+            <!-- Total Programs -->
+            <VBox alignment="CENTER" spacing="8" HBox.hgrow="ALWAYS"
+                  style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 10, 0, 0, 2); -fx-padding: 22 16;">
+                <HBox alignment="CENTER" prefWidth="44" prefHeight="44"
+                      style="-fx-background-color: #e8f5e9; -fx-background-radius: 10;">
+                    <Label text="📋" style="-fx-font-size: 20px;"/>
+                </HBox>
+                <Label fx:id="lblTotalPrograms" text="0" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #1a1a2e;"/>
+                <Label text="Total Programs" style="-fx-font-size: 12px; -fx-text-fill: #78909c;"/>
+            </VBox>
+
+            <!-- Total Revenue -->
+            <VBox alignment="CENTER" spacing="8" HBox.hgrow="ALWAYS"
+                  style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 10, 0, 0, 2); -fx-padding: 22 16;">
+                <HBox alignment="CENTER" prefWidth="44" prefHeight="44"
+                      style="-fx-background-color: #e8f5e9; -fx-background-radius: 10;">
+                    <Label text="💰" style="-fx-font-size: 20px;"/>
+                </HBox>
+                <Label fx:id="lblTotalRevenue" text="LKR 0" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #1a1a2e;"/>
+                <Label text="Total Revenue" style="-fx-font-size: 12px; -fx-text-fill: #78909c;"/>
+            </VBox>
+        </HBox>
+
+        <!-- ===== Recent Activity Table ===== -->
+        <VBox spacing="12" style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 8, 0, 0, 2); -fx-padding: 20;">
+            <Label text="Recent System Activity" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #1a1a2e;"/>
+
+            <TableView fx:id="tblRecentActivity" prefHeight="280">
+                <placeholder><Label text="No recent activity to display"/></placeholder>
+                <columns>
+                    <TableColumn fx:id="colId" text="ID" prefWidth="90">
+                        <cellValueFactory><PropertyValueFactory property="id"/></cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="colName" text="Name" prefWidth="200">
+                        <cellValueFactory><PropertyValueFactory property="name"/></cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="colType" text="Type" prefWidth="150">
+                        <cellValueFactory><PropertyValueFactory property="type"/></cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="colDate" text="Date Added" prefWidth="130">
+                        <cellValueFactory><PropertyValueFactory property="date"/></cellValueFactory>
+                    </TableColumn>
+                </columns>
+            </TableView>
+        </VBox>
+    </VBox>
+</ScrollPane>

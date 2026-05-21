@@ -3,6 +3,7 @@ package lk.ijse.theserenitymentalhealththerapycenter.controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -10,17 +11,24 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import lk.ijse.theserenitymentalhealththerapycenter.HelloApplication;
 
-public class AdminDashboardController {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class AdminDashboardController implements Initializable {
 
     @FXML private AnchorPane contentPane;
     @FXML private Label lblHeader;
     @FXML private Label lblSubheader;
 
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        // Auto-load dashboard home content on startup
+        loadContent("view/AdminDashboardContent.fxml", "Dashboard Home", "Welcome back, Admin");
+    }
+
     @FXML
     public void handleDashboard(ActionEvent event) {
-        lblHeader.setText("Dashboard Home");
-        lblSubheader.setText("Welcome back, Admin");
-        contentPane.getChildren().clear();
+        loadContent("view/AdminDashboardContent.fxml", "Dashboard Home", "Welcome back, Admin");
     }
 
     @FXML

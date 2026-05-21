@@ -57,9 +57,16 @@ public class TherapistBOImpl implements TherapistBO {
         if (dto.getSpecialization() == null || dto.getSpecialization().trim().isEmpty()) {
             throw new InvalidInputException("Specialization is required");
         }
+        // Strict email regex
         if (dto.getEmail() != null && !dto.getEmail().trim().isEmpty()) {
-            if (!dto.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
-                throw new InvalidInputException("Invalid email format");
+            if (!dto.getEmail().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {
+                throw new InvalidInputException("Invalid email format (e.g. doctor@serenity.lk)");
+            }
+        }
+        // Sri Lanka phone format: +94XXXXXXXXX or 0XXXXXXXXX
+        if (dto.getContactNumber() != null && !dto.getContactNumber().trim().isEmpty()) {
+            if (!dto.getContactNumber().matches("^(\\+94|0)\\d{9}$")) {
+                throw new InvalidInputException("Invalid phone format (e.g. +94771234567 or 0771234567)");
             }
         }
     }

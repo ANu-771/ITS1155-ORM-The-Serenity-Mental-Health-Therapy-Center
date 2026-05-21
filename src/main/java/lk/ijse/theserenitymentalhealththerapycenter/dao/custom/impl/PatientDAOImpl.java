@@ -108,4 +108,23 @@ public class PatientDAOImpl implements PatientDAO {
             session.close();
         }
     }
+
+    @Override
+    public List<Patient> getPatientsEnrolledInAllPrograms() throws Exception {
+        Session session = FactoryConfiguration.getInstance().getSession();
+        try {
+            // Step 1: Get total number of available therapy programs
+            Long totalPrograms = session.createQuery(
+                    "SELECT COUNT(tp) FROM TherapyProgram tp", Long.class).uniqueResult();
+
+            // Step 2: HQL Join Query — patients who have registered for EVERY available program
+            Query<Patient> query = session.createQuery(
+                    "SELECT p FROM Patient p JOIN p.therapyPrograms tp " +
+                    "GROUP BY p.id HAVING COUNT(tp) = :totalPrograms", Patient.class);
+            query.setParameter("totalPrograms", totalPrograms);
+            return query.list();
+        } finally {
+            session.close();
+        }
+    }
 }

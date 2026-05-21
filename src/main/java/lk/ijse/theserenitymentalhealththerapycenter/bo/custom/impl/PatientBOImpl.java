@@ -60,18 +60,40 @@ public class PatientBOImpl implements PatientBO {
         return dtos;
     }
 
+    @Override
+    public List<PatientDTO> getPatientsWithPrograms() throws Exception {
+        List<Patient> patients = patientDAO.getPatientsWithPrograms();
+        List<PatientDTO> dtos = new ArrayList<>();
+        for (Patient p : patients) {
+            dtos.add(new PatientDTO(p.getId(), p.getName(), p.getDob(), p.getContactNumber(), p.getEmail(), p.getMedicalHistory(), p.getRegistrationDate()));
+        }
+        return dtos;
+    }
+
+    @Override
+    public List<PatientDTO> getPatientsEnrolledInAllPrograms() throws Exception {
+        List<Patient> patients = patientDAO.getPatientsEnrolledInAllPrograms();
+        List<PatientDTO> dtos = new ArrayList<>();
+        for (Patient p : patients) {
+            dtos.add(new PatientDTO(p.getId(), p.getName(), p.getDob(), p.getContactNumber(), p.getEmail(), p.getMedicalHistory(), p.getRegistrationDate()));
+        }
+        return dtos;
+    }
+
     private void validatePatient(PatientDTO dto) {
         if (dto.getName() == null || dto.getName().trim().isEmpty()) {
             throw new InvalidInputException("Patient name is required");
         }
+        // Strict email regex validation
         if (dto.getEmail() != null && !dto.getEmail().trim().isEmpty()) {
-            if (!dto.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
-                throw new InvalidInputException("Invalid email format");
+            if (!dto.getEmail().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {
+                throw new InvalidInputException("Invalid email format (e.g. user@example.com)");
             }
         }
+        // Sri Lanka phone format: +94XXXXXXXXX or 0XXXXXXXXX (10 digits)
         if (dto.getContactNumber() != null && !dto.getContactNumber().trim().isEmpty()) {
-            if (!dto.getContactNumber().matches("^[0-9+\\-\\s]{7,15}$")) {
-                throw new InvalidInputException("Invalid phone number format");
+            if (!dto.getContactNumber().matches("^(\\+94|0)\\d{9}$")) {
+                throw new InvalidInputException("Invalid phone format (e.g. +94771234567 or 0771234567)");
             }
         }
     }
