@@ -15,7 +15,6 @@ public class FactoryConfiguration {
     private FactoryConfiguration() {
         Configuration configuration = new Configuration();
 
-        // Load hibernate.properties from classpath
         Properties properties = new Properties();
         try {
             properties.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("hibernate.properties"));
@@ -25,7 +24,6 @@ public class FactoryConfiguration {
 
         configuration.setProperties(properties);
 
-        // Register all entity classes
         configuration.addAnnotatedClass(User.class);
         configuration.addAnnotatedClass(Therapist.class);
         configuration.addAnnotatedClass(TherapyProgram.class);
