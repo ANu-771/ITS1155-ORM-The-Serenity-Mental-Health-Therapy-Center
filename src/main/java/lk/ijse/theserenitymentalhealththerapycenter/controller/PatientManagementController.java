@@ -115,35 +115,66 @@ public class PatientManagementController implements Initializable {
     }
 
 
-    @FXML
-    void handleSave(ActionEvent e) {
+    private boolean validateFields(boolean isSave) {
         resetValidationStyles();
 
-
-        boolean allFilled = true;
-        if (!ValidationUtil.validateRequired(txtName)) allFilled = false;
-        if (!ValidationUtil.validateRequired(txtContact)) allFilled = false;
-        if (!validateDatePicker(dpRegDate)) allFilled = false;
-        if (!ValidationUtil.validateRequired(cmbProgram)) allFilled = false;
-        if (!ValidationUtil.validateRequired(cmbGender)) allFilled = false;
-
-        if (!allFilled) {
-            ValidationUtil.showRequiredFieldsError();
-            return;
+        if (txtName.getText() == null || txtName.getText().trim().isEmpty()) {
+            txtName.setStyle("-fx-border-color: #e74c3c; -fx-border-width: 1.5; -fx-border-radius: 8;");
+            new Alert(Alert.AlertType.WARNING, "Full Name is required.").showAndWait();
+            txtName.requestFocus();
+            return false;
         }
 
-        boolean valid = true;
-        if (!ValidationUtil.validateName(txtName)) {
-            valid = false;
-        }
-        if (!ValidationUtil.validatePhone(txtContact)) {
-            valid = false;
+        if (!txtName.getText().trim().matches("^[A-Za-z\\s\\.-]+$")) {
+            txtName.setStyle("-fx-border-color: #e74c3c; -fx-border-width: 1.5; -fx-border-radius: 8;");
+            new Alert(Alert.AlertType.WARNING, "Invalid Name. The patient's name can only contain letters, spaces, hyphens, and periods.").showAndWait();
+            txtName.requestFocus();
+            return false;
         }
 
-        if (!valid) {
-            new Alert(Alert.AlertType.WARNING, "Please correct the highlighted fields.").showAndWait();
-            return;
+        if (txtContact.getText() == null || txtContact.getText().trim().isEmpty()) {
+            txtContact.setStyle("-fx-border-color: #e74c3c; -fx-border-width: 1.5; -fx-border-radius: 8;");
+            new Alert(Alert.AlertType.WARNING, "Contact Number is required.").showAndWait();
+            txtContact.requestFocus();
+            return false;
         }
+
+        if (!txtContact.getText().trim().matches("^\\d{10}$")) {
+            txtContact.setStyle("-fx-border-color: #e74c3c; -fx-border-width: 1.5; -fx-border-radius: 8;");
+            new Alert(Alert.AlertType.WARNING, "Invalid Contact Number. The mobile number must be exactly 10 digits long.").showAndWait();
+            txtContact.requestFocus();
+            return false;
+        }
+
+        if (cmbGender.getValue() == null) {
+            cmbGender.setStyle("-fx-border-color: #e74c3c; -fx-border-width: 1.5; -fx-border-radius: 8;");
+            new Alert(Alert.AlertType.WARNING, "Please select Gender.").showAndWait();
+            cmbGender.requestFocus();
+            return false;
+        }
+
+        if (dpRegDate.getValue() == null) {
+            dpRegDate.setStyle("-fx-border-color: #e74c3c; -fx-border-width: 1.5; -fx-border-radius: 8;");
+            new Alert(Alert.AlertType.WARNING, "Registration Date is required.").showAndWait();
+            dpRegDate.requestFocus();
+            return false;
+        }
+
+        if (isSave) {
+            if (cmbProgram.getValue() == null) {
+                cmbProgram.setStyle("-fx-border-color: #e74c3c; -fx-border-width: 1.5; -fx-border-radius: 8;");
+                new Alert(Alert.AlertType.WARNING, "Initial Therapy Program is required for registration.").showAndWait();
+                cmbProgram.requestFocus();
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    @FXML
+    void handleSave(ActionEvent e) {
+        if (!validateFields(true)) return;
 
         try {
             String dobStr = dpDob.getValue() != null ? dpDob.getValue().toString() : "";
@@ -175,28 +206,7 @@ public class PatientManagementController implements Initializable {
 
     @FXML
     void handleUpdate(ActionEvent e) {
-        resetValidationStyles();
-
-        boolean allFilled = true;
-        if (!ValidationUtil.validateRequired(txtId)) allFilled = false;
-        if (!ValidationUtil.validateRequired(txtName)) allFilled = false;
-        if (!ValidationUtil.validateRequired(txtContact)) allFilled = false;
-        if (!ValidationUtil.validateRequired(cmbGender)) allFilled = false;
-        if (!validateDatePicker(dpRegDate)) allFilled = false;
-
-        if (!allFilled) {
-            ValidationUtil.showRequiredFieldsError();
-            return;
-        }
-
-        boolean valid = true;
-        if (!ValidationUtil.validateName(txtName)) valid = false;
-        if (!ValidationUtil.validatePhone(txtContact)) valid = false;
-
-        if (!valid) {
-            new Alert(Alert.AlertType.WARNING, "Please correct the highlighted fields.").showAndWait();
-            return;
-        }
+        if (!validateFields(false)) return;
 
         try {
             String dobStr = dpDob.getValue() != null ? dpDob.getValue().toString() : "";
