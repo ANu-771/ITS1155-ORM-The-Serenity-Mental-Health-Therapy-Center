@@ -8,7 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import lk.ijse.theserenitymentalhealththerapycenter.bo.BOFactory;
 import lk.ijse.theserenitymentalhealththerapycenter.bo.custom.PatientBO;
-import lk.ijse.theserenitymentalhealththerapycenter.bo.custom.PaymentBO;
+
 import lk.ijse.theserenitymentalhealththerapycenter.bo.custom.TherapyProgramBO;
 import lk.ijse.theserenitymentalhealththerapycenter.dto.PatientDTO;
 import lk.ijse.theserenitymentalhealththerapycenter.dto.tm.PatientTM;
@@ -23,7 +23,7 @@ import java.util.ResourceBundle;
 public class PatientManagementController implements Initializable {
 
     @FXML
-    private TextField txtId, txtName, txtContact, txtSearch, txtProgramFee;
+    private TextField txtId, txtName, txtContact, txtSearch;
     @FXML
     private DatePicker dpDob, dpRegDate;
     @FXML
@@ -31,11 +31,11 @@ public class PatientManagementController implements Initializable {
     @FXML
     private TableView<PatientTM> tblPatients;
     @FXML
-    private ComboBox<String> cmbProgram, cmbPaymentMethod, cmbGender;
+    private ComboBox<String> cmbProgram, cmbGender;
 
     private final PatientBO patientBO = BOFactory.getInstance().getBO(BOFactory.BOType.PATIENT);
     private final TherapyProgramBO programBO = BOFactory.getInstance().getBO(BOFactory.BOType.THERAPY_PROGRAM);
-    private final PaymentBO paymentBO = BOFactory.getInstance().getBO(BOFactory.BOType.PAYMENT);
+
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -43,7 +43,7 @@ public class PatientManagementController implements Initializable {
         generateNextId();
         loadTable();
 
-        cmbPaymentMethod.setItems(FXCollections.observableArrayList("Cash", "Card", "Bank Transfer", "Online"));
+
         cmbGender.setItems(FXCollections.observableArrayList("Male", "Female"));
         loadPrograms();
 
@@ -69,10 +69,7 @@ public class PatientManagementController implements Initializable {
                 dpRegDate.setValue(nw.getRegistrationDate() != null && !nw.getRegistrationDate().isEmpty() ? LocalDate.parse(nw.getRegistrationDate()) : null);
 
                 cmbProgram.setDisable(true);
-                cmbPaymentMethod.setDisable(true);
                 cmbProgram.setValue(null);
-                cmbPaymentMethod.setValue(null);
-                txtProgramFee.clear();
 
                 resetValidationStyles();
             }
@@ -88,21 +85,7 @@ public class PatientManagementController implements Initializable {
             }
             cmbProgram.setItems(prList);
 
-            cmbProgram.getSelectionModel().selectedItemProperty().addListener((obs, old, nw) -> {
-                if (nw != null && !nw.isEmpty()) {
-                    String id = nw.split(" - ")[0];
-                    try {
-                        lk.ijse.theserenitymentalhealththerapycenter.dto.TherapyProgramDTO p = programBO.searchProgram(id);
-                        if (p != null) {
-                            txtProgramFee.setText(String.format("%.2f", p.getFee()));
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    txtProgramFee.clear();
-                }
-            });
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -142,7 +125,6 @@ public class PatientManagementController implements Initializable {
         if (!ValidationUtil.validateRequired(txtContact)) allFilled = false;
         if (!validateDatePicker(dpRegDate)) allFilled = false;
         if (!ValidationUtil.validateRequired(cmbProgram)) allFilled = false;
-        if (!ValidationUtil.validateRequired(cmbPaymentMethod)) allFilled = false;
         if (!ValidationUtil.validateRequired(cmbGender)) allFilled = false;
 
         if (!allFilled) {
@@ -178,11 +160,8 @@ public class PatientManagementController implements Initializable {
             );
 
             String programId = cmbProgram.getValue().split(" - ")[0];
-            String paymentMethod = cmbPaymentMethod.getValue();
-            double amount = Double.parseDouble(txtProgramFee.getText().trim());
-            String paymentId = paymentBO.getNextId();
 
-            patientBO.registerPatient(dto, programId, paymentMethod, amount, paymentId);
+            patientBO.registerPatient(dto, programId);
             new Alert(Alert.AlertType.INFORMATION, "Patient registered successfully!").showAndWait();
             loadTable();
             handleClear(null);
@@ -274,10 +253,7 @@ public class PatientManagementController implements Initializable {
         dpRegDate.setValue(LocalDate.now());
 
         cmbProgram.setDisable(false);
-        cmbPaymentMethod.setDisable(false);
         cmbProgram.setValue(null);
-        cmbPaymentMethod.setValue(null);
-        txtProgramFee.clear();
 
         if (txtSearch != null) txtSearch.clear();
         resetValidationStyles();

@@ -5,7 +5,8 @@ public class UserTM {
     private String username;
     private String role;
 
-    public UserTM() {}
+    public UserTM() {
+    }
 
     public UserTM(String id, String username, String role) {
         this.id = id;
@@ -13,10 +14,27 @@ public class UserTM {
         this.role = role;
     }
 
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
-    public String getUsername() { return username; }
-    public void setUsername(String username) { this.username = username; }
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 }

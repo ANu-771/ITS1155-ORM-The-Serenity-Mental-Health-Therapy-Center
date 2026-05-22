@@ -100,20 +100,12 @@ public class PatientBOImpl implements PatientBO {
     }
 
     @Override
-    public boolean registerPatient(PatientDTO dto, String programId, String paymentMethod, double amount, String paymentId) throws Exception {
+    public boolean registerPatient(PatientDTO dto, String programId) throws Exception {
         validatePatient(dto);
         if (programId == null || programId.isEmpty()) throw new InvalidInputException("Initial program must be selected for registration");
-        if (paymentMethod == null || paymentMethod.isEmpty()) throw new InvalidInputException("Payment method is required");
 
         Patient patient = new Patient(dto.getId(), dto.getName(), dto.getDob(), dto.getContactNumber(), dto.getGender(), dto.getMedicalHistory(), dto.getRegistrationDate());
-        
-        lk.ijse.theserenitymentalhealththerapycenter.entity.Payment payment = new lk.ijse.theserenitymentalhealththerapycenter.entity.Payment();
-        payment.setPaymentId(paymentId);
-        payment.setAmount(amount);
-        payment.setPaymentDate(dto.getRegistrationDate());
-        payment.setPaymentMethod(paymentMethod);
-        payment.setStatus("COMPLETED");
 
-        return patientDAO.registerPatient(patient, programId, payment);
+        return patientDAO.registerPatient(patient, programId);
     }
 }

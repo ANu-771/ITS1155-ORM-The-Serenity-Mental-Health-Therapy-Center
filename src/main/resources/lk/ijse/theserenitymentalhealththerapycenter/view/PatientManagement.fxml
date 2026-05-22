@@ -29,14 +29,6 @@
                     <Label text="Initial Therapy Program (Required for Registration)" styleClass="form-label"/>
                     <ComboBox fx:id="cmbProgram" promptText="Select Program" styleClass="combo-modern" prefHeight="38" maxWidth="1.7976931348623157E308"/>
                 </VBox>
-                <VBox spacing="4">
-                    <Label text="Program Fee (LKR)" styleClass="form-label"/>
-                    <TextField fx:id="txtProgramFee" editable="false" promptText="0.00" styleClass="text-field-modern" prefHeight="38" prefWidth="120"/>
-                </VBox>
-                <VBox spacing="4">
-                    <Label text="Payment Method" styleClass="form-label"/>
-                    <ComboBox fx:id="cmbPaymentMethod" promptText="Select Method" styleClass="combo-modern" prefHeight="38" prefWidth="150"/>
-                </VBox>
             </HBox>
             <HBox spacing="10" alignment="CENTER_LEFT">
                 <Button text="Save" styleClass="btn-save" onAction="#handleSave" prefWidth="100"/>

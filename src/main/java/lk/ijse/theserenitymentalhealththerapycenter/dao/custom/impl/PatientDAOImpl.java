@@ -137,7 +137,7 @@ public class PatientDAOImpl implements PatientDAO {
     }
 
     @Override
-    public boolean registerPatient(Patient patient, String programId, lk.ijse.theserenitymentalhealththerapycenter.entity.Payment payment) throws Exception {
+    public boolean registerPatient(Patient patient, String programId) throws Exception {
         Session session = FactoryConfiguration.getInstance().getSession();
         Transaction transaction = session.beginTransaction();
         try {
@@ -146,12 +146,9 @@ public class PatientDAOImpl implements PatientDAO {
             
             if (program != null) {
                 patient.getTherapyPrograms().add(program);
-                payment.setPatient(patient);
-                payment.setTherapyProgram(program);
             }
             
             session.persist(patient);
-            session.persist(payment);
             
             transaction.commit();
             return true;

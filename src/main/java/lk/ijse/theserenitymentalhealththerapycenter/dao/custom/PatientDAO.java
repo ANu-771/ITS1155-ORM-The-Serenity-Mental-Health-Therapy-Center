@@ -5,7 +5,6 @@ import lk.ijse.theserenitymentalhealththerapycenter.entity.Patient;
 
 import java.util.List;
 
-import lk.ijse.theserenitymentalhealththerapycenter.entity.Payment;
 
 public interface PatientDAO extends CrudDAO<Patient, String> {
     List<Patient> searchByName(String name) throws Exception;
@@ -16,5 +15,5 @@ public interface PatientDAO extends CrudDAO<Patient, String> {
 
     String getLastId() throws Exception;
 
-    boolean registerPatient(Patient patient, String programId, Payment payment) throws Exception;
+    boolean registerPatient(Patient patient, String programId) throws Exception;
 }

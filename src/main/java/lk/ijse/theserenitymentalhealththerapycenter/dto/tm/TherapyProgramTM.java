@@ -7,7 +7,8 @@ public class TherapyProgramTM {
     private double fee;
     private String description;
 
-    public TherapyProgramTM() {}
+    public TherapyProgramTM() {
+    }
 
     public TherapyProgramTM(String programId, String name, String duration, double fee, String description) {
         this.programId = programId;
@@ -17,14 +18,43 @@ public class TherapyProgramTM {
         this.description = description;
     }
 
-    public String getProgramId() { return programId; }
-    public void setProgramId(String programId) { this.programId = programId; }
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-    public String getDuration() { return duration; }
-    public void setDuration(String duration) { this.duration = duration; }
-    public double getFee() { return fee; }
-    public void setFee(double fee) { this.fee = fee; }
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public String getProgramId() {
+        return programId;
+    }
+
+    public void setProgramId(String programId) {
+        this.programId = programId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
+
+    public double getFee() {
+        return fee;
+    }
+
+    public void setFee(double fee) {
+        this.fee = fee;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }
