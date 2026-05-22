@@ -5,7 +5,8 @@ import lk.ijse.theserenitymentalhealththerapycenter.bo.custom.impl.*;
 public class BOFactory {
     private static BOFactory boFactory;
 
-    private BOFactory() {}
+    private BOFactory() {
+    }
 
     public static BOFactory getInstance() {
         if (boFactory == null) {

@@ -84,13 +84,13 @@ public class PatientBOImpl implements PatientBO {
         if (dto.getName() == null || dto.getName().trim().isEmpty()) {
             throw new InvalidInputException("Patient name is required");
         }
-        // Strict email regex validation
+        // email regex validation
         if (dto.getEmail() != null && !dto.getEmail().trim().isEmpty()) {
             if (!dto.getEmail().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {
                 throw new InvalidInputException("Invalid email format (e.g. user@example.com)");
             }
         }
-        // Sri Lanka phone format: +94XXXXXXXXX or 0XXXXXXXXX (10 digits)
+
         if (dto.getContactNumber() != null && !dto.getContactNumber().trim().isEmpty()) {
             if (!dto.getContactNumber().matches("^(\\+94|0)\\d{9}$")) {
                 throw new InvalidInputException("Invalid phone format (e.g. +94771234567 or 0771234567)");

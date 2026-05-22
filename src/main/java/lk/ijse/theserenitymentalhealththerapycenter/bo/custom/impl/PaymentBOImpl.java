@@ -39,7 +39,9 @@ public class PaymentBOImpl implements PaymentBO {
     }
 
     @Override
-    public boolean deletePayment(String id) throws Exception { return paymentDAO.delete(id); }
+    public boolean deletePayment(String id) throws Exception {
+        return paymentDAO.delete(id);
+    }
 
     @Override
     public PaymentDTO searchPayment(String id) throws Exception {

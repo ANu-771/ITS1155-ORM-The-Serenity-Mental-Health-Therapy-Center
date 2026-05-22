@@ -35,7 +35,6 @@ public class UserBOImpl implements UserBO {
             throw new DuplicateEntryException("Username '" + userDTO.getUsername() + "' already exists");
         }
 
-        // Hash the password with BCrypt before saving
         String hashedPassword = BCrypt.hashpw(userDTO.getPassword(), BCrypt.gensalt());
 
         User user = new User(
@@ -53,7 +52,6 @@ public class UserBOImpl implements UserBO {
             throw new InvalidInputException("Username is required");
         }
 
-        // Check if another user has the same username
         User existingUser = userDAO.findByUsername(userDTO.getUsername());
         if (existingUser != null && !existingUser.getId().equals(userDTO.getId())) {
             throw new DuplicateEntryException("Username '" + userDTO.getUsername() + "' already exists");
@@ -94,7 +92,6 @@ public class UserBOImpl implements UserBO {
         List<User> users = userDAO.getAll();
         List<UserDTO> userDTOs = new ArrayList<>();
         for (User user : users) {
-            // Don't expose password in DTO
             userDTOs.add(new UserDTO(user.getId(), user.getUsername(), "", user.getRole()));
         }
         return userDTOs;
@@ -114,7 +111,6 @@ public class UserBOImpl implements UserBO {
             throw new AuthenticationException("Invalid username or password");
         }
 
-        // Verify password using BCrypt's checkpw method
         if (!BCrypt.checkpw(password, user.getPassword())) {
             throw new AuthenticationException("Invalid username or password");
         }
@@ -141,18 +137,15 @@ public class UserBOImpl implements UserBO {
 
     @Override
     public boolean changeCredentials(String userId, String currentPassword, String newUsername, String newPassword) throws Exception {
-        // 1. Get the current user
         User user = userDAO.search(userId);
         if (user == null) {
             throw new AuthenticationException("User not found");
         }
 
-        // 2. Verify current password
         if (!BCrypt.checkpw(currentPassword, user.getPassword())) {
             throw new AuthenticationException("Current password is incorrect");
         }
 
-        // 3. If username changed, check for duplicates
         if (newUsername != null && !newUsername.trim().isEmpty() && !newUsername.equals(user.getUsername())) {
             User existing = userDAO.findByUsername(newUsername);
             if (existing != null) {
@@ -161,7 +154,6 @@ public class UserBOImpl implements UserBO {
             user.setUsername(newUsername.trim());
         }
 
-        // 4. If new password provided, hash it
         if (newPassword != null && !newPassword.trim().isEmpty()) {
             user.setPassword(BCrypt.hashpw(newPassword, BCrypt.gensalt()));
         }

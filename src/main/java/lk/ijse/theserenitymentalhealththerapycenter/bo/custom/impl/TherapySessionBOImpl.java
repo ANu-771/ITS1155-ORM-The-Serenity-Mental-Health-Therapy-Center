@@ -78,8 +78,10 @@ public class TherapySessionBOImpl implements TherapySessionBO {
     }
 
     private void validateSession(TherapySessionDTO dto) {
-        if (dto.getDate() == null || dto.getDate().trim().isEmpty()) throw new InvalidInputException("Session date is required");
-        if (dto.getTime() == null || dto.getTime().trim().isEmpty()) throw new InvalidInputException("Session time is required");
+        if (dto.getDate() == null || dto.getDate().trim().isEmpty())
+            throw new InvalidInputException("Session date is required");
+        if (dto.getTime() == null || dto.getTime().trim().isEmpty())
+            throw new InvalidInputException("Session time is required");
         if (dto.getPatientId() == null) throw new InvalidInputException("Patient is required");
         if (dto.getTherapistId() == null) throw new InvalidInputException("Therapist is required");
     }
