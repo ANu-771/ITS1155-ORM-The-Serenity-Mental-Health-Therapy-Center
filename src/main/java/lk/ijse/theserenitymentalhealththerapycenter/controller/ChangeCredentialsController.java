@@ -19,18 +19,23 @@ import java.util.ResourceBundle;
 
 public class ChangeCredentialsController implements Initializable {
 
-    @FXML private PasswordField txtCurrentPassword;
-    @FXML private TextField txtNewUsername;
-    @FXML private PasswordField txtNewPassword;
-    @FXML private PasswordField txtConfirmPassword;
-    @FXML private Label lblMessage;
-    @FXML private Label lblInfo;
+    @FXML
+    private PasswordField txtCurrentPassword;
+    @FXML
+    private TextField txtNewUsername;
+    @FXML
+    private PasswordField txtNewPassword;
+    @FXML
+    private PasswordField txtConfirmPassword;
+    @FXML
+    private Label lblMessage;
+    @FXML
+    private Label lblInfo;
 
     private final UserBO userBO = BOFactory.getInstance().getBO(BOFactory.BOType.USER);
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // Pre-fill username so the user knows their current one
         UserDTO currentUser = SessionContext.getCurrentUser();
         if (currentUser != null) {
             txtNewUsername.setPromptText("Current: " + currentUser.getUsername());
@@ -41,7 +46,6 @@ public class ChangeCredentialsController implements Initializable {
     void handleSave(ActionEvent event) {
         lblMessage.setVisible(false);
 
-        // 1. Current password is mandatory
         String currentPassword = txtCurrentPassword.getText();
         if (currentPassword == null || currentPassword.trim().isEmpty()) {
             showError("Current password is required to make changes.");
@@ -52,7 +56,6 @@ public class ChangeCredentialsController implements Initializable {
         String newPassword = txtNewPassword.getText();
         String confirmPassword = txtConfirmPassword.getText();
 
-        // 2. At least one change must be provided
         boolean usernameProvided = !newUsername.isEmpty();
         boolean passwordProvided = newPassword != null && !newPassword.trim().isEmpty();
 
@@ -61,7 +64,6 @@ public class ChangeCredentialsController implements Initializable {
             return;
         }
 
-        // 3. If new password provided, must match confirmation
         if (passwordProvided) {
             if (!newPassword.equals(confirmPassword)) {
                 showError("New password and confirmation do not match.");
@@ -69,7 +71,6 @@ public class ChangeCredentialsController implements Initializable {
             }
         }
 
-        // 4. Call BO layer
         try {
             UserDTO currentUser = SessionContext.getCurrentUser();
             if (currentUser == null) {
@@ -84,7 +85,6 @@ public class ChangeCredentialsController implements Initializable {
                     passwordProvided ? newPassword : null
             );
 
-            // Update session context if username changed
             if (usernameProvided) {
                 currentUser = new UserDTO(currentUser.getId(), newUsername, "", currentUser.getRole());
                 SessionContext.setCurrentUser(currentUser);
