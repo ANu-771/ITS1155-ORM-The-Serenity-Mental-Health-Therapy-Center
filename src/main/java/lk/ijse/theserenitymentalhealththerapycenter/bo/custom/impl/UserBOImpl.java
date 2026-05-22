@@ -57,7 +57,6 @@ public class UserBOImpl implements UserBO {
             throw new DuplicateEntryException("Username '" + userDTO.getUsername() + "' already exists");
         }
 
-        // If password is provided, hash it; otherwise keep existing
         String password;
         if (userDTO.getPassword() != null && !userDTO.getPassword().trim().isEmpty()) {
             password = BCrypt.hashpw(userDTO.getPassword(), BCrypt.gensalt());

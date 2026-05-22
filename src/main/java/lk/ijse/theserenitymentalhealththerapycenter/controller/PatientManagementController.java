@@ -22,11 +22,16 @@ import java.util.ResourceBundle;
 
 public class PatientManagementController implements Initializable {
 
-    @FXML private TextField txtId, txtName, txtContact, txtSearch, txtProgramFee;
-    @FXML private DatePicker dpDob, dpRegDate;
-    @FXML private TextArea txtMedicalHistory;
-    @FXML private TableView<PatientTM> tblPatients;
-    @FXML private ComboBox<String> cmbProgram, cmbPaymentMethod, cmbGender;
+    @FXML
+    private TextField txtId, txtName, txtContact, txtSearch, txtProgramFee;
+    @FXML
+    private DatePicker dpDob, dpRegDate;
+    @FXML
+    private TextArea txtMedicalHistory;
+    @FXML
+    private TableView<PatientTM> tblPatients;
+    @FXML
+    private ComboBox<String> cmbProgram, cmbPaymentMethod, cmbGender;
 
     private final PatientBO patientBO = BOFactory.getInstance().getBO(BOFactory.BOType.PATIENT);
     private final TherapyProgramBO programBO = BOFactory.getInstance().getBO(BOFactory.BOType.THERAPY_PROGRAM);
@@ -62,8 +67,7 @@ public class PatientManagementController implements Initializable {
                 txtContact.setText(nw.getContactNumber());
                 cmbGender.setValue(nw.getGender());
                 dpRegDate.setValue(nw.getRegistrationDate() != null && !nw.getRegistrationDate().isEmpty() ? LocalDate.parse(nw.getRegistrationDate()) : null);
-                
-                // Disable registration-only fields during update
+
                 cmbProgram.setDisable(true);
                 cmbPaymentMethod.setDisable(true);
                 cmbProgram.setValue(null);
@@ -92,16 +96,24 @@ public class PatientManagementController implements Initializable {
                         if (p != null) {
                             txtProgramFee.setText(String.format("%.2f", p.getFee()));
                         }
-                    } catch (Exception e) { e.printStackTrace(); }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 } else {
                     txtProgramFee.clear();
                 }
             });
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void generateNextId() {
-        try { txtId.setText(patientBO.getNextId()); } catch (Exception e) { e.printStackTrace(); }
+        try {
+            txtId.setText(patientBO.getNextId());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void resetValidationStyles() {
@@ -119,12 +131,12 @@ public class PatientManagementController implements Initializable {
         return true;
     }
 
-    // ===== SAVE =====
+
     @FXML
     void handleSave(ActionEvent e) {
         resetValidationStyles();
 
-        // 1. Required fields check
+
         boolean allFilled = true;
         if (!ValidationUtil.validateRequired(txtName)) allFilled = false;
         if (!ValidationUtil.validateRequired(txtContact)) allFilled = false;
@@ -138,7 +150,6 @@ public class PatientManagementController implements Initializable {
             return;
         }
 
-        // 2. Regex validation
         boolean valid = true;
         if (!ValidationUtil.validateName(txtName)) {
             valid = false;
@@ -152,7 +163,6 @@ public class PatientManagementController implements Initializable {
             return;
         }
 
-        // 3. Save via BO layer
         try {
             String dobStr = dpDob.getValue() != null ? dpDob.getValue().toString() : "";
             String regDateStr = dpRegDate.getValue() != null ? dpRegDate.getValue().toString() : "";
@@ -184,7 +194,6 @@ public class PatientManagementController implements Initializable {
         }
     }
 
-    // ===== UPDATE =====
     @FXML
     void handleUpdate(ActionEvent e) {
         resetValidationStyles();
@@ -233,7 +242,6 @@ public class PatientManagementController implements Initializable {
         }
     }
 
-    // ===== DELETE =====
     @FXML
     void handleDelete(ActionEvent e) {
         String id = txtId.getText();
@@ -256,7 +264,6 @@ public class PatientManagementController implements Initializable {
         }
     }
 
-    // ===== CLEAR =====
     @FXML
     void handleClear(ActionEvent e) {
         txtName.clear();
@@ -277,11 +284,13 @@ public class PatientManagementController implements Initializable {
         generateNextId();
     }
 
-    // ===== SEARCH =====
     @FXML
     void handleSearch(javafx.scene.input.KeyEvent e) {
         String q = txtSearch.getText().trim();
-        if (q.isEmpty()) { loadTable(); return; }
+        if (q.isEmpty()) {
+            loadTable();
+            return;
+        }
         try {
             List<PatientDTO> results = patientBO.searchPatientsByName(q);
             ObservableList<PatientTM> list = FXCollections.observableArrayList();
@@ -289,10 +298,11 @@ public class PatientManagementController implements Initializable {
                 list.add(new PatientTM(p.getId(), p.getName(), p.getDob(), p.getContactNumber(), p.getGender(), p.getRegistrationDate()));
             }
             tblPatients.setItems(list);
-        } catch (Exception ex) { ex.printStackTrace(); }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
-    // ===== LOAD TABLE =====
     private void loadTable() {
         try {
             List<PatientDTO> all = patientBO.getAllPatients();
@@ -301,6 +311,8 @@ public class PatientManagementController implements Initializable {
                 list.add(new PatientTM(p.getId(), p.getName(), p.getDob(), p.getContactNumber(), p.getGender(), p.getRegistrationDate()));
             }
             tblPatients.setItems(list);
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
