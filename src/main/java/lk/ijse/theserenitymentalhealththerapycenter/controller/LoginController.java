@@ -3,6 +3,7 @@ package lk.ijse.theserenitymentalhealththerapycenter.controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
@@ -61,11 +62,9 @@ public class LoginController {
             }
 
             FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource(fxmlFile));
-            Scene scene = new Scene(loader.load(), 1280, 720);
-            stage.setScene(scene);
+            Parent root = loader.load();
+            stage.getScene().setRoot(root);
             stage.setTitle("Serenity - " + user.getRole() + " Dashboard");
-            stage.setResizable(true);
-            stage.centerOnScreen();
 
         } catch (AuthenticationException e) {
             showError(e.getMessage());

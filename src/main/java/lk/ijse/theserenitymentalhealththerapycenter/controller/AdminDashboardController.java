@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
@@ -64,11 +65,9 @@ public class AdminDashboardController implements Initializable {
             lk.ijse.theserenitymentalhealththerapycenter.util.SessionContext.clear();
             Stage stage = (Stage) contentPane.getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("view/Login.fxml"));
-            Scene scene = new Scene(loader.load(), 1280, 720);
-            stage.setScene(scene);
+            Parent root = loader.load();
+            stage.getScene().setRoot(root);
             stage.setTitle("Serenity - Login");
-            stage.setResizable(true);
-            stage.centerOnScreen();
         } catch (Exception e) {
             e.printStackTrace();
         }
