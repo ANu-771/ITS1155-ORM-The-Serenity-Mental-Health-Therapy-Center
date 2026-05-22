@@ -50,7 +50,7 @@ public class RegisterController implements Initializable {
 
         try {
 
-            String newUserId = "U" + System.currentTimeMillis();
+            String newUserId = userBO.getNextId();
             UserDTO newUser = new UserDTO(newUserId, username.trim(), password, role);
             userBO.saveUser(newUser);
             new Alert(Alert.AlertType.INFORMATION, "Registration successful! You can now log in.").showAndWait();
