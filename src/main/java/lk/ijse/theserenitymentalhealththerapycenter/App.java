@@ -10,22 +10,14 @@ import lk.ijse.theserenitymentalhealththerapycenter.config.FactoryConfiguration;
 
 import java.io.IOException;
 
-public class HelloApplication extends Application {
+public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         // Initialize Hibernate SessionFactory
         FactoryConfiguration.getInstance();
 
-        // Create default admin account if no users exist
-        try {
-            UserBO userBO = BOFactory.getInstance().getBO(BOFactory.BOType.USER);
-            userBO.createDefaultAdmin();
-        } catch (Exception e) {
-            System.err.println("Warning: Could not create default admin - " + e.getMessage());
-        }
-
         // Load Login screen
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("view/Login.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/Login.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1280, 720);
         stage.setTitle("Serenity Mental Health Therapy Center");
         stage.setScene(scene);
@@ -34,3 +26,4 @@ public class HelloApplication extends Application {
         stage.show();
     }
 }
+

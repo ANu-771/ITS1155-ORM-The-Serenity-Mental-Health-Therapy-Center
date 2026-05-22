@@ -11,7 +11,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import lk.ijse.theserenitymentalhealththerapycenter.HelloApplication;
+import lk.ijse.theserenitymentalhealththerapycenter.App;
 import lk.ijse.theserenitymentalhealththerapycenter.bo.BOFactory;
 import lk.ijse.theserenitymentalhealththerapycenter.bo.custom.UserBO;
 import lk.ijse.theserenitymentalhealththerapycenter.dto.UserDTO;
@@ -61,7 +61,7 @@ public class LoginController {
                 fxmlFile = "view/ReceptionistDashboard.fxml";
             }
 
-            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource(fxmlFile));
+            FXMLLoader loader = new FXMLLoader(App.class.getResource(fxmlFile));
             Parent root = loader.load();
             stage.getScene().setRoot(root);
             stage.setTitle("Serenity - " + user.getRole() + " Dashboard");
@@ -94,8 +94,23 @@ public class LoginController {
         }
     }
 
+    @FXML
+    public void handleSignUp(ActionEvent event) {
+        try {
+            Stage stage = (Stage) txtUsername.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(App.class.getResource("view/Register.fxml"));
+            Parent root = loader.load();
+            stage.getScene().setRoot(root);
+            stage.setTitle("Serenity - Sign Up");
+        } catch (Exception e) {
+            showError("Could not load Sign Up page.");
+            e.printStackTrace();
+        }
+    }
+
     private void showError(String message) {
         lblError.setText(message);
         lblError.setVisible(true);
     }
 }
+

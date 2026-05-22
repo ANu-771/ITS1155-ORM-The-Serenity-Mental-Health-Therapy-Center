@@ -10,7 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import lk.ijse.theserenitymentalhealththerapycenter.HelloApplication;
+import lk.ijse.theserenitymentalhealththerapycenter.App;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -61,7 +61,7 @@ public class ReceptionistDashboardController implements Initializable {
         try {
             lk.ijse.theserenitymentalhealththerapycenter.util.SessionContext.clear();
             Stage stage = (Stage) contentPane.getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("view/Login.fxml"));
+            FXMLLoader loader = new FXMLLoader(App.class.getResource("view/Login.fxml"));
             Parent root = loader.load();
             stage.getScene().setRoot(root);
             stage.setTitle("Serenity - Login");
@@ -74,7 +74,7 @@ public class ReceptionistDashboardController implements Initializable {
         try {
             lblHeader.setText(title);
             lblSubheader.setText(subtitle);
-            Node node = FXMLLoader.load(HelloApplication.class.getResource(fxmlFile));
+            Node node = FXMLLoader.load(App.class.getResource(fxmlFile));
             contentPane.getChildren().clear();
             contentPane.getChildren().add(node);
             AnchorPane.setTopAnchor(node, 0.0);
@@ -86,3 +86,4 @@ public class ReceptionistDashboardController implements Initializable {
         }
     }
 }
+

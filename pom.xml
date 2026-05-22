@@ -89,7 +89,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                lk.ijse.theserenitymentalhealththerapycenter/lk.ijse.theserenitymentalhealththerapycenter.HelloApplication
+                                lk.ijse.theserenitymentalhealththerapycenter/lk.ijse.theserenitymentalhealththerapycenter.App
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
