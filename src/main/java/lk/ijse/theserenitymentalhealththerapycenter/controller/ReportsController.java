@@ -18,7 +18,7 @@ import java.util.ResourceBundle;
 public class ReportsController implements Initializable {
 
     @FXML private Label lblTotalPatients, lblTotalSessions, lblTotalRevenue, lblTotalTherapists;
-    @FXML private TextField txtFromDate, txtToDate;
+    @FXML private DatePicker dpFromDate, dpToDate;
     @FXML private ComboBox<String> cmbReportType;
     @FXML private TableView<?> tblReport;
 
@@ -59,11 +59,11 @@ public class ReportsController implements Initializable {
 
         // Build parameters for the Jasper report
         Map<String, Object> params = new HashMap<>();
-        if (txtFromDate.getText() != null && !txtFromDate.getText().trim().isEmpty()) {
-            params.put("fromDate", txtFromDate.getText().trim());
+        if (dpFromDate.getValue() != null) {
+            params.put("fromDate", dpFromDate.getValue().toString());
         }
-        if (txtToDate.getText() != null && !txtToDate.getText().trim().isEmpty()) {
-            params.put("toDate", txtToDate.getText().trim());
+        if (dpToDate.getValue() != null) {
+            params.put("toDate", dpToDate.getValue().toString());
         }
 
         // Map report type to .jrxml file path (classpath resources)

@@ -12,9 +12,9 @@
             <Label text="Therapy Program Details" styleClass="card-header"/>
             <HBox spacing="16" alignment="CENTER_LEFT">
                 <VBox spacing="4" HBox.hgrow="ALWAYS"><Label text="Program ID" styleClass="form-label"/><TextField fx:id="txtProgramId" promptText="MT1001" styleClass="text-field-modern" prefHeight="38"/></VBox>
-                <VBox spacing="4" HBox.hgrow="ALWAYS"><Label text="Program Name" styleClass="form-label"/><TextField fx:id="txtName" promptText="Cognitive Behavioral Therapy" styleClass="text-field-modern" prefHeight="38"/></VBox>
-                <VBox spacing="4"><Label text="Duration" styleClass="form-label"/><TextField fx:id="txtDuration" promptText="12 weeks" styleClass="text-field-modern" prefHeight="38" prefWidth="140"/></VBox>
-                <VBox spacing="4"><Label text="Fee (LKR)" styleClass="form-label"/><TextField fx:id="txtFee" promptText="80,000.00" styleClass="text-field-modern" prefHeight="38" prefWidth="140"/></VBox>
+                <VBox spacing="4" HBox.hgrow="ALWAYS"><Label text="Program Name" styleClass="form-label"/><ComboBox fx:id="cmbProgramName" promptText="Select Therapy Program" styleClass="combo-modern" prefHeight="38" maxWidth="Infinity"/></VBox>
+                <VBox spacing="4"><Label text="Duration" styleClass="form-label"/><TextField fx:id="txtDuration" promptText="e.g. 12 weeks" styleClass="text-field-modern" prefHeight="38" prefWidth="140" editable="false"/></VBox>
+                <VBox spacing="4"><Label text="Fee (LKR)" styleClass="form-label"/><TextField fx:id="txtFee" promptText="e.g. 80000.00" styleClass="text-field-modern" prefHeight="38" prefWidth="140" editable="false"/></VBox>
             </HBox>
             <VBox spacing="4">
                 <Label text="Description" styleClass="form-label"/>

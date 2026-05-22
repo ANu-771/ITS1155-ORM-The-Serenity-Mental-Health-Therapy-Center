@@ -19,7 +19,8 @@ import java.util.ResourceBundle;
 
 public class TherapyProgramManagementController implements Initializable {
 
-    @FXML private TextField txtProgramId, txtName, txtDuration, txtFee, txtSearch;
+    @FXML private TextField txtProgramId, txtDuration, txtFee, txtSearch;
+    @FXML private ComboBox<String> cmbProgramName;
     @FXML private TextArea txtDescription;
     @FXML private TableView<TherapyProgramTM> tblPrograms;
 
@@ -30,14 +31,51 @@ public class TherapyProgramManagementController implements Initializable {
         txtProgramId.setEditable(false);
         generateNextId();
         loadTable();
+
+        cmbProgramName.setItems(FXCollections.observableArrayList(
+                "Cognitive Behavioral Therapy",
+                "Mindfulness-Based Stress Reduction",
+                "Dialectical Behavior Therapy",
+                "Group Therapy Sessions",
+                "Family Counseling"
+        ));
+
+        cmbProgramName.setOnAction(e -> {
+            String selected = cmbProgramName.getValue();
+            if (selected != null) {
+                switch (selected) {
+                    case "Cognitive Behavioral Therapy":
+                        txtDuration.setText("12 weeks");
+                        txtFee.setText("80000.00");
+                        break;
+                    case "Mindfulness-Based Stress Reduction":
+                        txtDuration.setText("8 weeks");
+                        txtFee.setText("50000.00");
+                        break;
+                    case "Dialectical Behavior Therapy":
+                        txtDuration.setText("16 weeks");
+                        txtFee.setText("100000.00");
+                        break;
+                    case "Group Therapy Sessions":
+                        txtDuration.setText("6 months");
+                        txtFee.setText("120000.00");
+                        break;
+                    case "Family Counseling":
+                        txtDuration.setText("3 months");
+                        txtFee.setText("40000.00");
+                        break;
+                }
+            }
+        });
+
         tblPrograms.getSelectionModel().selectedItemProperty().addListener((obs, old, nw) -> {
             if (nw != null) {
                 txtProgramId.setText(nw.getProgramId());
-                txtName.setText(nw.getName());
+                cmbProgramName.setValue(nw.getName());
                 txtDuration.setText(nw.getDuration());
                 txtFee.setText(String.valueOf(nw.getFee()));
                 txtDescription.setText(nw.getDescription());
-                ValidationUtil.resetStyles(txtProgramId, txtName, txtDuration, txtFee);
+                resetValidationStyles();
             }
         });
     }
@@ -46,12 +84,17 @@ public class TherapyProgramManagementController implements Initializable {
         try { txtProgramId.setText(programBO.getNextId()); } catch (Exception e) { e.printStackTrace(); }
     }
 
+    private void resetValidationStyles() {
+        ValidationUtil.resetStyles(txtProgramId, txtDuration, txtFee);
+        cmbProgramName.setStyle("-fx-border-color: #dee2e6; -fx-border-radius: 8;");
+    }
+
     @FXML
     void handleSave(ActionEvent e) {
-        ValidationUtil.resetStyles(txtProgramId, txtName, txtDuration, txtFee);
+        resetValidationStyles();
 
         boolean allFilled = true;
-        if (!ValidationUtil.validateRequired(txtName)) allFilled = false;
+        if (!ValidationUtil.validateRequired(cmbProgramName)) allFilled = false;
         if (!ValidationUtil.validateRequired(txtDuration)) allFilled = false;
         if (!ValidationUtil.validateRequired(txtFee)) allFilled = false;
 
@@ -63,7 +106,7 @@ public class TherapyProgramManagementController implements Initializable {
         try {
             double fee = Double.parseDouble(txtFee.getText().trim());
             programBO.saveProgram(new TherapyProgramDTO(
-                    txtProgramId.getText().trim(), txtName.getText().trim(),
+                    txtProgramId.getText().trim(), cmbProgramName.getValue(),
                     txtDuration.getText().trim(), fee, txtDescription.getText()));
             new Alert(Alert.AlertType.INFORMATION, "Program saved successfully!").showAndWait();
             loadTable();
@@ -80,11 +123,11 @@ public class TherapyProgramManagementController implements Initializable {
 
     @FXML
     void handleUpdate(ActionEvent e) {
-        ValidationUtil.resetStyles(txtProgramId, txtName, txtDuration, txtFee);
+        resetValidationStyles();
 
         boolean allFilled = true;
         if (!ValidationUtil.validateRequired(txtProgramId)) allFilled = false;
-        if (!ValidationUtil.validateRequired(txtName)) allFilled = false;
+        if (!ValidationUtil.validateRequired(cmbProgramName)) allFilled = false;
         if (!ValidationUtil.validateRequired(txtDuration)) allFilled = false;
         if (!ValidationUtil.validateRequired(txtFee)) allFilled = false;
 
@@ -96,7 +139,7 @@ public class TherapyProgramManagementController implements Initializable {
         try {
             double fee = Double.parseDouble(txtFee.getText().trim());
             programBO.updateProgram(new TherapyProgramDTO(
-                    txtProgramId.getText().trim(), txtName.getText().trim(),
+                    txtProgramId.getText().trim(), cmbProgramName.getValue(),
                     txtDuration.getText().trim(), fee, txtDescription.getText()));
             new Alert(Alert.AlertType.INFORMATION, "Program updated successfully!").showAndWait();
             loadTable();
@@ -133,10 +176,10 @@ public class TherapyProgramManagementController implements Initializable {
 
     @FXML
     void handleClear(ActionEvent e) {
-        txtName.clear(); txtDuration.clear();
+        cmbProgramName.getSelectionModel().clearSelection(); txtDuration.clear();
         txtFee.clear(); txtDescription.clear();
         if (txtSearch != null) txtSearch.clear();
-        ValidationUtil.resetStyles(txtProgramId, txtName, txtDuration, txtFee);
+        resetValidationStyles();
         generateNextId();
     }
 

@@ -14,12 +14,14 @@ import lk.ijse.theserenitymentalhealththerapycenter.exception.InvalidInputExcept
 import lk.ijse.theserenitymentalhealththerapycenter.util.ValidationUtil;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
 
 public class PatientManagementController implements Initializable {
 
-    @FXML private TextField txtId, txtName, txtDob, txtContact, txtEmail, txtRegDate, txtSearch;
+    @FXML private TextField txtId, txtName, txtContact, txtEmail, txtSearch;
+    @FXML private DatePicker dpDob, dpRegDate;
     @FXML private TextArea txtMedicalHistory;
     @FXML private TableView<PatientTM> tblPatients;
 
@@ -30,15 +32,28 @@ public class PatientManagementController implements Initializable {
         txtId.setEditable(false);
         generateNextId();
         loadTable();
+
+        // Automatically set Registration Date to today's date
+        dpRegDate.setValue(LocalDate.now());
+
+        // Disable future dates for DOB DatePicker
+        dpDob.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                setDisable(empty || date.isAfter(LocalDate.now()));
+            }
+        });
+
         tblPatients.getSelectionModel().selectedItemProperty().addListener((obs, old, nw) -> {
             if (nw != null) {
                 txtId.setText(nw.getId());
                 txtName.setText(nw.getName());
-                txtDob.setText(nw.getDob());
+                dpDob.setValue(nw.getDob() != null && !nw.getDob().isEmpty() ? LocalDate.parse(nw.getDob()) : null);
                 txtContact.setText(nw.getContactNumber());
                 txtEmail.setText(nw.getEmail());
-                txtRegDate.setText(nw.getRegistrationDate());
-                ValidationUtil.resetStyles(txtId, txtName, txtDob, txtContact, txtEmail, txtRegDate);
+                dpRegDate.setValue(nw.getRegistrationDate() != null && !nw.getRegistrationDate().isEmpty() ? LocalDate.parse(nw.getRegistrationDate()) : null);
+                resetValidationStyles();
             }
         });
     }
@@ -47,17 +62,31 @@ public class PatientManagementController implements Initializable {
         try { txtId.setText(patientBO.getNextId()); } catch (Exception e) { e.printStackTrace(); }
     }
 
-    // ===== SAVE — with required fields + regex validation =====
+    private void resetValidationStyles() {
+        ValidationUtil.resetStyles(txtId, txtName, txtContact, txtEmail);
+        dpDob.setStyle("-fx-border-color: #dee2e6; -fx-border-radius: 8;");
+        dpRegDate.setStyle("-fx-border-color: #dee2e6; -fx-border-radius: 8;");
+    }
+
+    private boolean validateDatePicker(DatePicker picker) {
+        if (picker.getValue() == null) {
+            picker.setStyle("-fx-border-color: #e74c3c; -fx-border-width: 1.5; -fx-border-radius: 8;");
+            return false;
+        }
+        picker.setStyle("-fx-border-color: #dee2e6; -fx-border-radius: 8;");
+        return true;
+    }
+
+    // ===== SAVE =====
     @FXML
     void handleSave(ActionEvent e) {
-        // Reset all borders first
-        ValidationUtil.resetStyles(txtId, txtName, txtDob, txtContact, txtEmail, txtRegDate);
+        resetValidationStyles();
 
         // 1. Required fields check
         boolean allFilled = true;
         if (!ValidationUtil.validateRequired(txtName)) allFilled = false;
         if (!ValidationUtil.validateRequired(txtContact)) allFilled = false;
-        if (!ValidationUtil.validateRequired(txtRegDate)) allFilled = false;
+        if (!validateDatePicker(dpRegDate)) allFilled = false;
 
         if (!allFilled) {
             ValidationUtil.showRequiredFieldsError();
@@ -66,7 +95,6 @@ public class PatientManagementController implements Initializable {
 
         // 2. Regex validation
         boolean valid = true;
-
         if (!ValidationUtil.validateName(txtName)) {
             valid = false;
         }
@@ -87,14 +115,17 @@ public class PatientManagementController implements Initializable {
 
         // 3. Save via BO layer
         try {
+            String dobStr = dpDob.getValue() != null ? dpDob.getValue().toString() : "";
+            String regDateStr = dpRegDate.getValue() != null ? dpRegDate.getValue().toString() : "";
+
             patientBO.savePatient(new PatientDTO(
                     txtId.getText().trim(),
                     txtName.getText().trim(),
-                    txtDob.getText().trim(),
+                    dobStr,
                     txtContact.getText().trim(),
                     txtEmail.getText().trim(),
                     txtMedicalHistory.getText(),
-                    txtRegDate.getText().trim()
+                    regDateStr
             ));
             new Alert(Alert.AlertType.INFORMATION, "Patient saved successfully!").showAndWait();
             loadTable();
@@ -106,15 +137,16 @@ public class PatientManagementController implements Initializable {
         }
     }
 
-    // ===== UPDATE — same validation pattern =====
+    // ===== UPDATE =====
     @FXML
     void handleUpdate(ActionEvent e) {
-        ValidationUtil.resetStyles(txtId, txtName, txtDob, txtContact, txtEmail, txtRegDate);
+        resetValidationStyles();
 
         boolean allFilled = true;
         if (!ValidationUtil.validateRequired(txtId)) allFilled = false;
         if (!ValidationUtil.validateRequired(txtName)) allFilled = false;
         if (!ValidationUtil.validateRequired(txtContact)) allFilled = false;
+        if (!validateDatePicker(dpRegDate)) allFilled = false;
 
         if (!allFilled) {
             ValidationUtil.showRequiredFieldsError();
@@ -134,14 +166,17 @@ public class PatientManagementController implements Initializable {
         }
 
         try {
+            String dobStr = dpDob.getValue() != null ? dpDob.getValue().toString() : "";
+            String regDateStr = dpRegDate.getValue() != null ? dpRegDate.getValue().toString() : "";
+
             patientBO.updatePatient(new PatientDTO(
                     txtId.getText().trim(),
                     txtName.getText().trim(),
-                    txtDob.getText().trim(),
+                    dobStr,
                     txtContact.getText().trim(),
                     txtEmail.getText().trim(),
                     txtMedicalHistory.getText(),
-                    txtRegDate.getText().trim()
+                    regDateStr
             ));
             new Alert(Alert.AlertType.INFORMATION, "Patient updated successfully!").showAndWait();
             loadTable();
@@ -153,7 +188,7 @@ public class PatientManagementController implements Initializable {
         }
     }
 
-    // ===== DELETE — with confirmation dialog =====
+    // ===== DELETE =====
     @FXML
     void handleDelete(ActionEvent e) {
         String id = txtId.getText();
@@ -162,9 +197,8 @@ public class PatientManagementController implements Initializable {
             return;
         }
 
-        // Show confirmation dialog before deleting
         if (!ValidationUtil.confirmDelete()) {
-            return; // User cancelled
+            return;
         }
 
         try {
@@ -180,10 +214,14 @@ public class PatientManagementController implements Initializable {
     // ===== CLEAR =====
     @FXML
     void handleClear(ActionEvent e) {
-        txtName.clear(); txtDob.clear();
-        txtContact.clear(); txtEmail.clear(); txtMedicalHistory.clear(); txtRegDate.clear();
+        txtName.clear();
+        dpDob.setValue(null);
+        txtContact.clear();
+        txtEmail.clear();
+        txtMedicalHistory.clear();
+        dpRegDate.setValue(LocalDate.now());
         if (txtSearch != null) txtSearch.clear();
-        ValidationUtil.resetStyles(txtId, txtName, txtDob, txtContact, txtEmail, txtRegDate);
+        resetValidationStyles();
         generateNextId();
     }
 

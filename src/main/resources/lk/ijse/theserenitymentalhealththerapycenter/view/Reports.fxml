@@ -34,11 +34,11 @@
             <HBox spacing="16" alignment="CENTER_LEFT">
                 <VBox spacing="4">
                     <Label text="From Date" styleClass="form-label"/>
-                    <TextField fx:id="txtFromDate" promptText="YYYY-MM-DD" styleClass="text-field-modern" prefHeight="38" prefWidth="160"/>
+                    <DatePicker fx:id="dpFromDate" promptText="Select From Date" styleClass="date-picker-modern" prefHeight="38" prefWidth="160"/>
                 </VBox>
                 <VBox spacing="4">
                     <Label text="To Date" styleClass="form-label"/>
-                    <TextField fx:id="txtToDate" promptText="YYYY-MM-DD" styleClass="text-field-modern" prefHeight="38" prefWidth="160"/>
+                    <DatePicker fx:id="dpToDate" promptText="Select To Date" styleClass="date-picker-modern" prefHeight="38" prefWidth="160"/>
                 </VBox>
                 <VBox spacing="4">
                     <Label text="Report Type" styleClass="form-label"/>

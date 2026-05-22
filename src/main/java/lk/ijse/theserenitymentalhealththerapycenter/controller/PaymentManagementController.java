@@ -17,12 +17,14 @@ import lk.ijse.theserenitymentalhealththerapycenter.exception.PaymentException;
 import lk.ijse.theserenitymentalhealththerapycenter.util.ValidationUtil;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
 
 public class PaymentManagementController implements Initializable {
 
-    @FXML private TextField txtPaymentId, txtAmount, txtDate;
+    @FXML private TextField txtPaymentId, txtAmount;
+    @FXML private DatePicker dpDate;
     @FXML private ComboBox<String> cmbPatient, cmbProgram, cmbMethod, cmbStatus;
     @FXML private TableView<PaymentTM> tblPayments;
 
@@ -35,17 +37,26 @@ public class PaymentManagementController implements Initializable {
         cmbMethod.setItems(FXCollections.observableArrayList("Cash", "Card", "Bank Transfer", "Online"));
         cmbStatus.setItems(FXCollections.observableArrayList("PENDING", "COMPLETED", "FAILED"));
         txtPaymentId.setEditable(false);
+
+        // Default to today's date
+        dpDate.setValue(LocalDate.now());
+
         generateNextId();
         loadCombos();
         loadTable();
+
         tblPayments.getSelectionModel().selectedItemProperty().addListener((obs, old, nw) -> {
             if (nw != null) {
                 txtPaymentId.setText(nw.getPaymentId());
                 txtAmount.setText(String.valueOf(nw.getAmount()));
-                txtDate.setText(nw.getPaymentDate());
+                // Parse date string back to LocalDate
+                try {
+                    dpDate.setValue(nw.getPaymentDate() != null && !nw.getPaymentDate().isEmpty()
+                            ? LocalDate.parse(nw.getPaymentDate()) : null);
+                } catch (Exception ignored) { dpDate.setValue(null); }
                 cmbMethod.setValue(nw.getPaymentMethod());
                 cmbStatus.setValue(nw.getStatus());
-                ValidationUtil.resetStyles(txtPaymentId, txtAmount, txtDate);
+                ValidationUtil.resetStyles(txtPaymentId, txtAmount);
             }
         });
     }
@@ -74,12 +85,15 @@ public class PaymentManagementController implements Initializable {
 
     @FXML
     void handleSave(ActionEvent e) {
-        ValidationUtil.resetStyles(txtPaymentId, txtAmount, txtDate);
+        ValidationUtil.resetStyles(txtPaymentId, txtAmount);
 
         // Required fields
         boolean allFilled = true;
         if (!ValidationUtil.validateRequired(txtAmount)) allFilled = false;
-        if (!ValidationUtil.validateRequired(txtDate)) allFilled = false;
+        if (dpDate.getValue() == null) {
+            dpDate.setStyle("-fx-border-color: #e74c3c; -fx-border-width: 1.5; -fx-border-radius: 8;");
+            allFilled = false;
+        }
         if (!ValidationUtil.validateRequired(cmbPatient)) allFilled = false;
         if (!ValidationUtil.validateRequired(cmbProgram)) allFilled = false;
         if (!ValidationUtil.validateRequired(cmbMethod)) allFilled = false;
@@ -92,8 +106,9 @@ public class PaymentManagementController implements Initializable {
 
         try {
             double amount = Double.parseDouble(txtAmount.getText().trim());
+            String dateStr = dpDate.getValue().toString();
             PaymentDTO dto = new PaymentDTO(
-                    txtPaymentId.getText().trim(), amount, txtDate.getText().trim(),
+                    txtPaymentId.getText().trim(), amount, dateStr,
                     cmbMethod.getValue(), cmbStatus.getValue(),
                     extractId(cmbPatient.getValue()), null,
                     extractId(cmbProgram.getValue()), null);
@@ -114,12 +129,15 @@ public class PaymentManagementController implements Initializable {
 
     @FXML
     void handleUpdate(ActionEvent e) {
-        ValidationUtil.resetStyles(txtPaymentId, txtAmount, txtDate);
+        ValidationUtil.resetStyles(txtPaymentId, txtAmount);
 
         boolean allFilled = true;
         if (!ValidationUtil.validateRequired(txtPaymentId)) allFilled = false;
         if (!ValidationUtil.validateRequired(txtAmount)) allFilled = false;
-        if (!ValidationUtil.validateRequired(txtDate)) allFilled = false;
+        if (dpDate.getValue() == null) {
+            dpDate.setStyle("-fx-border-color: #e74c3c; -fx-border-width: 1.5; -fx-border-radius: 8;");
+            allFilled = false;
+        }
 
         if (!allFilled) {
             ValidationUtil.showRequiredFieldsError();
@@ -128,8 +146,9 @@ public class PaymentManagementController implements Initializable {
 
         try {
             double amount = Double.parseDouble(txtAmount.getText().trim());
+            String dateStr = dpDate.getValue().toString();
             PaymentDTO dto = new PaymentDTO(
-                    txtPaymentId.getText().trim(), amount, txtDate.getText().trim(),
+                    txtPaymentId.getText().trim(), amount, dateStr,
                     cmbMethod.getValue(), cmbStatus.getValue(),
                     extractId(cmbPatient.getValue()), null,
                     extractId(cmbProgram.getValue()), null);
@@ -167,10 +186,12 @@ public class PaymentManagementController implements Initializable {
 
     @FXML
     void handleClear(ActionEvent e) {
-        txtPaymentId.clear(); txtAmount.clear(); txtDate.clear();
+        txtPaymentId.clear(); txtAmount.clear();
+        dpDate.setValue(LocalDate.now());
+        dpDate.setStyle("");
         cmbPatient.setValue(null); cmbProgram.setValue(null);
         cmbMethod.setValue(null); cmbStatus.setValue(null);
-        ValidationUtil.resetStyles(txtPaymentId, txtAmount, txtDate);
+        ValidationUtil.resetStyles(txtPaymentId, txtAmount);
         generateNextId();
     }
 

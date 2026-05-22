@@ -13,7 +13,7 @@
             <HBox spacing="16" alignment="CENTER_LEFT">
                 <VBox spacing="4" HBox.hgrow="ALWAYS"><Label text="Payment ID" styleClass="form-label"/><TextField fx:id="txtPaymentId" promptText="PAY001" styleClass="text-field-modern" prefHeight="38"/></VBox>
                 <VBox spacing="4" HBox.hgrow="ALWAYS"><Label text="Amount (LKR)" styleClass="form-label"/><TextField fx:id="txtAmount" promptText="80,000.00" styleClass="text-field-modern" prefHeight="38"/></VBox>
-                <VBox spacing="4"><Label text="Payment Date" styleClass="form-label"/><TextField fx:id="txtDate" promptText="YYYY-MM-DD" styleClass="text-field-modern" prefHeight="38" prefWidth="150"/></VBox>
+                <VBox spacing="4"><Label text="Payment Date" styleClass="form-label"/><DatePicker fx:id="dpDate" promptText="Select Date" styleClass="date-picker-modern" prefHeight="38" prefWidth="150"/></VBox>
             </HBox>
             <HBox spacing="16" alignment="CENTER_LEFT">
                 <VBox spacing="4" HBox.hgrow="ALWAYS"><Label text="Patient" styleClass="form-label"/><ComboBox fx:id="cmbPatient" promptText="Select Patient" styleClass="combo-modern" prefHeight="38" maxWidth="1.7976931348623157E308"/></VBox>
