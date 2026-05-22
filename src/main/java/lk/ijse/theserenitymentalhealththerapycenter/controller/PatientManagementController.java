@@ -8,6 +8,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import lk.ijse.theserenitymentalhealththerapycenter.bo.BOFactory;
 import lk.ijse.theserenitymentalhealththerapycenter.bo.custom.PatientBO;
+import lk.ijse.theserenitymentalhealththerapycenter.bo.custom.PaymentBO;
+import lk.ijse.theserenitymentalhealththerapycenter.bo.custom.TherapyProgramBO;
 import lk.ijse.theserenitymentalhealththerapycenter.dto.PatientDTO;
 import lk.ijse.theserenitymentalhealththerapycenter.dto.tm.PatientTM;
 import lk.ijse.theserenitymentalhealththerapycenter.exception.InvalidInputException;
@@ -20,18 +22,25 @@ import java.util.ResourceBundle;
 
 public class PatientManagementController implements Initializable {
 
-    @FXML private TextField txtId, txtName, txtContact, txtEmail, txtSearch;
+    @FXML private TextField txtId, txtName, txtContact, txtSearch, txtProgramFee;
     @FXML private DatePicker dpDob, dpRegDate;
     @FXML private TextArea txtMedicalHistory;
     @FXML private TableView<PatientTM> tblPatients;
+    @FXML private ComboBox<String> cmbProgram, cmbPaymentMethod, cmbGender;
 
     private final PatientBO patientBO = BOFactory.getInstance().getBO(BOFactory.BOType.PATIENT);
+    private final TherapyProgramBO programBO = BOFactory.getInstance().getBO(BOFactory.BOType.THERAPY_PROGRAM);
+    private final PaymentBO paymentBO = BOFactory.getInstance().getBO(BOFactory.BOType.PAYMENT);
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         txtId.setEditable(false);
         generateNextId();
         loadTable();
+
+        cmbPaymentMethod.setItems(FXCollections.observableArrayList("Cash", "Card", "Bank Transfer", "Online"));
+        cmbGender.setItems(FXCollections.observableArrayList("Male", "Female"));
+        loadPrograms();
 
         // Automatically set Registration Date to today's date
         dpRegDate.setValue(LocalDate.now());
@@ -51,11 +60,44 @@ public class PatientManagementController implements Initializable {
                 txtName.setText(nw.getName());
                 dpDob.setValue(nw.getDob() != null && !nw.getDob().isEmpty() ? LocalDate.parse(nw.getDob()) : null);
                 txtContact.setText(nw.getContactNumber());
-                txtEmail.setText(nw.getEmail());
+                cmbGender.setValue(nw.getGender());
                 dpRegDate.setValue(nw.getRegistrationDate() != null && !nw.getRegistrationDate().isEmpty() ? LocalDate.parse(nw.getRegistrationDate()) : null);
+                
+                // Disable registration-only fields during update
+                cmbProgram.setDisable(true);
+                cmbPaymentMethod.setDisable(true);
+                cmbProgram.setValue(null);
+                cmbPaymentMethod.setValue(null);
+                txtProgramFee.clear();
+
                 resetValidationStyles();
             }
         });
+    }
+
+    private void loadPrograms() {
+        try {
+            List<lk.ijse.theserenitymentalhealththerapycenter.dto.TherapyProgramDTO> programs = programBO.getAllPrograms();
+            ObservableList<String> prList = FXCollections.observableArrayList();
+            for (lk.ijse.theserenitymentalhealththerapycenter.dto.TherapyProgramDTO p : programs) {
+                prList.add(p.getProgramId() + " - " + p.getName());
+            }
+            cmbProgram.setItems(prList);
+
+            cmbProgram.getSelectionModel().selectedItemProperty().addListener((obs, old, nw) -> {
+                if (nw != null && !nw.isEmpty()) {
+                    String id = nw.split(" - ")[0];
+                    try {
+                        lk.ijse.theserenitymentalhealththerapycenter.dto.TherapyProgramDTO p = programBO.searchProgram(id);
+                        if (p != null) {
+                            txtProgramFee.setText(String.format("%.2f", p.getFee()));
+                        }
+                    } catch (Exception e) { e.printStackTrace(); }
+                } else {
+                    txtProgramFee.clear();
+                }
+            });
+        } catch (Exception e) { e.printStackTrace(); }
     }
 
     private void generateNextId() {
@@ -63,7 +105,7 @@ public class PatientManagementController implements Initializable {
     }
 
     private void resetValidationStyles() {
-        ValidationUtil.resetStyles(txtId, txtName, txtContact, txtEmail);
+        ValidationUtil.resetStyles(txtId, txtName, txtContact);
         dpDob.setStyle("-fx-border-color: #dee2e6; -fx-border-radius: 8;");
         dpRegDate.setStyle("-fx-border-color: #dee2e6; -fx-border-radius: 8;");
     }
@@ -87,6 +129,9 @@ public class PatientManagementController implements Initializable {
         if (!ValidationUtil.validateRequired(txtName)) allFilled = false;
         if (!ValidationUtil.validateRequired(txtContact)) allFilled = false;
         if (!validateDatePicker(dpRegDate)) allFilled = false;
+        if (!ValidationUtil.validateRequired(cmbProgram)) allFilled = false;
+        if (!ValidationUtil.validateRequired(cmbPaymentMethod)) allFilled = false;
+        if (!ValidationUtil.validateRequired(cmbGender)) allFilled = false;
 
         if (!allFilled) {
             ValidationUtil.showRequiredFieldsError();
@@ -101,12 +146,6 @@ public class PatientManagementController implements Initializable {
         if (!ValidationUtil.validatePhone(txtContact)) {
             valid = false;
         }
-        // Email is optional, but validate format if provided
-        if (txtEmail.getText() != null && !txtEmail.getText().trim().isEmpty()) {
-            if (!ValidationUtil.validateEmail(txtEmail)) {
-                valid = false;
-            }
-        }
 
         if (!valid) {
             new Alert(Alert.AlertType.WARNING, "Please correct the highlighted fields.").showAndWait();
@@ -118,22 +157,30 @@ public class PatientManagementController implements Initializable {
             String dobStr = dpDob.getValue() != null ? dpDob.getValue().toString() : "";
             String regDateStr = dpRegDate.getValue() != null ? dpRegDate.getValue().toString() : "";
 
-            patientBO.savePatient(new PatientDTO(
+            PatientDTO dto = new PatientDTO(
                     txtId.getText().trim(),
                     txtName.getText().trim(),
                     dobStr,
                     txtContact.getText().trim(),
-                    txtEmail.getText().trim(),
+                    cmbGender.getValue(),
                     txtMedicalHistory.getText(),
                     regDateStr
-            ));
-            new Alert(Alert.AlertType.INFORMATION, "Patient saved successfully!").showAndWait();
+            );
+
+            String programId = cmbProgram.getValue().split(" - ")[0];
+            String paymentMethod = cmbPaymentMethod.getValue();
+            double amount = Double.parseDouble(txtProgramFee.getText().trim());
+            String paymentId = paymentBO.getNextId();
+
+            patientBO.registerPatient(dto, programId, paymentMethod, amount, paymentId);
+            new Alert(Alert.AlertType.INFORMATION, "Patient registered successfully!").showAndWait();
             loadTable();
             handleClear(null);
         } catch (InvalidInputException ex) {
             new Alert(Alert.AlertType.WARNING, ex.getMessage()).showAndWait();
         } catch (Exception ex) {
             new Alert(Alert.AlertType.ERROR, "Error: " + ex.getMessage()).showAndWait();
+            ex.printStackTrace();
         }
     }
 
@@ -146,6 +193,7 @@ public class PatientManagementController implements Initializable {
         if (!ValidationUtil.validateRequired(txtId)) allFilled = false;
         if (!ValidationUtil.validateRequired(txtName)) allFilled = false;
         if (!ValidationUtil.validateRequired(txtContact)) allFilled = false;
+        if (!ValidationUtil.validateRequired(cmbGender)) allFilled = false;
         if (!validateDatePicker(dpRegDate)) allFilled = false;
 
         if (!allFilled) {
@@ -156,9 +204,6 @@ public class PatientManagementController implements Initializable {
         boolean valid = true;
         if (!ValidationUtil.validateName(txtName)) valid = false;
         if (!ValidationUtil.validatePhone(txtContact)) valid = false;
-        if (txtEmail.getText() != null && !txtEmail.getText().trim().isEmpty()) {
-            if (!ValidationUtil.validateEmail(txtEmail)) valid = false;
-        }
 
         if (!valid) {
             new Alert(Alert.AlertType.WARNING, "Please correct the highlighted fields.").showAndWait();
@@ -174,7 +219,7 @@ public class PatientManagementController implements Initializable {
                     txtName.getText().trim(),
                     dobStr,
                     txtContact.getText().trim(),
-                    txtEmail.getText().trim(),
+                    cmbGender.getValue(),
                     txtMedicalHistory.getText(),
                     regDateStr
             ));
@@ -217,9 +262,16 @@ public class PatientManagementController implements Initializable {
         txtName.clear();
         dpDob.setValue(null);
         txtContact.clear();
-        txtEmail.clear();
+        cmbGender.setValue(null);
         txtMedicalHistory.clear();
         dpRegDate.setValue(LocalDate.now());
+
+        cmbProgram.setDisable(false);
+        cmbPaymentMethod.setDisable(false);
+        cmbProgram.setValue(null);
+        cmbPaymentMethod.setValue(null);
+        txtProgramFee.clear();
+
         if (txtSearch != null) txtSearch.clear();
         resetValidationStyles();
         generateNextId();
@@ -234,7 +286,7 @@ public class PatientManagementController implements Initializable {
             List<PatientDTO> results = patientBO.searchPatientsByName(q);
             ObservableList<PatientTM> list = FXCollections.observableArrayList();
             for (PatientDTO p : results) {
-                list.add(new PatientTM(p.getId(), p.getName(), p.getDob(), p.getContactNumber(), p.getEmail(), p.getRegistrationDate()));
+                list.add(new PatientTM(p.getId(), p.getName(), p.getDob(), p.getContactNumber(), p.getGender(), p.getRegistrationDate()));
             }
             tblPatients.setItems(list);
         } catch (Exception ex) { ex.printStackTrace(); }
@@ -246,7 +298,7 @@ public class PatientManagementController implements Initializable {
             List<PatientDTO> all = patientBO.getAllPatients();
             ObservableList<PatientTM> list = FXCollections.observableArrayList();
             for (PatientDTO p : all) {
-                list.add(new PatientTM(p.getId(), p.getName(), p.getDob(), p.getContactNumber(), p.getEmail(), p.getRegistrationDate()));
+                list.add(new PatientTM(p.getId(), p.getName(), p.getDob(), p.getContactNumber(), p.getGender(), p.getRegistrationDate()));
             }
             tblPatients.setItems(list);
         } catch (Exception e) { e.printStackTrace(); }

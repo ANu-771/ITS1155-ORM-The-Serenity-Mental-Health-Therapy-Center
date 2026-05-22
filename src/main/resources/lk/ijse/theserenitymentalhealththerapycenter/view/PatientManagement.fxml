@@ -17,13 +17,27 @@
             </HBox>
             <HBox spacing="16" alignment="CENTER_LEFT">
                 <VBox spacing="4" HBox.hgrow="ALWAYS"><Label text="Contact Number" styleClass="form-label"/><TextField fx:id="txtContact" promptText="+94 77 000 0000" styleClass="text-field-modern" prefHeight="38"/></VBox>
-                <VBox spacing="4" HBox.hgrow="ALWAYS"><Label text="Email" styleClass="form-label"/><TextField fx:id="txtEmail" promptText="patient@email.com" styleClass="text-field-modern" prefHeight="38"/></VBox>
+                <VBox spacing="4" HBox.hgrow="ALWAYS"><Label text="Gender" styleClass="form-label"/><ComboBox fx:id="cmbGender" promptText="Select Gender" styleClass="combo-modern" prefHeight="38" maxWidth="1.7976931348623157E308"/></VBox>
                 <VBox spacing="4"><Label text="Registration Date" styleClass="form-label"/><DatePicker fx:id="dpRegDate" promptText="Select Reg. Date" styleClass="date-picker-modern" prefHeight="38" prefWidth="140"/></VBox>
             </HBox>
             <VBox spacing="4">
                 <Label text="Medical History" styleClass="form-label"/>
                 <TextArea fx:id="txtMedicalHistory" promptText="Enter medical history notes..." prefRowCount="2" styleClass="text-area-modern"/>
             </VBox>
+            <HBox spacing="16" alignment="CENTER_LEFT">
+                <VBox spacing="4" HBox.hgrow="ALWAYS">
+                    <Label text="Initial Therapy Program (Required for Registration)" styleClass="form-label"/>
+                    <ComboBox fx:id="cmbProgram" promptText="Select Program" styleClass="combo-modern" prefHeight="38" maxWidth="1.7976931348623157E308"/>
+                </VBox>
+                <VBox spacing="4">
+                    <Label text="Program Fee (LKR)" styleClass="form-label"/>
+                    <TextField fx:id="txtProgramFee" editable="false" promptText="0.00" styleClass="text-field-modern" prefHeight="38" prefWidth="120"/>
+                </VBox>
+                <VBox spacing="4">
+                    <Label text="Payment Method" styleClass="form-label"/>
+                    <ComboBox fx:id="cmbPaymentMethod" promptText="Select Method" styleClass="combo-modern" prefHeight="38" prefWidth="150"/>
+                </VBox>
+            </HBox>
             <HBox spacing="10" alignment="CENTER_LEFT">
                 <Button text="Save" styleClass="btn-save" onAction="#handleSave" prefWidth="100"/>
                 <Button text="Update" styleClass="btn-update" onAction="#handleUpdate" prefWidth="100"/>
@@ -40,7 +54,7 @@
                 <TableColumn fx:id="colName" text="Name" prefWidth="160"><cellValueFactory><PropertyValueFactory property="name"/></cellValueFactory></TableColumn>
                 <TableColumn fx:id="colDob" text="DOB" prefWidth="100"><cellValueFactory><PropertyValueFactory property="dob"/></cellValueFactory></TableColumn>
                 <TableColumn fx:id="colContact" text="Contact" prefWidth="120"><cellValueFactory><PropertyValueFactory property="contactNumber"/></cellValueFactory></TableColumn>
-                <TableColumn fx:id="colEmail" text="Email" prefWidth="170"><cellValueFactory><PropertyValueFactory property="email"/></cellValueFactory></TableColumn>
+                <TableColumn fx:id="colGender" text="Gender" prefWidth="100"><cellValueFactory><PropertyValueFactory property="gender"/></cellValueFactory></TableColumn>
                 <TableColumn fx:id="colRegDate" text="Reg. Date" prefWidth="100"><cellValueFactory><PropertyValueFactory property="registrationDate"/></cellValueFactory></TableColumn>
             </columns>
         </TableView>

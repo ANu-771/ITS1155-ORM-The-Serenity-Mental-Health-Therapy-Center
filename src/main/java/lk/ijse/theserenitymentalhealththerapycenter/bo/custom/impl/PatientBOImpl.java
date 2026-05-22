@@ -17,14 +17,14 @@ public class PatientBOImpl implements PatientBO {
     @Override
     public boolean savePatient(PatientDTO dto) throws Exception {
         validatePatient(dto);
-        Patient patient = new Patient(dto.getId(), dto.getName(), dto.getDob(), dto.getContactNumber(), dto.getEmail(), dto.getMedicalHistory(), dto.getRegistrationDate());
+        Patient patient = new Patient(dto.getId(), dto.getName(), dto.getDob(), dto.getContactNumber(), dto.getGender(), dto.getMedicalHistory(), dto.getRegistrationDate());
         return patientDAO.save(patient);
     }
 
     @Override
     public boolean updatePatient(PatientDTO dto) throws Exception {
         validatePatient(dto);
-        Patient patient = new Patient(dto.getId(), dto.getName(), dto.getDob(), dto.getContactNumber(), dto.getEmail(), dto.getMedicalHistory(), dto.getRegistrationDate());
+        Patient patient = new Patient(dto.getId(), dto.getName(), dto.getDob(), dto.getContactNumber(), dto.getGender(), dto.getMedicalHistory(), dto.getRegistrationDate());
         return patientDAO.update(patient);
     }
 
@@ -37,7 +37,7 @@ public class PatientBOImpl implements PatientBO {
     public PatientDTO searchPatient(String id) throws Exception {
         Patient p = patientDAO.search(id);
         if (p == null) return null;
-        return new PatientDTO(p.getId(), p.getName(), p.getDob(), p.getContactNumber(), p.getEmail(), p.getMedicalHistory(), p.getRegistrationDate());
+        return new PatientDTO(p.getId(), p.getName(), p.getDob(), p.getContactNumber(), p.getGender(), p.getMedicalHistory(), p.getRegistrationDate());
     }
 
     @Override
@@ -45,7 +45,7 @@ public class PatientBOImpl implements PatientBO {
         List<Patient> patients = patientDAO.getAll();
         List<PatientDTO> dtos = new ArrayList<>();
         for (Patient p : patients) {
-            dtos.add(new PatientDTO(p.getId(), p.getName(), p.getDob(), p.getContactNumber(), p.getEmail(), p.getMedicalHistory(), p.getRegistrationDate()));
+            dtos.add(new PatientDTO(p.getId(), p.getName(), p.getDob(), p.getContactNumber(), p.getGender(), p.getMedicalHistory(), p.getRegistrationDate()));
         }
         return dtos;
     }
@@ -55,7 +55,7 @@ public class PatientBOImpl implements PatientBO {
         List<Patient> patients = patientDAO.searchByName(name);
         List<PatientDTO> dtos = new ArrayList<>();
         for (Patient p : patients) {
-            dtos.add(new PatientDTO(p.getId(), p.getName(), p.getDob(), p.getContactNumber(), p.getEmail(), p.getMedicalHistory(), p.getRegistrationDate()));
+            dtos.add(new PatientDTO(p.getId(), p.getName(), p.getDob(), p.getContactNumber(), p.getGender(), p.getMedicalHistory(), p.getRegistrationDate()));
         }
         return dtos;
     }
@@ -65,7 +65,7 @@ public class PatientBOImpl implements PatientBO {
         List<Patient> patients = patientDAO.getPatientsWithPrograms();
         List<PatientDTO> dtos = new ArrayList<>();
         for (Patient p : patients) {
-            dtos.add(new PatientDTO(p.getId(), p.getName(), p.getDob(), p.getContactNumber(), p.getEmail(), p.getMedicalHistory(), p.getRegistrationDate()));
+            dtos.add(new PatientDTO(p.getId(), p.getName(), p.getDob(), p.getContactNumber(), p.getGender(), p.getMedicalHistory(), p.getRegistrationDate()));
         }
         return dtos;
     }
@@ -75,7 +75,7 @@ public class PatientBOImpl implements PatientBO {
         List<Patient> patients = patientDAO.getPatientsEnrolledInAllPrograms();
         List<PatientDTO> dtos = new ArrayList<>();
         for (Patient p : patients) {
-            dtos.add(new PatientDTO(p.getId(), p.getName(), p.getDob(), p.getContactNumber(), p.getEmail(), p.getMedicalHistory(), p.getRegistrationDate()));
+            dtos.add(new PatientDTO(p.getId(), p.getName(), p.getDob(), p.getContactNumber(), p.getGender(), p.getMedicalHistory(), p.getRegistrationDate()));
         }
         return dtos;
     }
@@ -84,12 +84,7 @@ public class PatientBOImpl implements PatientBO {
         if (dto.getName() == null || dto.getName().trim().isEmpty()) {
             throw new InvalidInputException("Patient name is required");
         }
-        // email regex validation
-        if (dto.getEmail() != null && !dto.getEmail().trim().isEmpty()) {
-            if (!dto.getEmail().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {
-                throw new InvalidInputException("Invalid email format (e.g. user@example.com)");
-            }
-        }
+
 
         if (dto.getContactNumber() != null && !dto.getContactNumber().trim().isEmpty()) {
             if (!dto.getContactNumber().matches("^(\\+94|0)\\d{9}$")) {
@@ -102,5 +97,23 @@ public class PatientBOImpl implements PatientBO {
     public String getNextId() throws Exception {
         String lastId = patientDAO.getLastId();
         return lk.ijse.theserenitymentalhealththerapycenter.util.IdGenerator.generateNextId("P", lastId);
+    }
+
+    @Override
+    public boolean registerPatient(PatientDTO dto, String programId, String paymentMethod, double amount, String paymentId) throws Exception {
+        validatePatient(dto);
+        if (programId == null || programId.isEmpty()) throw new InvalidInputException("Initial program must be selected for registration");
+        if (paymentMethod == null || paymentMethod.isEmpty()) throw new InvalidInputException("Payment method is required");
+
+        Patient patient = new Patient(dto.getId(), dto.getName(), dto.getDob(), dto.getContactNumber(), dto.getGender(), dto.getMedicalHistory(), dto.getRegistrationDate());
+        
+        lk.ijse.theserenitymentalhealththerapycenter.entity.Payment payment = new lk.ijse.theserenitymentalhealththerapycenter.entity.Payment();
+        payment.setPaymentId(paymentId);
+        payment.setAmount(amount);
+        payment.setPaymentDate(dto.getRegistrationDate());
+        payment.setPaymentMethod(paymentMethod);
+        payment.setStatus("COMPLETED");
+
+        return patientDAO.registerPatient(patient, programId, payment);
     }
 }

@@ -21,8 +21,8 @@ public class Patient {
     @Column(name = "contact_number", length = 15)
     private String contactNumber;
 
-    @Column(length = 100)
-    private String email;
+    @Column(length = 10)
+    private String gender;
 
     @Column(name = "medical_history", length = 1000)
     private String medicalHistory;
@@ -47,12 +47,12 @@ public class Patient {
     public Patient() {
     }
 
-    public Patient(String id, String name, String dob, String contactNumber, String email, String medicalHistory, String registrationDate) {
+    public Patient(String id, String name, String dob, String contactNumber, String gender, String medicalHistory, String registrationDate) {
         this.id = id;
         this.name = name;
         this.dob = dob;
         this.contactNumber = contactNumber;
-        this.email = email;
+        this.gender = gender;
         this.medicalHistory = medicalHistory;
         this.registrationDate = registrationDate;
     }
@@ -89,12 +89,12 @@ public class Patient {
         this.contactNumber = contactNumber;
     }
 
-    public String getEmail() {
-        return email;
+    public String getGender() {
+        return gender;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public String getMedicalHistory() {

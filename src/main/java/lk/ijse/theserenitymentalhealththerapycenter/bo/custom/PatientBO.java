@@ -22,4 +22,6 @@ public interface PatientBO {
     List<PatientDTO> getPatientsEnrolledInAllPrograms() throws Exception;
 
     String getNextId() throws Exception;
+    
+    boolean registerPatient(PatientDTO patientDTO, String programId, String paymentMethod, double amount, String paymentId) throws Exception;
 }

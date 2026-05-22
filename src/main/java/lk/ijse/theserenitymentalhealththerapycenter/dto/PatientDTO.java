@@ -5,18 +5,18 @@ public class PatientDTO {
     private String name;
     private String dob;
     private String contactNumber;
-    private String email;
+    private String gender;
     private String medicalHistory;
     private String registrationDate;
 
     public PatientDTO() {}
 
-    public PatientDTO(String id, String name, String dob, String contactNumber, String email, String medicalHistory, String registrationDate) {
+    public PatientDTO(String id, String name, String dob, String contactNumber, String gender, String medicalHistory, String registrationDate) {
         this.id = id;
         this.name = name;
         this.dob = dob;
         this.contactNumber = contactNumber;
-        this.email = email;
+        this.gender = gender;
         this.medicalHistory = medicalHistory;
         this.registrationDate = registrationDate;
     }
@@ -29,8 +29,8 @@ public class PatientDTO {
     public void setDob(String dob) { this.dob = dob; }
     public String getContactNumber() { return contactNumber; }
     public void setContactNumber(String contactNumber) { this.contactNumber = contactNumber; }
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public String getGender() { return gender; }
+    public void setGender(String gender) { this.gender = gender; }
     public String getMedicalHistory() { return medicalHistory; }
     public void setMedicalHistory(String medicalHistory) { this.medicalHistory = medicalHistory; }
     public String getRegistrationDate() { return registrationDate; }
