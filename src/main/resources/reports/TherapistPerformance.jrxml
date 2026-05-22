@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports
-              http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
               name="TherapistPerformance" pageWidth="595" pageHeight="842"
-              columnWidth="535" leftMargin="30" rightMargin="30"
-              topMargin="30" bottomMargin="30">
+              columnWidth="555" leftMargin="20" rightMargin="20"
+              topMargin="20" bottomMargin="20">
 
     <parameter name="fromDate" class="java.lang.String"/>
     <parameter name="toDate" class="java.lang.String"/>
@@ -25,42 +24,155 @@
     <field name="email" class="java.lang.String"/>
 
     <title>
-        <band height="60">
-            <staticText>
-                <reportElement x="0" y="0" width="535" height="35"/>
-                <textElement textAlignment="Center">
-                    <font size="18" isBold="true"/>
-                </textElement>
-                <text><![CDATA[Serenity Mental Health Therapy Center]]></text>
-            </staticText>
-            <staticText>
-                <reportElement x="0" y="35" width="535" height="20"/>
-                <textElement textAlignment="Center">
-                    <font size="12"/>
-                </textElement>
-                <text><![CDATA[Therapist Roster and Performance]]></text>
-            </staticText>
+        <band height="90">
+            <frame>
+                <reportElement mode="Opaque" x="0" y="0" width="555" height="90" backcolor="#3B82F6"/>
+                <staticText>
+                    <reportElement x="0" y="15" width="555" height="35" forecolor="#FFFFFF"/>
+                    <textElement textAlignment="Center" verticalAlignment="Middle">
+                        <font size="26" isBold="true"/>
+                    </textElement>
+                    <text><![CDATA[Therapist Roster and Performance]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="0" y="55" width="555" height="20" forecolor="#E0E7FF"/>
+                    <textElement textAlignment="Center" verticalAlignment="Middle">
+                        <font size="12"/>
+                    </textElement>
+                    <text><![CDATA[Serenity Mental Health Therapy Center]]></text>
+                </staticText>
+                <textField pattern="MMMMM dd, yyyy">
+                    <reportElement x="380" y="70" width="165" height="15" forecolor="#FFFFFF"/>
+                    <textElement textAlignment="Right" verticalAlignment="Middle">
+                        <font size="10"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+                </textField>
+            </frame>
         </band>
     </title>
 
     <columnHeader>
-        <band height="25">
-            <staticText><reportElement x="0" y="0" width="70" height="25"/><textElement><font isBold="true" size="9"/></textElement><text><![CDATA[Therapist ID]]></text></staticText>
-            <staticText><reportElement x="70" y="0" width="130" height="25"/><textElement><font isBold="true" size="9"/></textElement><text><![CDATA[Name]]></text></staticText>
-            <staticText><reportElement x="200" y="0" width="120" height="25"/><textElement><font isBold="true" size="9"/></textElement><text><![CDATA[Specialization]]></text></staticText>
-            <staticText><reportElement x="320" y="0" width="100" height="25"/><textElement><font isBold="true" size="9"/></textElement><text><![CDATA[Contact Number]]></text></staticText>
-            <staticText><reportElement x="420" y="0" width="115" height="25"/><textElement><font isBold="true" size="9"/></textElement><text><![CDATA[Email]]></text></staticText>
+        <band height="30">
+            <frame>
+                <reportElement mode="Opaque" x="0" y="0" width="555" height="30" backcolor="#F3F4F6"/>
+                <!-- Widths: 75, 135, 125, 105, 115 = 555 -->
+                <staticText>
+                    <reportElement x="0" y="0" width="75" height="30" forecolor="#374151"/>
+                    <textElement verticalAlignment="Middle">
+                        <font size="12" isBold="true"/>
+                        <paragraph leftIndent="10"/>
+                    </textElement>
+                    <text><![CDATA[ID]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="75" y="0" width="135" height="30" forecolor="#374151"/>
+                    <textElement verticalAlignment="Middle">
+                        <font size="12" isBold="true"/>
+                        <paragraph leftIndent="10"/>
+                    </textElement>
+                    <text><![CDATA[Name]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="210" y="0" width="125" height="30" forecolor="#374151"/>
+                    <textElement verticalAlignment="Middle">
+                        <font size="12" isBold="true"/>
+                        <paragraph leftIndent="10"/>
+                    </textElement>
+                    <text><![CDATA[Specialization]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="335" y="0" width="105" height="30" forecolor="#374151"/>
+                    <textElement verticalAlignment="Middle">
+                        <font size="12" isBold="true"/>
+                        <paragraph leftIndent="10"/>
+                    </textElement>
+                    <text><![CDATA[Contact Number]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="440" y="0" width="115" height="30" forecolor="#374151"/>
+                    <textElement verticalAlignment="Middle">
+                        <font size="12" isBold="true"/>
+                        <paragraph leftIndent="10"/>
+                    </textElement>
+                    <text><![CDATA[Email]]></text>
+                </staticText>
+            </frame>
         </band>
     </columnHeader>
 
     <detail>
-        <band height="20">
-            <textField><reportElement x="0" y="0" width="70" height="20"/><textElement><font size="8"/></textElement><textFieldExpression><![CDATA[$F{id}]]></textFieldExpression></textField>
-            <textField><reportElement x="70" y="0" width="130" height="20"/><textElement><font size="8"/></textElement><textFieldExpression><![CDATA[$F{name}]]></textFieldExpression></textField>
-            <textField><reportElement x="200" y="0" width="120" height="20"/><textElement><font size="8"/></textElement><textFieldExpression><![CDATA[$F{specialization}]]></textFieldExpression></textField>
-            <textField><reportElement x="320" y="0" width="100" height="20"/><textElement><font size="8"/></textElement><textFieldExpression><![CDATA[$F{contact_number}]]></textFieldExpression></textField>
-            <textField><reportElement x="420" y="0" width="115" height="20"/><textElement><font size="8"/></textElement><textFieldExpression><![CDATA[$F{email}]]></textFieldExpression></textField>
+        <band height="30">
+            <textField textAdjust="StretchHeight" isBlankWhenNull="true">
+                <reportElement x="0" y="0" width="75" height="29" forecolor="#1F2937"/>
+                <textElement verticalAlignment="Middle">
+                    <font size="11"/>
+                    <paragraph leftIndent="10"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+            </textField>
+            <textField textAdjust="StretchHeight" isBlankWhenNull="true">
+                <reportElement x="75" y="0" width="135" height="29" forecolor="#1F2937"/>
+                <textElement verticalAlignment="Middle">
+                    <font size="11"/>
+                    <paragraph leftIndent="10"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+            </textField>
+            <textField textAdjust="StretchHeight" isBlankWhenNull="true">
+                <reportElement x="210" y="0" width="125" height="29" forecolor="#1F2937"/>
+                <textElement verticalAlignment="Middle">
+                    <font size="11"/>
+                    <paragraph leftIndent="10"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{specialization}]]></textFieldExpression>
+            </textField>
+            <textField textAdjust="StretchHeight" isBlankWhenNull="true">
+                <reportElement x="335" y="0" width="105" height="29" forecolor="#1F2937"/>
+                <textElement verticalAlignment="Middle">
+                    <font size="11"/>
+                    <paragraph leftIndent="10"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{contact_number}]]></textFieldExpression>
+            </textField>
+            <textField textAdjust="StretchHeight" isBlankWhenNull="true">
+                <reportElement x="440" y="0" width="115" height="29" forecolor="#1F2937"/>
+                <textElement verticalAlignment="Middle">
+                    <font size="11"/>
+                    <paragraph leftIndent="10"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>
+            </textField>
+            <line>
+                <reportElement x="0" y="29" width="555" height="1" forecolor="#E5E7EB"/>
+            </line>
         </band>
     </detail>
+
+    <pageFooter>
+        <band height="30">
+            <textField>
+                <reportElement x="435" y="10" width="80" height="20" forecolor="#6B7280"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font size="10"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+            </textField>
+            <textField evaluationTime="Report">
+                <reportElement x="515" y="10" width="40" height="20" forecolor="#6B7280"/>
+                <textElement verticalAlignment="Middle">
+                    <font size="10"/>
+                </textElement>
+                <textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement x="0" y="10" width="200" height="20" forecolor="#6B7280"/>
+                <textElement verticalAlignment="Middle">
+                    <font size="10"/>
+                </textElement>
+                <text><![CDATA[Developed by Anu Soft]]></text>
+            </staticText>
+        </band>
+    </pageFooter>
 
 </jasperReport>
