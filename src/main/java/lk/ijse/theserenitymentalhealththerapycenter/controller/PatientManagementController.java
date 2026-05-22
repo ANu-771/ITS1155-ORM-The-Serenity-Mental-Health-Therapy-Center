@@ -47,10 +47,8 @@ public class PatientManagementController implements Initializable {
         cmbGender.setItems(FXCollections.observableArrayList("Male", "Female"));
         loadPrograms();
 
-        // Automatically set Registration Date to today's date
         dpRegDate.setValue(LocalDate.now());
 
-        // Disable future dates for DOB DatePicker
         dpDob.setDayCellFactory(picker -> new DateCell() {
             @Override
             public void updateItem(LocalDate date, boolean empty) {
