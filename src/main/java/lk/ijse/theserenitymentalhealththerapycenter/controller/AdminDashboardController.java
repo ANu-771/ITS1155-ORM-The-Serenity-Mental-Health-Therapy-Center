@@ -16,13 +16,15 @@ import java.util.ResourceBundle;
 
 public class AdminDashboardController implements Initializable {
 
-    @FXML private AnchorPane contentPane;
-    @FXML private Label lblHeader;
-    @FXML private Label lblSubheader;
+    @FXML
+    private AnchorPane contentPane;
+    @FXML
+    private Label lblHeader;
+    @FXML
+    private Label lblSubheader;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // Auto-load dashboard home content on startup
         loadContent("view/AdminDashboardContent.fxml", "Dashboard Home", "Welcome back, Admin");
     }
 

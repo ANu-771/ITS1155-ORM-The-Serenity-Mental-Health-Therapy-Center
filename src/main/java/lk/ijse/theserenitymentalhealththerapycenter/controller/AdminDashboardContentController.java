@@ -18,10 +18,14 @@ import java.util.ResourceBundle;
 
 public class AdminDashboardContentController implements Initializable {
 
-    @FXML private Label lblTotalPatients;
-    @FXML private Label lblActiveTherapists;
-    @FXML private Label lblTotalPrograms;
-    @FXML private Label lblTotalRevenue;
+    @FXML
+    private Label lblTotalPatients;
+    @FXML
+    private Label lblActiveTherapists;
+    @FXML
+    private Label lblTotalPrograms;
+    @FXML
+    private Label lblTotalRevenue;
 
     private final PatientBO patientBO = BOFactory.getInstance().getBO(BOFactory.BOType.PATIENT);
     private final TherapistBO therapistBO = BOFactory.getInstance().getBO(BOFactory.BOType.THERAPIST);
