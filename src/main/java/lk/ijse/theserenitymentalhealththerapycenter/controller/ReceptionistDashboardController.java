@@ -17,9 +17,12 @@ import java.util.ResourceBundle;
 
 public class ReceptionistDashboardController implements Initializable {
 
-    @FXML private AnchorPane contentPane;
-    @FXML private Label lblHeader;
-    @FXML private Label lblSubheader;
+    @FXML
+    private AnchorPane contentPane;
+    @FXML
+    private Label lblHeader;
+    @FXML
+    private Label lblSubheader;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {

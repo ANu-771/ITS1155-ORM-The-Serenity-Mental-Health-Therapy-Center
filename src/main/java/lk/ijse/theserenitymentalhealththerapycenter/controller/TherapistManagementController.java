@@ -19,8 +19,10 @@ import java.util.ResourceBundle;
 
 public class TherapistManagementController implements Initializable {
 
-    @FXML private TextField txtId, txtName, txtSpecialization, txtContact, txtEmail, txtSearch;
-    @FXML private TableView<TherapistTM> tblTherapists;
+    @FXML
+    private TextField txtId, txtName, txtSpecialization, txtContact, txtEmail, txtSearch;
+    @FXML
+    private TableView<TherapistTM> tblTherapists;
 
     private final TherapistBO therapistBO = BOFactory.getInstance().getBO(BOFactory.BOType.THERAPIST);
 
@@ -42,7 +44,11 @@ public class TherapistManagementController implements Initializable {
     }
 
     private void generateNextId() {
-        try { txtId.setText(therapistBO.getNextId()); } catch (Exception e) { e.printStackTrace(); }
+        try {
+            txtId.setText(therapistBO.getNextId());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -72,7 +78,7 @@ public class TherapistManagementController implements Initializable {
             new Alert(Alert.AlertType.WARNING, "Please select a therapist to update.").showAndWait();
             return;
         }
-        
+
         if (!validateInput()) {
             return;
         }
@@ -114,8 +120,10 @@ public class TherapistManagementController implements Initializable {
 
     @FXML
     void handleClear(ActionEvent e) {
-        txtName.clear(); txtSpecialization.clear();
-        txtContact.clear(); txtEmail.clear();
+        txtName.clear();
+        txtSpecialization.clear();
+        txtContact.clear();
+        txtEmail.clear();
         if (txtSearch != null) txtSearch.clear();
         ValidationUtil.resetStyles(txtId, txtName, txtSpecialization, txtContact, txtEmail);
         generateNextId();
@@ -124,19 +132,24 @@ public class TherapistManagementController implements Initializable {
     @FXML
     void handleSearch(javafx.scene.input.KeyEvent e) {
         String id = txtSearch.getText().trim();
-        if (id.isEmpty()) { loadTable(); return; }
+        if (id.isEmpty()) {
+            loadTable();
+            return;
+        }
         try {
             TherapistDTO t = therapistBO.searchTherapist(id);
             ObservableList<TherapistTM> list = FXCollections.observableArrayList();
-            if (t != null) list.add(new TherapistTM(t.getId(), t.getName(), t.getSpecialization(), t.getContactNumber(), t.getEmail()));
+            if (t != null)
+                list.add(new TherapistTM(t.getId(), t.getName(), t.getSpecialization(), t.getContactNumber(), t.getEmail()));
             tblTherapists.setItems(list);
-        } catch (Exception ex) { ex.printStackTrace(); }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     private boolean validateInput() {
         ValidationUtil.resetStyles(txtId, txtName, txtSpecialization, txtContact, txtEmail);
 
-        // 1. Required Fields Check
         boolean allFilled = true;
         if (!ValidationUtil.validateRequired(txtName)) allFilled = false;
         if (!ValidationUtil.validateRequired(txtSpecialization)) allFilled = false;
@@ -147,7 +160,6 @@ public class TherapistManagementController implements Initializable {
             return false;
         }
 
-        // 2. Sequential Specific Regex Validations
         if (!ValidationUtil.isValidName(txtName.getText())) {
             ValidationUtil.setInvalid(txtName);
             new Alert(Alert.AlertType.ERROR, "Invalid Name. The name can only contain letters, spaces, hyphens, and titles with periods (like Dr.).").showAndWait();
@@ -178,8 +190,11 @@ public class TherapistManagementController implements Initializable {
         try {
             List<TherapistDTO> all = therapistBO.getAllTherapists();
             ObservableList<TherapistTM> list = FXCollections.observableArrayList();
-            for (TherapistDTO t : all) list.add(new TherapistTM(t.getId(), t.getName(), t.getSpecialization(), t.getContactNumber(), t.getEmail()));
+            for (TherapistDTO t : all)
+                list.add(new TherapistTM(t.getId(), t.getName(), t.getSpecialization(), t.getContactNumber(), t.getEmail()));
             tblTherapists.setItems(list);
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

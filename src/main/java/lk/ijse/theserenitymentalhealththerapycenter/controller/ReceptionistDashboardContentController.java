@@ -18,9 +18,12 @@ import java.util.ResourceBundle;
 
 public class ReceptionistDashboardContentController implements Initializable {
 
-    @FXML private Label lblTodaySessions;
-    @FXML private Label lblPendingPayments;
-    @FXML private Label lblNewPatients;
+    @FXML
+    private Label lblTodaySessions;
+    @FXML
+    private Label lblPendingPayments;
+    @FXML
+    private Label lblNewPatients;
 
     private final TherapySessionBO sessionBO = BOFactory.getInstance().getBO(BOFactory.BOType.THERAPY_SESSION);
     private final PaymentBO paymentBO = BOFactory.getInstance().getBO(BOFactory.BOType.PAYMENT);

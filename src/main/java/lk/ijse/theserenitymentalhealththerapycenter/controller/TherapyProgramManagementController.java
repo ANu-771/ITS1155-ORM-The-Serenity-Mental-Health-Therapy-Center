@@ -19,10 +19,14 @@ import java.util.ResourceBundle;
 
 public class TherapyProgramManagementController implements Initializable {
 
-    @FXML private TextField txtProgramId, txtDuration, txtFee, txtSearch;
-    @FXML private ComboBox<String> cmbProgramName;
-    @FXML private TextArea txtDescription;
-    @FXML private TableView<TherapyProgramTM> tblPrograms;
+    @FXML
+    private TextField txtProgramId, txtDuration, txtFee, txtSearch;
+    @FXML
+    private ComboBox<String> cmbProgramName;
+    @FXML
+    private TextArea txtDescription;
+    @FXML
+    private TableView<TherapyProgramTM> tblPrograms;
 
     private final TherapyProgramBO programBO = BOFactory.getInstance().getBO(BOFactory.BOType.THERAPY_PROGRAM);
 
@@ -81,7 +85,11 @@ public class TherapyProgramManagementController implements Initializable {
     }
 
     private void generateNextId() {
-        try { txtProgramId.setText(programBO.getNextId()); } catch (Exception e) { e.printStackTrace(); }
+        try {
+            txtProgramId.setText(programBO.getNextId());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void resetValidationStyles() {
@@ -176,8 +184,10 @@ public class TherapyProgramManagementController implements Initializable {
 
     @FXML
     void handleClear(ActionEvent e) {
-        cmbProgramName.getSelectionModel().clearSelection(); txtDuration.clear();
-        txtFee.clear(); txtDescription.clear();
+        cmbProgramName.getSelectionModel().clearSelection();
+        txtDuration.clear();
+        txtFee.clear();
+        txtDescription.clear();
         if (txtSearch != null) txtSearch.clear();
         resetValidationStyles();
         generateNextId();
@@ -186,21 +196,30 @@ public class TherapyProgramManagementController implements Initializable {
     @FXML
     void handleSearch(javafx.scene.input.KeyEvent e) {
         String id = txtSearch.getText().trim();
-        if (id.isEmpty()) { loadTable(); return; }
+        if (id.isEmpty()) {
+            loadTable();
+            return;
+        }
         try {
             TherapyProgramDTO p = programBO.searchProgram(id);
             ObservableList<TherapyProgramTM> list = FXCollections.observableArrayList();
-            if (p != null) list.add(new TherapyProgramTM(p.getProgramId(), p.getName(), p.getDuration(), p.getFee(), p.getDescription()));
+            if (p != null)
+                list.add(new TherapyProgramTM(p.getProgramId(), p.getName(), p.getDuration(), p.getFee(), p.getDescription()));
             tblPrograms.setItems(list);
-        } catch (Exception ex) { ex.printStackTrace(); }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     private void loadTable() {
         try {
             List<TherapyProgramDTO> all = programBO.getAllPrograms();
             ObservableList<TherapyProgramTM> list = FXCollections.observableArrayList();
-            for (TherapyProgramDTO p : all) list.add(new TherapyProgramTM(p.getProgramId(), p.getName(), p.getDuration(), p.getFee(), p.getDescription()));
+            for (TherapyProgramDTO p : all)
+                list.add(new TherapyProgramTM(p.getProgramId(), p.getName(), p.getDuration(), p.getFee(), p.getDescription()));
             tblPrograms.setItems(list);
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -18,10 +18,14 @@ import java.util.ResourceBundle;
 
 public class RegisterController implements Initializable {
 
-    @FXML private TextField txtUsername;
-    @FXML private PasswordField txtPassword;
-    @FXML private ComboBox<String> cmbRole;
-    @FXML private Label lblError;
+    @FXML
+    private TextField txtUsername;
+    @FXML
+    private PasswordField txtPassword;
+    @FXML
+    private ComboBox<String> cmbRole;
+    @FXML
+    private Label lblError;
 
     private final UserBO userBO = BOFactory.getInstance().getBO(BOFactory.BOType.USER);
 
@@ -38,28 +42,18 @@ public class RegisterController implements Initializable {
         String role = cmbRole.getValue();
 
         if (username == null || username.trim().isEmpty() ||
-            password == null || password.trim().isEmpty() ||
-            role == null || role.trim().isEmpty()) {
+                password == null || password.trim().isEmpty() ||
+                role == null || role.trim().isEmpty()) {
             showError("Please fill in all fields.");
             return;
         }
 
         try {
-            // Need a new ID. The current system likely uses manual string IDs for Users (e.g. U001) or auto-increment.
-            // Let's use a unique ID generator if available, or just a timestamp for the user ID to guarantee uniqueness,
-            // or fetch the next ID from UserBO. Let's try to get next ID if there is a method, or assume it's handled.
-            // Looking at the other controllers, there's usually a getNextId() method.
-            // If UserBO doesn't have getNextId(), generating one based on time is a safe fallback for users since they just login with username.
-            String newUserId = "U" + System.currentTimeMillis(); 
-            
-            UserDTO newUser = new UserDTO(newUserId, username.trim(), password, role);
-            
-            // Note: Since userBO.saveUser hashes the password using BCrypt inside the BO, we can pass plain text.
-            userBO.saveUser(newUser);
 
+            String newUserId = "U" + System.currentTimeMillis();
+            UserDTO newUser = new UserDTO(newUserId, username.trim(), password, role);
+            userBO.saveUser(newUser);
             new Alert(Alert.AlertType.INFORMATION, "Registration successful! You can now log in.").showAndWait();
-            
-            // Redirect back to login
             handleBackToLogin(event);
 
         } catch (Exception e) {

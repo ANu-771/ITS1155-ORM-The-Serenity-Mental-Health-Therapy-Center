@@ -17,10 +17,14 @@ import java.util.ResourceBundle;
 
 public class ReportsController implements Initializable {
 
-    @FXML private Label lblTotalPatients, lblTotalSessions, lblTotalRevenue, lblTotalTherapists;
-    @FXML private DatePicker dpFromDate, dpToDate;
-    @FXML private ComboBox<String> cmbReportType;
-    @FXML private TableView<?> tblReport;
+    @FXML
+    private Label lblTotalPatients, lblTotalSessions, lblTotalRevenue, lblTotalTherapists;
+    @FXML
+    private DatePicker dpFromDate, dpToDate;
+    @FXML
+    private ComboBox<String> cmbReportType;
+    @FXML
+    private TableView<?> tblReport;
 
     private final PatientBO patientBO = BOFactory.getInstance().getBO(BOFactory.BOType.PATIENT);
     private final TherapySessionBO sessionBO = BOFactory.getInstance().getBO(BOFactory.BOType.THERAPY_SESSION);
@@ -57,7 +61,6 @@ public class ReportsController implements Initializable {
             return;
         }
 
-        // Build parameters for the Jasper report
         Map<String, Object> params = new HashMap<>();
         if (dpFromDate.getValue() != null) {
             params.put("fromDate", dpFromDate.getValue().toString());
@@ -66,7 +69,6 @@ public class ReportsController implements Initializable {
             params.put("toDate", dpToDate.getValue().toString());
         }
 
-        // Map report type to .jrxml file path (classpath resources)
         String jrxmlPath;
         switch (type) {
             case "Financial Summary":
@@ -86,7 +88,6 @@ public class ReportsController implements Initializable {
                 return;
         }
 
-        // Generate and display the JasperReport in a viewer
         JasperReportUtil.generateReport(jrxmlPath, params);
     }
 }

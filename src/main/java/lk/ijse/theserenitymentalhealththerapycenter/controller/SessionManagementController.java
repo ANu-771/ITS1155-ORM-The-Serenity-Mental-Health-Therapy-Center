@@ -25,10 +25,14 @@ import java.util.ResourceBundle;
 
 public class SessionManagementController implements Initializable {
 
-    @FXML private TextField txtSessionId;
-    @FXML private DatePicker dpDate;
-    @FXML private ComboBox<String> cmbTime, cmbStatus, cmbPatient, cmbTherapist, cmbProgram;
-    @FXML private TableView<TherapySessionTM> tblSessions;
+    @FXML
+    private TextField txtSessionId;
+    @FXML
+    private DatePicker dpDate;
+    @FXML
+    private ComboBox<String> cmbTime, cmbStatus, cmbPatient, cmbTherapist, cmbProgram;
+    @FXML
+    private TableView<TherapySessionTM> tblSessions;
 
     private final TherapySessionBO sessionBO = BOFactory.getInstance().getBO(BOFactory.BOType.THERAPY_SESSION);
     private final PatientBO patientBO = BOFactory.getInstance().getBO(BOFactory.BOType.PATIENT);
@@ -47,7 +51,6 @@ public class SessionManagementController implements Initializable {
                 "04:00 PM", "05:00 PM"
         ));
 
-        // Disable past dates on DatePicker
         dpDate.setDayCellFactory(getDisablePastDatesCellFactory());
 
         txtSessionId.setEditable(false);
@@ -55,7 +58,6 @@ public class SessionManagementController implements Initializable {
         loadCombos();
         loadTable();
 
-        // Table row selection listener
         tblSessions.getSelectionModel().selectedItemProperty().addListener((obs, old, nw) -> {
             if (nw != null) {
                 txtSessionId.setText(nw.getSessionId());
@@ -66,9 +68,7 @@ public class SessionManagementController implements Initializable {
         });
     }
 
-    /**
-     * DayCellFactory that disables all past dates (before today).
-     */
+
     private Callback<DatePicker, DateCell> getDisablePastDatesCellFactory() {
         return datePicker -> new DateCell() {
             @Override
@@ -96,7 +96,6 @@ public class SessionManagementController implements Initializable {
             for (TherapistDTO t : therapists) tList.add(t.getId() + " - " + t.getName());
             cmbTherapist.setItems(tList);
 
-            // Programs — loaded dynamically from database
             List<TherapyProgramDTO> programs = programBO.getAllPrograms();
             ObservableList<String> prList = FXCollections.observableArrayList();
             for (TherapyProgramDTO p : programs) prList.add(p.getProgramId() + " - " + p.getName());
@@ -120,7 +119,6 @@ public class SessionManagementController implements Initializable {
 
     @FXML
     void handleSave(ActionEvent e) {
-        // Required fields check
         boolean allFilled = true;
         if (dpDate.getValue() == null) {
             dpDate.setStyle("-fx-border-color: #e74c3c;");
@@ -236,7 +234,6 @@ public class SessionManagementController implements Initializable {
         cmbPatient.setValue(null);
         cmbTherapist.setValue(null);
         cmbProgram.setValue(null);
-        // Reset any red borders
         dpDate.setStyle("");
         cmbTime.setStyle("");
         ValidationUtil.resetStyles(txtSessionId);

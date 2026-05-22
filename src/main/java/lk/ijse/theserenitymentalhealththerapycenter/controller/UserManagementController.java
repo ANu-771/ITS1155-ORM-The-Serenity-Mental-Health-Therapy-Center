@@ -20,10 +20,14 @@ import java.util.ResourceBundle;
 
 public class UserManagementController implements Initializable {
 
-    @FXML private TextField txtId, txtUsername, txtSearch;
-    @FXML private PasswordField txtPassword;
-    @FXML private ComboBox<String> cmbRole;
-    @FXML private TableView<UserTM> tblUsers;
+    @FXML
+    private TextField txtId, txtUsername, txtSearch;
+    @FXML
+    private PasswordField txtPassword;
+    @FXML
+    private ComboBox<String> cmbRole;
+    @FXML
+    private TableView<UserTM> tblUsers;
 
     private final UserBO userBO = BOFactory.getInstance().getBO(BOFactory.BOType.USER);
 
@@ -45,14 +49,17 @@ public class UserManagementController implements Initializable {
     }
 
     private void generateNextId() {
-        try { txtId.setText(userBO.getNextId()); } catch (Exception e) { e.printStackTrace(); }
+        try {
+            txtId.setText(userBO.getNextId());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     void handleSave(ActionEvent event) {
         ValidationUtil.resetStyles(txtId, txtUsername);
 
-        // Required fields check
         boolean allFilled = true;
         if (!ValidationUtil.validateRequired(txtUsername)) allFilled = false;
         if (!ValidationUtil.validateRequired(txtPassword)) allFilled = false;
@@ -127,7 +134,9 @@ public class UserManagementController implements Initializable {
 
     @FXML
     void handleClear(ActionEvent event) {
-        txtUsername.clear(); txtPassword.clear(); cmbRole.setValue(null);
+        txtUsername.clear();
+        txtPassword.clear();
+        cmbRole.setValue(null);
         if (txtSearch != null) txtSearch.clear();
         ValidationUtil.resetStyles(txtId, txtUsername);
         generateNextId();
@@ -136,13 +145,18 @@ public class UserManagementController implements Initializable {
     @FXML
     void handleSearch(javafx.scene.input.KeyEvent event) {
         String id = txtSearch.getText().trim();
-        if (id.isEmpty()) { loadTable(); return; }
+        if (id.isEmpty()) {
+            loadTable();
+            return;
+        }
         try {
             UserDTO user = userBO.searchUser(id);
             ObservableList<UserTM> list = FXCollections.observableArrayList();
             if (user != null) list.add(new UserTM(user.getId(), user.getUsername(), user.getRole()));
             tblUsers.setItems(list);
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void loadTable() {
@@ -151,6 +165,8 @@ public class UserManagementController implements Initializable {
             ObservableList<UserTM> list = FXCollections.observableArrayList();
             for (UserDTO u : users) list.add(new UserTM(u.getId(), u.getUsername(), u.getRole()));
             tblUsers.setItems(list);
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

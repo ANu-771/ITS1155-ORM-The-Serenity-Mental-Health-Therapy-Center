@@ -23,10 +23,14 @@ import java.util.ResourceBundle;
 
 public class PaymentManagementController implements Initializable {
 
-    @FXML private TextField txtPaymentId, txtAmount;
-    @FXML private DatePicker dpDate;
-    @FXML private ComboBox<String> cmbPatient, cmbProgram, cmbMethod, cmbStatus;
-    @FXML private TableView<PaymentTM> tblPayments;
+    @FXML
+    private TextField txtPaymentId, txtAmount;
+    @FXML
+    private DatePicker dpDate;
+    @FXML
+    private ComboBox<String> cmbPatient, cmbProgram, cmbMethod, cmbStatus;
+    @FXML
+    private TableView<PaymentTM> tblPayments;
 
     private final PaymentBO paymentBO = BOFactory.getInstance().getBO(BOFactory.BOType.PAYMENT);
     private final PatientBO patientBO = BOFactory.getInstance().getBO(BOFactory.BOType.PATIENT);
@@ -38,7 +42,6 @@ public class PaymentManagementController implements Initializable {
         cmbStatus.setItems(FXCollections.observableArrayList("PENDING", "COMPLETED", "FAILED"));
         txtPaymentId.setEditable(false);
 
-        // Default to today's date
         dpDate.setValue(LocalDate.now());
 
         generateNextId();
@@ -49,11 +52,12 @@ public class PaymentManagementController implements Initializable {
             if (nw != null) {
                 txtPaymentId.setText(nw.getPaymentId());
                 txtAmount.setText(String.valueOf(nw.getAmount()));
-                // Parse date string back to LocalDate
                 try {
                     dpDate.setValue(nw.getPaymentDate() != null && !nw.getPaymentDate().isEmpty()
                             ? LocalDate.parse(nw.getPaymentDate()) : null);
-                } catch (Exception ignored) { dpDate.setValue(null); }
+                } catch (Exception ignored) {
+                    dpDate.setValue(null);
+                }
                 cmbMethod.setValue(nw.getPaymentMethod());
                 cmbStatus.setValue(nw.getStatus());
                 ValidationUtil.resetStyles(txtPaymentId, txtAmount);
@@ -72,7 +76,9 @@ public class PaymentManagementController implements Initializable {
             ObservableList<String> prList = FXCollections.observableArrayList();
             for (TherapyProgramDTO p : programs) prList.add(p.getProgramId() + " - " + p.getName());
             cmbProgram.setItems(prList);
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private String extractId(String comboVal) {
@@ -80,14 +86,17 @@ public class PaymentManagementController implements Initializable {
     }
 
     private void generateNextId() {
-        try { txtPaymentId.setText(paymentBO.getNextId()); } catch (Exception e) { e.printStackTrace(); }
+        try {
+            txtPaymentId.setText(paymentBO.getNextId());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     void handleSave(ActionEvent e) {
         ValidationUtil.resetStyles(txtPaymentId, txtAmount);
 
-        // Required fields
         boolean allFilled = true;
         if (!ValidationUtil.validateRequired(txtAmount)) allFilled = false;
         if (dpDate.getValue() == null) {
@@ -186,11 +195,14 @@ public class PaymentManagementController implements Initializable {
 
     @FXML
     void handleClear(ActionEvent e) {
-        txtPaymentId.clear(); txtAmount.clear();
+        txtPaymentId.clear();
+        txtAmount.clear();
         dpDate.setValue(LocalDate.now());
         dpDate.setStyle("");
-        cmbPatient.setValue(null); cmbProgram.setValue(null);
-        cmbMethod.setValue(null); cmbStatus.setValue(null);
+        cmbPatient.setValue(null);
+        cmbProgram.setValue(null);
+        cmbMethod.setValue(null);
+        cmbStatus.setValue(null);
         ValidationUtil.resetStyles(txtPaymentId, txtAmount);
         generateNextId();
     }
@@ -203,6 +215,8 @@ public class PaymentManagementController implements Initializable {
                 list.add(new PaymentTM(p.getPaymentId(), p.getAmount(), p.getPaymentDate(), p.getPaymentMethod(), p.getStatus(), p.getPatientName(), p.getProgramName()));
             }
             tblPayments.setItems(list);
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
