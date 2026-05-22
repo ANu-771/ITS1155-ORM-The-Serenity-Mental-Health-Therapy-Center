@@ -381,3 +381,69 @@
 .show-password-check:hover {
     -fx-text-fill: #1A73E8;
 }
+
+/* ===== PASTEL DASHBOARD CARDS ===== */
+.pastel-card {
+    -fx-background-radius: 12;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 4);
+    -fx-border-radius: 12;
+    -fx-border-width: 1;
+    -fx-border-color: transparent;
+}
+
+.pastel-card:hover {
+    -fx-border-color: rgba(0,0,0,0.1);
+}
+
+.pastel-card-1 {
+    -fx-background-color: #E3F2FD;
+}
+.pastel-card-1 .card-number {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1565C0;
+}
+.pastel-card-1 .card-subtitle {
+    -fx-font-size: 13px;
+    -fx-text-fill: #0D47A1;
+}
+
+.pastel-card-2 {
+    -fx-background-color: #E8F5E9;
+}
+.pastel-card-2 .card-number {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2E7D32;
+}
+.pastel-card-2 .card-subtitle {
+    -fx-font-size: 13px;
+    -fx-text-fill: #1B5E20;
+}
+
+.pastel-card-3 {
+    -fx-background-color: #FFF8E1;
+}
+.pastel-card-3 .card-number {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #F57F17;
+}
+.pastel-card-3 .card-subtitle {
+    -fx-font-size: 13px;
+    -fx-text-fill: #E65100;
+}
+
+.pastel-card-4 {
+    -fx-background-color: #F3E5F5;
+}
+.pastel-card-4 .card-number {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #6A1B9A;
+}
+.pastel-card-4 .card-subtitle {
+    -fx-font-size: 13px;
+    -fx-text-fill: #4A148C;
+}

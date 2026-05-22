@@ -1,50 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.control.cell.*?>
-<?import javafx.scene.layout.*?>
 
-<ScrollPane fitToWidth="true" stylesheets="@../styles.css"
-            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="lk.ijse.theserenitymentalhealththerapycenter.controller.ReceptionistDashboardContentController"
-            style="-fx-background-color: transparent; -fx-background: transparent;">
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;" stylesheets="@../styles.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.theserenitymentalhealththerapycenter.controller.ReceptionistDashboardContentController">
 
     <VBox spacing="24">
-        <padding><Insets top="8" right="4" bottom="20" left="4"/></padding>
+        <padding><Insets bottom="20" left="4" right="4" top="8" /></padding>
 
         <!-- ===== Stats Cards Row ===== -->
         <HBox spacing="16">
             <!-- Today's Sessions -->
-            <VBox alignment="CENTER" spacing="8" HBox.hgrow="ALWAYS"
-                  style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 10, 0, 0, 2); -fx-padding: 22 16;">
-                <HBox alignment="CENTER" prefWidth="44" prefHeight="44"
-                      style="-fx-background-color: #e3f2fd; -fx-background-radius: 10;">
-                    <Label text="📅" style="-fx-font-size: 20px;"/>
-                </HBox>
-                <Label fx:id="lblTodaySessions" text="0" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #1a1a2e;"/>
-                <Label text="Today's Sessions" style="-fx-font-size: 12px; -fx-text-fill: #78909c;"/>
+            <VBox alignment="CENTER" spacing="8" styleClass="pastel-card, pastel-card-1" HBox.hgrow="ALWAYS">
+                <ImageView fitHeight="40" fitWidth="40" preserveRatio="true">
+                    <image>
+                        <Image url="@../image/sessions.png" />
+                    </image>
+                </ImageView>
+                <Label fx:id="lblTodaySessions" styleClass="card-number" text="0" />
+                <Label styleClass="card-subtitle" text="Today's Sessions" />
             </VBox>
 
             <!-- Pending Payments -->
-            <VBox alignment="CENTER" spacing="8" HBox.hgrow="ALWAYS"
-                  style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 10, 0, 0, 2); -fx-padding: 22 16;">
-                <HBox alignment="CENTER" prefWidth="44" prefHeight="44"
-                      style="-fx-background-color: #e3f2fd; -fx-background-radius: 10;">
-                    <Label text="💳" style="-fx-font-size: 20px;"/>
-                </HBox>
-                <Label fx:id="lblPendingPayments" text="0" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #1a1a2e;"/>
-                <Label text="Pending Payments" style="-fx-font-size: 12px; -fx-text-fill: #78909c;"/>
+            <VBox alignment="CENTER" spacing="8" styleClass="pastel-card, pastel-card-3" HBox.hgrow="ALWAYS">
+                <ImageView fitHeight="40" fitWidth="40" preserveRatio="true">
+                    <image>
+                        <Image url="@../image/payment.png" />
+                    </image>
+                </ImageView>
+                <Label fx:id="lblPendingPayments" styleClass="card-number" text="0" />
+                <Label styleClass="card-subtitle" text="Pending Payments" />
             </VBox>
 
             <!-- New Patients -->
-            <VBox alignment="CENTER" spacing="8" HBox.hgrow="ALWAYS"
-                  style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 10, 0, 0, 2); -fx-padding: 22 16;">
-                <HBox alignment="CENTER" prefWidth="44" prefHeight="44"
-                      style="-fx-background-color: #e3f2fd; -fx-background-radius: 10;">
-                    <Label text="🧑" style="-fx-font-size: 20px;"/>
-                </HBox>
-                <Label fx:id="lblNewPatients" text="0" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #1a1a2e;"/>
-                <Label text="Total Patients" style="-fx-font-size: 12px; -fx-text-fill: #78909c;"/>
+            <VBox alignment="CENTER" spacing="8" styleClass="pastel-card, pastel-card-2" HBox.hgrow="ALWAYS">
+                <ImageView fitHeight="40" fitWidth="40" preserveRatio="true">
+                    <image>
+                        <Image url="@../image/patient.png" />
+                    </image>
+                </ImageView>
+                <Label fx:id="lblNewPatients" styleClass="card-number" text="0" />
+                <Label styleClass="card-subtitle" text="New Patients" />
             </VBox>
         </HBox>
 
