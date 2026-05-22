@@ -5,7 +5,8 @@ import lk.ijse.theserenitymentalhealththerapycenter.dao.custom.impl.*;
 public class DAOFactory {
     private static DAOFactory daoFactory;
 
-    private DAOFactory() {}
+    private DAOFactory() {
+    }
 
     public static DAOFactory getInstance() {
         if (daoFactory == null) {

@@ -7,7 +7,10 @@ import java.util.List;
 
 public interface TherapySessionDAO extends CrudDAO<TherapySession, String> {
     List<TherapySession> getSessionsByTherapist(String therapistId) throws Exception;
+
     List<TherapySession> getSessionsByPatient(String patientId) throws Exception;
+
     boolean checkConflict(String therapistId, String date, String time) throws Exception;
+
     String getLastId() throws Exception;
 }

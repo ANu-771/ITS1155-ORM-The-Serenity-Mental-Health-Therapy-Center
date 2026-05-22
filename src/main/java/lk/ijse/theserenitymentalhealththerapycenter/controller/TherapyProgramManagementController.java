@@ -20,9 +20,7 @@ import java.util.ResourceBundle;
 public class TherapyProgramManagementController implements Initializable {
 
     @FXML
-    private TextField txtProgramId, txtDuration, txtFee, txtSearch;
-    @FXML
-    private ComboBox<String> cmbProgramName;
+    private TextField txtProgramId, txtDuration, txtFee, txtSearch, txtProgramName;
     @FXML
     private TextArea txtDescription;
     @FXML
@@ -36,46 +34,11 @@ public class TherapyProgramManagementController implements Initializable {
         generateNextId();
         loadTable();
 
-        cmbProgramName.setItems(FXCollections.observableArrayList(
-                "Cognitive Behavioral Therapy",
-                "Mindfulness-Based Stress Reduction",
-                "Dialectical Behavior Therapy",
-                "Group Therapy Sessions",
-                "Family Counseling"
-        ));
-
-        cmbProgramName.setOnAction(e -> {
-            String selected = cmbProgramName.getValue();
-            if (selected != null) {
-                switch (selected) {
-                    case "Cognitive Behavioral Therapy":
-                        txtDuration.setText("12 weeks");
-                        txtFee.setText("80000.00");
-                        break;
-                    case "Mindfulness-Based Stress Reduction":
-                        txtDuration.setText("8 weeks");
-                        txtFee.setText("50000.00");
-                        break;
-                    case "Dialectical Behavior Therapy":
-                        txtDuration.setText("16 weeks");
-                        txtFee.setText("100000.00");
-                        break;
-                    case "Group Therapy Sessions":
-                        txtDuration.setText("6 months");
-                        txtFee.setText("120000.00");
-                        break;
-                    case "Family Counseling":
-                        txtDuration.setText("3 months");
-                        txtFee.setText("40000.00");
-                        break;
-                }
-            }
-        });
 
         tblPrograms.getSelectionModel().selectedItemProperty().addListener((obs, old, nw) -> {
             if (nw != null) {
                 txtProgramId.setText(nw.getProgramId());
-                cmbProgramName.setValue(nw.getName());
+                txtProgramName.setText(nw.getName());
                 txtDuration.setText(nw.getDuration());
                 txtFee.setText(String.valueOf(nw.getFee()));
                 txtDescription.setText(nw.getDescription());
@@ -93,8 +56,7 @@ public class TherapyProgramManagementController implements Initializable {
     }
 
     private void resetValidationStyles() {
-        ValidationUtil.resetStyles(txtProgramId, txtDuration, txtFee);
-        cmbProgramName.setStyle("-fx-border-color: #dee2e6; -fx-border-radius: 8;");
+        ValidationUtil.resetStyles(txtProgramId, txtProgramName, txtDuration, txtFee);
     }
 
     @FXML
@@ -102,7 +64,7 @@ public class TherapyProgramManagementController implements Initializable {
         resetValidationStyles();
 
         boolean allFilled = true;
-        if (!ValidationUtil.validateRequired(cmbProgramName)) allFilled = false;
+        if (!ValidationUtil.validateRequired(txtProgramName)) allFilled = false;
         if (!ValidationUtil.validateRequired(txtDuration)) allFilled = false;
         if (!ValidationUtil.validateRequired(txtFee)) allFilled = false;
 
@@ -114,7 +76,7 @@ public class TherapyProgramManagementController implements Initializable {
         try {
             double fee = Double.parseDouble(txtFee.getText().trim());
             programBO.saveProgram(new TherapyProgramDTO(
-                    txtProgramId.getText().trim(), cmbProgramName.getValue(),
+                    txtProgramId.getText().trim(), txtProgramName.getText().trim(),
                     txtDuration.getText().trim(), fee, txtDescription.getText()));
             new Alert(Alert.AlertType.INFORMATION, "Program saved successfully!").showAndWait();
             loadTable();
@@ -135,7 +97,7 @@ public class TherapyProgramManagementController implements Initializable {
 
         boolean allFilled = true;
         if (!ValidationUtil.validateRequired(txtProgramId)) allFilled = false;
-        if (!ValidationUtil.validateRequired(cmbProgramName)) allFilled = false;
+        if (!ValidationUtil.validateRequired(txtProgramName)) allFilled = false;
         if (!ValidationUtil.validateRequired(txtDuration)) allFilled = false;
         if (!ValidationUtil.validateRequired(txtFee)) allFilled = false;
 
@@ -147,7 +109,7 @@ public class TherapyProgramManagementController implements Initializable {
         try {
             double fee = Double.parseDouble(txtFee.getText().trim());
             programBO.updateProgram(new TherapyProgramDTO(
-                    txtProgramId.getText().trim(), cmbProgramName.getValue(),
+                    txtProgramId.getText().trim(), txtProgramName.getText().trim(),
                     txtDuration.getText().trim(), fee, txtDescription.getText()));
             new Alert(Alert.AlertType.INFORMATION, "Program updated successfully!").showAndWait();
             loadTable();
@@ -184,7 +146,7 @@ public class TherapyProgramManagementController implements Initializable {
 
     @FXML
     void handleClear(ActionEvent e) {
-        cmbProgramName.getSelectionModel().clearSelection();
+        txtProgramName.clear();
         txtDuration.clear();
         txtFee.clear();
         txtDescription.clear();

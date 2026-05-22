@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface PaymentDAO extends CrudDAO<Payment, String> {
     List<Payment> getPaymentsByPatient(String patientId) throws Exception;
+
     String getLastId() throws Exception;
 }
