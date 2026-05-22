@@ -47,29 +47,7 @@ public class TherapistManagementController implements Initializable {
 
     @FXML
     void handleSave(ActionEvent e) {
-        ValidationUtil.resetStyles(txtId, txtName, txtSpecialization, txtContact, txtEmail);
-
-        // Required fields
-        boolean allFilled = true;
-        if (!ValidationUtil.validateRequired(txtName)) allFilled = false;
-        if (!ValidationUtil.validateRequired(txtSpecialization)) allFilled = false;
-        if (!ValidationUtil.validateRequired(txtContact)) allFilled = false;
-
-        if (!allFilled) {
-            ValidationUtil.showRequiredFieldsError();
-            return;
-        }
-
-        // Regex validation
-        boolean valid = true;
-        if (!ValidationUtil.validateName(txtName)) valid = false;
-        if (!ValidationUtil.validatePhone(txtContact)) valid = false;
-        if (txtEmail.getText() != null && !txtEmail.getText().trim().isEmpty()) {
-            if (!ValidationUtil.validateEmail(txtEmail)) valid = false;
-        }
-
-        if (!valid) {
-            new Alert(Alert.AlertType.WARNING, "Please correct the highlighted fields.").showAndWait();
+        if (!validateInput()) {
             return;
         }
 
@@ -90,28 +68,12 @@ public class TherapistManagementController implements Initializable {
 
     @FXML
     void handleUpdate(ActionEvent e) {
-        ValidationUtil.resetStyles(txtId, txtName, txtSpecialization, txtContact, txtEmail);
-
-        boolean allFilled = true;
-        if (!ValidationUtil.validateRequired(txtId)) allFilled = false;
-        if (!ValidationUtil.validateRequired(txtName)) allFilled = false;
-        if (!ValidationUtil.validateRequired(txtSpecialization)) allFilled = false;
-        if (!ValidationUtil.validateRequired(txtContact)) allFilled = false;
-
-        if (!allFilled) {
-            ValidationUtil.showRequiredFieldsError();
+        if (!ValidationUtil.validateRequired(txtId)) {
+            new Alert(Alert.AlertType.WARNING, "Please select a therapist to update.").showAndWait();
             return;
         }
-
-        boolean valid = true;
-        if (!ValidationUtil.validateName(txtName)) valid = false;
-        if (!ValidationUtil.validatePhone(txtContact)) valid = false;
-        if (txtEmail.getText() != null && !txtEmail.getText().trim().isEmpty()) {
-            if (!ValidationUtil.validateEmail(txtEmail)) valid = false;
-        }
-
-        if (!valid) {
-            new Alert(Alert.AlertType.WARNING, "Please correct the highlighted fields.").showAndWait();
+        
+        if (!validateInput()) {
             return;
         }
 
@@ -169,6 +131,47 @@ public class TherapistManagementController implements Initializable {
             if (t != null) list.add(new TherapistTM(t.getId(), t.getName(), t.getSpecialization(), t.getContactNumber(), t.getEmail()));
             tblTherapists.setItems(list);
         } catch (Exception ex) { ex.printStackTrace(); }
+    }
+
+    private boolean validateInput() {
+        ValidationUtil.resetStyles(txtId, txtName, txtSpecialization, txtContact, txtEmail);
+
+        // 1. Required Fields Check
+        boolean allFilled = true;
+        if (!ValidationUtil.validateRequired(txtName)) allFilled = false;
+        if (!ValidationUtil.validateRequired(txtSpecialization)) allFilled = false;
+        if (!ValidationUtil.validateRequired(txtContact)) allFilled = false;
+
+        if (!allFilled) {
+            ValidationUtil.showRequiredFieldsError();
+            return false;
+        }
+
+        // 2. Sequential Specific Regex Validations
+        if (!ValidationUtil.isValidName(txtName.getText())) {
+            ValidationUtil.setInvalid(txtName);
+            new Alert(Alert.AlertType.ERROR, "Invalid Name. The name can only contain letters, spaces, hyphens, and titles with periods (like Dr.).").showAndWait();
+            txtName.requestFocus();
+            return false;
+        }
+
+        if (!ValidationUtil.isValidPhone(txtContact.getText())) {
+            ValidationUtil.setInvalid(txtContact);
+            new Alert(Alert.AlertType.ERROR, "Invalid Contact Number. The contact number must be exactly 10 digits long.").showAndWait();
+            txtContact.requestFocus();
+            return false;
+        }
+
+        if (txtEmail.getText() != null && !txtEmail.getText().trim().isEmpty()) {
+            if (!ValidationUtil.isValidEmail(txtEmail.getText())) {
+                ValidationUtil.setInvalid(txtEmail);
+                new Alert(Alert.AlertType.ERROR, "Invalid Email. Please enter a valid email address format.").showAndWait();
+                txtEmail.requestFocus();
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private void loadTable() {
