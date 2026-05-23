@@ -25,12 +25,18 @@ import java.util.ResourceBundle;
 
 public class SessionManagementController implements Initializable {
 
-    @FXML private ComboBox<String> cmbPatient, cmbProgram, cmbTherapist, cmbStatus, cmbTime, cmbPaymentMethod;
-    @FXML private TextField txtSessionId, txtPaymentAmount;
-    @FXML private DatePicker dpDate;
-    @FXML private Label lblTotalFee, lblPaidAmount, lblDueBalance, lblPrepaidSessions;
-    @FXML private Button btnProcessPayment, btnScheduleSession;
-    @FXML private TableView<TherapySessionTM> tblSessions;
+    @FXML
+    private ComboBox<String> cmbPatient, cmbProgram, cmbTherapist, cmbStatus, cmbTime, cmbPaymentMethod;
+    @FXML
+    private TextField txtSessionId, txtPaymentAmount;
+    @FXML
+    private DatePicker dpDate;
+    @FXML
+    private Label lblTotalFee, lblPaidAmount, lblDueBalance, lblPrepaidSessions;
+    @FXML
+    private Button btnProcessPayment, btnScheduleSession;
+    @FXML
+    private TableView<TherapySessionTM> tblSessions;
 
     private final TherapySessionBO sessionBO = BOFactory.getInstance().getBO(BOFactory.BOType.THERAPY_SESSION);
     private final PatientBO patientBO = BOFactory.getInstance().getBO(BOFactory.BOType.PATIENT);
@@ -41,7 +47,8 @@ public class SessionManagementController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         cmbStatus.setItems(FXCollections.observableArrayList("SCHEDULED", "COMPLETED", "CANCELLED"));
-        cmbTime.setItems(FXCollections.observableArrayList("08:00 AM", "09:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "01:00 PM", "02:00 PM", "03:00 PM", "04:00 PM", "05:00 PM"));
+        cmbTime.setItems(FXCollections.observableArrayList("08:00 AM", "09:00 AM", "10:00 AM", "11:00 AM", "12:00 PM",
+                "01:00 PM", "02:00 PM", "03:00 PM", "04:00 PM", "05:00 PM"));
         cmbPaymentMethod.setItems(FXCollections.observableArrayList("Cash", "Card", "Bank Transfer"));
 
         dpDate.setDayCellFactory(getDisablePastDatesCellFactory());
@@ -84,12 +91,14 @@ public class SessionManagementController implements Initializable {
         try {
             List<PatientDTO> patients = patientBO.getAllPatients();
             ObservableList<String> pList = FXCollections.observableArrayList();
-            for (PatientDTO p : patients) pList.add(p.getId() + " - " + p.getName());
+            for (PatientDTO p : patients)
+                pList.add(p.getId() + " - " + p.getName());
             cmbPatient.setItems(pList);
 
             List<TherapistDTO> therapists = therapistBO.getAllTherapists();
             ObservableList<String> tList = FXCollections.observableArrayList();
-            for (TherapistDTO t : therapists) tList.add(t.getId() + " - " + t.getName());
+            for (TherapistDTO t : therapists)
+                tList.add(t.getId() + " - " + t.getName());
             cmbTherapist.setItems(tList);
         } catch (Exception e) {
             e.printStackTrace();
@@ -174,34 +183,40 @@ public class SessionManagementController implements Initializable {
             String nextPaymentId = paymentBO.getNextId();
 
             FinancialSummaryDTO currentSummary = paymentBO.getFinancialSummary(patientId, programId);
-            
-            // Note: coveredSessions here should be calculated. 
-            // In the previous payment system, this logic was needed. 
+
+            // Note: coveredSessions here should be calculated.
+            // In the previous payment system, this logic was needed.
             // We'll approximate: 1 payment covers equivalent fraction of sessions.
-            // Wait, actually, let's just make it simple: assuming each payment covers proportional sessions
-            // or we'll just set it to total sessions if paying full. 
-            // But to avoid complex math in controller, we'll just set covered sessions to 1 for this POS demo unless they pay in full.
-            
+            // Wait, actually, let's just make it simple: assuming each payment covers
+            // proportional sessions
+            // or we'll just set it to total sessions if paying full.
+            // But to avoid complex math in controller, we'll just set covered sessions to 1
+            // for this POS demo unless they pay in full.
+
             // Let's implement simple proportional covered sessions logic:
             double programFee = currentSummary.getTotalFee();
-            int totalSessions = Integer.parseInt(lblPrepaidSessions.getText()); // this is available, but wait, program total sessions is better.
-            
-            // It's safer to get the program total sessions. 
+            int totalSessions = Integer.parseInt(lblPrepaidSessions.getText()); // this is available, but wait, program
+                                                                                // total sessions is better.
+
+            // It's safer to get the program total sessions.
             TherapyProgramDTO program = programBO.searchProgram(programId);
             int coveredSessions = (int) Math.floor((amount / program.getFee()) * program.getTotalSessions());
-            if (coveredSessions <= 0 && amount > 0) coveredSessions = 1;
+            if (coveredSessions <= 0 && amount > 0)
+                coveredSessions = 1;
 
             double dueBalance = currentSummary.getDueBalance() - amount;
-            if (dueBalance < 0) dueBalance = 0;
+            if (dueBalance < 0)
+                dueBalance = 0;
 
-            PaymentDTO paymentDTO = new PaymentDTO(nextPaymentId, amount, paymentDate, cmbPaymentMethod.getValue(), "COMPLETED", coveredSessions, dueBalance, patientId, null, programId, null);
-            
+            PaymentDTO paymentDTO = new PaymentDTO(nextPaymentId, amount, paymentDate, cmbPaymentMethod.getValue(),
+                    "COMPLETED", coveredSessions, dueBalance, patientId, null, programId, null);
+
             paymentBO.savePayment(paymentDTO);
-            
+
             new Alert(Alert.AlertType.INFORMATION, "Payment Processed Successfully!").showAndWait();
             txtPaymentAmount.clear();
             cmbPaymentMethod.setValue(null);
-            
+
             updateFinancialSummary(patientId, programId);
 
         } catch (NumberFormatException ex) {
@@ -213,7 +228,8 @@ public class SessionManagementController implements Initializable {
 
     @FXML
     void handleSave(ActionEvent e) {
-        if (!ValidationUtil.validateRequired(cmbPatient) || !ValidationUtil.validateRequired(cmbProgram) || !ValidationUtil.validateRequired(cmbTherapist)) {
+        if (!ValidationUtil.validateRequired(cmbPatient) || !ValidationUtil.validateRequired(cmbProgram)
+                || !ValidationUtil.validateRequired(cmbTherapist)) {
             new Alert(Alert.AlertType.WARNING, "Please select Patient, Program, and Therapist.").showAndWait();
             return;
         }
@@ -242,7 +258,7 @@ public class SessionManagementController implements Initializable {
             updateFinancialSummary(extractId(cmbPatient.getValue()), extractId(cmbProgram.getValue()));
             handleClear(null);
             generateNextId();
-            
+
         } catch (PaymentRequiredException ex) {
             new Alert(Alert.AlertType.WARNING, ex.getMessage()).showAndWait();
         } catch (SchedulingConflictException ex) {
@@ -281,7 +297,8 @@ public class SessionManagementController implements Initializable {
             new Alert(Alert.AlertType.WARNING, "Please select a session to delete.").showAndWait();
             return;
         }
-        if (!ValidationUtil.confirmDelete()) return;
+        if (!ValidationUtil.confirmDelete())
+            return;
         try {
             sessionBO.deleteSession(id.trim());
             new Alert(Alert.AlertType.INFORMATION, "Session deleted successfully!").showAndWait();
@@ -312,7 +329,8 @@ public class SessionManagementController implements Initializable {
             List<TherapySessionDTO> all = sessionBO.getAllSessions();
             ObservableList<TherapySessionTM> list = FXCollections.observableArrayList();
             for (TherapySessionDTO s : all) {
-                list.add(new TherapySessionTM(s.getSessionId(), s.getDate(), s.getTime(), s.getStatus(), s.getPatientName(), s.getTherapistName(), s.getProgramName()));
+                list.add(new TherapySessionTM(s.getSessionId(), s.getDate(), s.getTime(), s.getStatus(),
+                        s.getPatientName(), s.getTherapistName(), s.getProgramName()));
             }
             tblSessions.setItems(list);
         } catch (Exception e) {
