@@ -19,5 +19,9 @@ public interface PaymentBO {
 
     lk.ijse.theserenitymentalhealththerapycenter.dto.FinancialSummaryDTO getFinancialSummary(String patientId, String programId) throws Exception;
 
+    java.util.Map<String, Double> getIncomeByDate(int days) throws Exception;
+
+    java.util.Map<String, Double> getRevenueByMonth(int months) throws Exception;
+
     String getNextId() throws Exception;
 }

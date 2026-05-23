@@ -60,5 +60,18 @@
             </VBox>
         </HBox>
 
+        <!-- ===== Chart Row ===== -->
+        <VBox styleClass="card" VBox.vgrow="ALWAYS" minHeight="350">
+            <Label styleClass="card-header" text="Total Revenue Growth (Last 6 Months)" />
+            <javafx.scene.chart.AreaChart fx:id="revenueChart" VBox.vgrow="ALWAYS" legendVisible="false">
+                <xAxis>
+                    <javafx.scene.chart.CategoryAxis label="Months" side="BOTTOM" />
+                </xAxis>
+                <yAxis>
+                    <javafx.scene.chart.NumberAxis label="Revenue" side="LEFT" />
+                </yAxis>
+            </javafx.scene.chart.AreaChart>
+        </VBox>
+
     </VBox>
 </ScrollPane>

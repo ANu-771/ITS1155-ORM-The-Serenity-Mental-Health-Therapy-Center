@@ -49,5 +49,18 @@
             </VBox>
         </HBox>
 
+        <!-- ===== Chart Row ===== -->
+        <VBox styleClass="card" VBox.vgrow="ALWAYS" minHeight="350">
+            <Label styleClass="card-header" text="Recent Income (Last 7 Days)" />
+            <javafx.scene.chart.BarChart fx:id="incomeChart" VBox.vgrow="ALWAYS" legendVisible="false">
+                <xAxis>
+                    <javafx.scene.chart.CategoryAxis label="Dates" side="BOTTOM" />
+                </xAxis>
+                <yAxis>
+                    <javafx.scene.chart.NumberAxis label="Income" side="LEFT" />
+                </yAxis>
+            </javafx.scene.chart.BarChart>
+        </VBox>
+
     </VBox>
 </ScrollPane>

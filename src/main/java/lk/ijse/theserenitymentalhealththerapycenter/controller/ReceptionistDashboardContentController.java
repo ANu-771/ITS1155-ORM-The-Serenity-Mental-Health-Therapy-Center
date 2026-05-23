@@ -24,6 +24,8 @@ public class ReceptionistDashboardContentController implements Initializable {
     private Label lblPendingPayments;
     @FXML
     private Label lblNewPatients;
+    @FXML
+    private javafx.scene.chart.BarChart<String, Number> incomeChart;
 
     private final TherapySessionBO sessionBO = BOFactory.getInstance().getBO(BOFactory.BOType.THERAPY_SESSION);
     private final PaymentBO paymentBO = BOFactory.getInstance().getBO(BOFactory.BOType.PAYMENT);
@@ -32,6 +34,25 @@ public class ReceptionistDashboardContentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         loadStats();
+        loadChart();
+    }
+
+    private void loadChart() {
+        try {
+            java.util.Map<String, Double> incomeData = paymentBO.getIncomeByDate(7);
+            javafx.scene.chart.XYChart.Series<String, Number> series = new javafx.scene.chart.XYChart.Series<>();
+            series.setName("Income");
+
+            for (java.util.Map.Entry<String, Double> entry : incomeData.entrySet()) {
+                String label = java.time.LocalDate.parse(entry.getKey()).format(java.time.format.DateTimeFormatter.ofPattern("MMM dd"));
+                series.getData().add(new javafx.scene.chart.XYChart.Data<>(label, entry.getValue()));
+            }
+
+            incomeChart.getData().clear();
+            incomeChart.getData().add(series);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void loadStats() {

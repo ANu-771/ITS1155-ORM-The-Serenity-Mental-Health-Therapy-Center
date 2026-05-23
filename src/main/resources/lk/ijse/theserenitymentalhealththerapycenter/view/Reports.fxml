@@ -1,59 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 
-<AnchorPane stylesheets="@../styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="lk.ijse.theserenitymentalhealththerapycenter.controller.ReportsController">
-    <VBox spacing="20" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane stylesheets="@../styles.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.theserenitymentalhealththerapycenter.controller.ReportsController">
+    <VBox spacing="20" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
 
         <!-- Stats Cards Row -->
         <HBox spacing="16">
-            <VBox spacing="6" styleClass="stat-card" HBox.hgrow="ALWAYS" alignment="CENTER">
-                <Label fx:id="lblTotalPatients" text="0" styleClass="stat-value"/>
-                <Label text="Total Patients" styleClass="stat-label"/>
+            <VBox alignment="CENTER" spacing="6" styleClass="stat-card" HBox.hgrow="ALWAYS">
+                <Label fx:id="lblTotalPatients" styleClass="stat-value" text="0" />
+                <Label styleClass="stat-label" text="Total Patients" />
             </VBox>
-            <VBox spacing="6" styleClass="stat-card" HBox.hgrow="ALWAYS" alignment="CENTER">
-                <Label fx:id="lblTotalSessions" text="0" styleClass="stat-value"/>
-                <Label text="Total Sessions" styleClass="stat-label"/>
+            <VBox alignment="CENTER" spacing="6" styleClass="stat-card" HBox.hgrow="ALWAYS">
+                <Label fx:id="lblTotalSessions" styleClass="stat-value" text="0" />
+                <Label styleClass="stat-label" text="Total Sessions" />
             </VBox>
-            <VBox spacing="6" styleClass="stat-card" HBox.hgrow="ALWAYS" alignment="CENTER">
-                <Label fx:id="lblTotalRevenue" text="LKR 0" styleClass="stat-value"/>
-                <Label text="Total Revenue" styleClass="stat-label"/>
+            <VBox alignment="CENTER" spacing="6" styleClass="stat-card" HBox.hgrow="ALWAYS">
+                <Label fx:id="lblTotalRevenue" styleClass="stat-value" text="LKR 0" />
+                <Label styleClass="stat-label" text="Total Revenue" />
             </VBox>
-            <VBox spacing="6" styleClass="stat-card" HBox.hgrow="ALWAYS" alignment="CENTER">
-                <Label fx:id="lblTotalTherapists" text="0" styleClass="stat-value"/>
-                <Label text="Active Therapists" styleClass="stat-label"/>
+            <VBox alignment="CENTER" spacing="6" styleClass="stat-card" HBox.hgrow="ALWAYS">
+                <Label fx:id="lblTotalTherapists" styleClass="stat-value" text="0" />
+                <Label styleClass="stat-label" text="Active Therapists" />
             </VBox>
         </HBox>
 
         <!-- Report Actions -->
         <VBox spacing="16" styleClass="card">
-            <Label text="Generate Reports" styleClass="card-header"/>
+            <Label styleClass="card-header" text="Generate Reports" />
 
-            <HBox spacing="16" alignment="CENTER_LEFT">
+            <HBox alignment="CENTER_LEFT" spacing="16">
                 <VBox spacing="4">
-                    <Label text="From Date" styleClass="form-label"/>
-                    <DatePicker fx:id="dpFromDate" promptText="Select From Date" styleClass="date-picker-modern" prefHeight="38" prefWidth="160"/>
+                    <Label styleClass="form-label" text="From Date" />
+                    <DatePicker fx:id="dpFromDate" prefHeight="38" prefWidth="160" promptText="Select From Date" styleClass="date-picker-modern" />
                 </VBox>
                 <VBox spacing="4">
-                    <Label text="To Date" styleClass="form-label"/>
-                    <DatePicker fx:id="dpToDate" promptText="Select To Date" styleClass="date-picker-modern" prefHeight="38" prefWidth="160"/>
+                    <Label styleClass="form-label" text="To Date" />
+                    <DatePicker fx:id="dpToDate" prefHeight="38" prefWidth="160" promptText="Select To Date" styleClass="date-picker-modern" />
                 </VBox>
                 <VBox spacing="4">
-                    <Label text="Report Type" styleClass="form-label"/>
-                    <ComboBox fx:id="cmbReportType" promptText="Select Type" styleClass="combo-modern" prefHeight="38" prefWidth="200"/>
+                    <Label styleClass="form-label" text="Report Type" />
+                    <ComboBox fx:id="cmbReportType" prefHeight="38" prefWidth="200" promptText="Select Type" styleClass="combo-modern" />
                 </VBox>
-                <Region HBox.hgrow="ALWAYS"/>
+                <Region HBox.hgrow="ALWAYS" />
                 <VBox alignment="BOTTOM_CENTER">
-                    <Button fx:id="btnGenerate" text="📊  Generate Report" styleClass="btn-report" onAction="#handleGenerate"/>
+                    <Button fx:id="btnGenerate" onAction="#handleGenerate" styleClass="btn-report" text="📊  Generate Report" />
                 </VBox>
             </HBox>
         </VBox>
-
-        <!-- Report Results Table -->
-        <TableView fx:id="tblReport" VBox.vgrow="ALWAYS">
-            <placeholder><Label text="Select a report type and click Generate"/></placeholder>
-        </TableView>
     </VBox>
 </AnchorPane>

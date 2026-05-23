@@ -109,4 +109,47 @@ public class PaymentBOImpl implements PaymentBO {
 
         return new lk.ijse.theserenitymentalhealththerapycenter.dto.FinancialSummaryDTO(program.getFee(), paidAmount, dueBalance, prepaidSessionsAvailable);
     }
+
+    @Override
+    public java.util.Map<String, Double> getIncomeByDate(int days) throws Exception {
+        List<Payment> all = paymentDAO.getAll();
+        java.time.LocalDate startDate = java.time.LocalDate.now().minusDays(days - 1);
+        
+        java.util.Map<String, Double> result = new java.util.LinkedHashMap<>();
+        for (int i = 0; i < days; i++) {
+            result.put(startDate.plusDays(i).toString(), 0.0);
+        }
+
+        for (Payment p : all) {
+            try {
+                java.time.LocalDate date = java.time.LocalDate.parse(p.getPaymentDate());
+                if (!date.isBefore(startDate)) {
+                    result.put(date.toString(), result.getOrDefault(date.toString(), 0.0) + p.getAmount());
+                }
+            } catch (Exception ignored) {}
+        }
+        return result;
+    }
+
+    @Override
+    public java.util.Map<String, Double> getRevenueByMonth(int months) throws Exception {
+        List<Payment> all = paymentDAO.getAll();
+        java.time.YearMonth startMonth = java.time.YearMonth.now().minusMonths(months - 1);
+        
+        java.util.Map<String, Double> result = new java.util.LinkedHashMap<>();
+        for (int i = 0; i < months; i++) {
+            result.put(startMonth.plusMonths(i).toString(), 0.0);
+        }
+
+        for (Payment p : all) {
+            try {
+                java.time.LocalDate date = java.time.LocalDate.parse(p.getPaymentDate());
+                java.time.YearMonth ym = java.time.YearMonth.from(date);
+                if (!ym.isBefore(startMonth)) {
+                    result.put(ym.toString(), result.getOrDefault(ym.toString(), 0.0) + p.getAmount());
+                }
+            } catch (Exception ignored) {}
+        }
+        return result;
+    }
 }

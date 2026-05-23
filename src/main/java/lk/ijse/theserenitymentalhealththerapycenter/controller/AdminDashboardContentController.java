@@ -26,6 +26,8 @@ public class AdminDashboardContentController implements Initializable {
     private Label lblTotalPrograms;
     @FXML
     private Label lblTotalRevenue;
+    @FXML
+    private javafx.scene.chart.AreaChart<String, Number> revenueChart;
 
     private final PatientBO patientBO = BOFactory.getInstance().getBO(BOFactory.BOType.PATIENT);
     private final TherapistBO therapistBO = BOFactory.getInstance().getBO(BOFactory.BOType.THERAPIST);
@@ -35,6 +37,26 @@ public class AdminDashboardContentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         loadStats();
+        loadChart();
+    }
+
+    private void loadChart() {
+        try {
+            java.util.Map<String, Double> revenueData = paymentBO.getRevenueByMonth(6);
+            javafx.scene.chart.XYChart.Series<String, Number> series = new javafx.scene.chart.XYChart.Series<>();
+            series.setName("Revenue");
+
+            for (java.util.Map.Entry<String, Double> entry : revenueData.entrySet()) {
+                java.time.YearMonth ym = java.time.YearMonth.parse(entry.getKey());
+                String label = ym.getMonth().toString().substring(0, 3) + " " + ym.getYear();
+                series.getData().add(new javafx.scene.chart.XYChart.Data<>(label, entry.getValue()));
+            }
+
+            revenueChart.getData().clear();
+            revenueChart.getData().add(series);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void loadStats() {
