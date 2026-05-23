@@ -119,6 +119,7 @@ public class PaymentManagementController implements Initializable {
             PaymentDTO dto = new PaymentDTO(
                     txtPaymentId.getText().trim(), amount, dateStr,
                     cmbMethod.getValue(), cmbStatus.getValue(),
+                    0, 0.0, // Default coveredSessions and dueBalance for manually created payment
                     extractId(cmbPatient.getValue()), null,
                     extractId(cmbProgram.getValue()), null);
             paymentBO.savePayment(dto);
@@ -159,6 +160,7 @@ public class PaymentManagementController implements Initializable {
             PaymentDTO dto = new PaymentDTO(
                     txtPaymentId.getText().trim(), amount, dateStr,
                     cmbMethod.getValue(), cmbStatus.getValue(),
+                    0, 0.0, // Default coveredSessions and dueBalance
                     extractId(cmbPatient.getValue()), null,
                     extractId(cmbProgram.getValue()), null);
             paymentBO.updatePayment(dto);

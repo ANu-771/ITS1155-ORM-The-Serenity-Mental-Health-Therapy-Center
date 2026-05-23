@@ -15,5 +15,5 @@ public interface PatientDAO extends CrudDAO<Patient, String> {
 
     String getLastId() throws Exception;
 
-    boolean registerPatient(Patient patient, String programId) throws Exception;
+    boolean registerPatient(Patient patient, List<String> programIds, List<lk.ijse.theserenitymentalhealththerapycenter.entity.Payment> payments) throws Exception;
 }

@@ -8,11 +8,12 @@ public class PatientDTO {
     private String gender;
     private String medicalHistory;
     private String registrationDate;
+    private boolean isVerified;
 
     public PatientDTO() {
     }
 
-    public PatientDTO(String id, String name, String dob, String contactNumber, String gender, String medicalHistory, String registrationDate) {
+    public PatientDTO(String id, String name, String dob, String contactNumber, String gender, String medicalHistory, String registrationDate, boolean isVerified) {
         this.id = id;
         this.name = name;
         this.dob = dob;
@@ -20,6 +21,7 @@ public class PatientDTO {
         this.gender = gender;
         this.medicalHistory = medicalHistory;
         this.registrationDate = registrationDate;
+        this.isVerified = isVerified;
     }
 
     public String getId() {
@@ -76,5 +78,13 @@ public class PatientDTO {
 
     public void setRegistrationDate(String registrationDate) {
         this.registrationDate = registrationDate;
+    }
+
+    public boolean isVerified() {
+        return isVerified;
+    }
+
+    public void setVerified(boolean verified) {
+        isVerified = verified;
     }
 }

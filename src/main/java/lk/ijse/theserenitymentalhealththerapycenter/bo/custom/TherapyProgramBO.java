@@ -15,5 +15,9 @@ public interface TherapyProgramBO {
 
     List<TherapyProgramDTO> getAllPrograms() throws Exception;
 
+    List<TherapyProgramDTO> getProgramsByPatient(String patientId) throws Exception;
+
+    List<TherapyProgramDTO> getEligibleProgramsForPatient(String patientId) throws Exception;
+
     String getNextId() throws Exception;
 }

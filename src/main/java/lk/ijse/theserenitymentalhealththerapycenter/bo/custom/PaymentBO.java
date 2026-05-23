@@ -17,5 +17,7 @@ public interface PaymentBO {
 
     List<PaymentDTO> getPaymentsByPatient(String patientId) throws Exception;
 
+    lk.ijse.theserenitymentalhealththerapycenter.dto.FinancialSummaryDTO getFinancialSummary(String patientId, String programId) throws Exception;
+
     String getNextId() throws Exception;
 }

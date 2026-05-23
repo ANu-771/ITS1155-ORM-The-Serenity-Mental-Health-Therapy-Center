@@ -31,6 +31,9 @@ public class Patient {
     @Column(name = "registration_date", length = 15)
     private String registrationDate;
 
+    @Column(name = "is_verified")
+    private boolean isVerified;
+
     @ManyToMany
     @JoinTable(
             name = "patient_program",
@@ -48,7 +51,7 @@ public class Patient {
     public Patient() {
     }
 
-    public Patient(String id, String name, String dob, String contactNumber, String gender, String medicalHistory, String registrationDate) {
+    public Patient(String id, String name, String dob, String contactNumber, String gender, String medicalHistory, String registrationDate, boolean isVerified) {
         this.id = id;
         this.name = name;
         this.dob = dob;
@@ -56,6 +59,7 @@ public class Patient {
         this.gender = gender;
         this.medicalHistory = medicalHistory;
         this.registrationDate = registrationDate;
+        this.isVerified = isVerified;
     }
 
     public String getId() {
@@ -112,6 +116,14 @@ public class Patient {
 
     public void setRegistrationDate(String registrationDate) {
         this.registrationDate = registrationDate;
+    }
+
+    public boolean isVerified() {
+        return isVerified;
+    }
+
+    public void setVerified(boolean verified) {
+        isVerified = verified;
     }
 
     public List<TherapyProgram> getTherapyPrograms() {

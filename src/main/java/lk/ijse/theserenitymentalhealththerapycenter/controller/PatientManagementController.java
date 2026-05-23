@@ -6,15 +6,21 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 import lk.ijse.theserenitymentalhealththerapycenter.bo.BOFactory;
 import lk.ijse.theserenitymentalhealththerapycenter.bo.custom.PatientBO;
 
 import lk.ijse.theserenitymentalhealththerapycenter.bo.custom.TherapyProgramBO;
 import lk.ijse.theserenitymentalhealththerapycenter.dto.PatientDTO;
+import lk.ijse.theserenitymentalhealththerapycenter.dto.RegistrationInvoiceDTO;
 import lk.ijse.theserenitymentalhealththerapycenter.dto.tm.PatientTM;
 import lk.ijse.theserenitymentalhealththerapycenter.exception.InvalidInputException;
 import lk.ijse.theserenitymentalhealththerapycenter.util.ValidationUtil;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.view.JasperViewer;
 
+import java.io.InputStream;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
@@ -31,7 +37,15 @@ public class PatientManagementController implements Initializable {
     @FXML
     private TableView<PatientTM> tblPatients;
     @FXML
-    private ComboBox<String> cmbProgram, cmbGender;
+    private ComboBox<String> cmbGender, cmbPaymentMethod;
+    @FXML
+    private CheckBox chkVerified;
+    @FXML
+    private VBox vboxPrograms;
+    @FXML
+    private TextField txtTotalFee, txtUpfrontPayment, txtDueBalance;
+
+    private List<lk.ijse.theserenitymentalhealththerapycenter.dto.TherapyProgramDTO> allPrograms;
 
     private final PatientBO patientBO = BOFactory.getInstance().getBO(BOFactory.BOType.PATIENT);
     private final TherapyProgramBO programBO = BOFactory.getInstance().getBO(BOFactory.BOType.THERAPY_PROGRAM);
@@ -45,9 +59,21 @@ public class PatientManagementController implements Initializable {
 
 
         cmbGender.setItems(FXCollections.observableArrayList("Male", "Female"));
+        cmbPaymentMethod.setItems(FXCollections.observableArrayList("Cash", "Card", "Bank Transfer", "Online"));
+        
         loadPrograms();
 
+        txtUpfrontPayment.textProperty().addListener((obs, old, nw) -> calculateDueBalance());
+
         dpRegDate.setValue(LocalDate.now());
+        dpRegDate.setEditable(false);
+        dpRegDate.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                setDisable(empty || !date.equals(LocalDate.now()));
+            }
+        });
 
         dpDob.setDayCellFactory(picker -> new DateCell() {
             @Override
@@ -66,8 +92,10 @@ public class PatientManagementController implements Initializable {
                 cmbGender.setValue(nw.getGender());
                 dpRegDate.setValue(nw.getRegistrationDate() != null && !nw.getRegistrationDate().isEmpty() ? LocalDate.parse(nw.getRegistrationDate()) : null);
 
-                cmbProgram.setDisable(true);
-                cmbProgram.setValue(null);
+                vboxPrograms.setDisable(true);
+                chkVerified.setDisable(true);
+                txtUpfrontPayment.setDisable(true);
+                cmbPaymentMethod.setDisable(true);
 
                 resetValidationStyles();
             }
@@ -76,16 +104,42 @@ public class PatientManagementController implements Initializable {
 
     private void loadPrograms() {
         try {
-            List<lk.ijse.theserenitymentalhealththerapycenter.dto.TherapyProgramDTO> programs = programBO.getAllPrograms();
-            ObservableList<String> prList = FXCollections.observableArrayList();
-            for (lk.ijse.theserenitymentalhealththerapycenter.dto.TherapyProgramDTO p : programs) {
-                prList.add(p.getProgramId() + " - " + p.getName());
+            allPrograms = programBO.getAllPrograms();
+            vboxPrograms.getChildren().clear();
+            for (lk.ijse.theserenitymentalhealththerapycenter.dto.TherapyProgramDTO p : allPrograms) {
+                CheckBox chk = new CheckBox(p.getProgramId() + " - " + p.getName() + " (LKR " + p.getFee() + ")");
+                chk.getStyleClass().add("form-label");
+                chk.setUserData(p);
+                chk.selectedProperty().addListener((obs, oldVal, newVal) -> calculateTotalFee());
+                vboxPrograms.getChildren().add(chk);
             }
-            cmbProgram.setItems(prList);
-
-
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void calculateTotalFee() {
+        double total = 0;
+        for (javafx.scene.Node node : vboxPrograms.getChildren()) {
+            if (node instanceof CheckBox) {
+                CheckBox chk = (CheckBox) node;
+                if (chk.isSelected()) {
+                    lk.ijse.theserenitymentalhealththerapycenter.dto.TherapyProgramDTO p = (lk.ijse.theserenitymentalhealththerapycenter.dto.TherapyProgramDTO) chk.getUserData();
+                    total += p.getFee();
+                }
+            }
+        }
+        txtTotalFee.setText(String.valueOf(total));
+        calculateDueBalance();
+    }
+
+    private void calculateDueBalance() {
+        try {
+            double total = txtTotalFee.getText().isEmpty() ? 0 : Double.parseDouble(txtTotalFee.getText());
+            double paid = txtUpfrontPayment.getText().trim().isEmpty() ? 0 : Double.parseDouble(txtUpfrontPayment.getText().trim());
+            txtDueBalance.setText(String.valueOf(total - paid));
+        } catch (NumberFormatException e) {
+            txtDueBalance.setText("Invalid Input");
         }
     }
 
@@ -159,10 +213,41 @@ public class PatientManagementController implements Initializable {
         }
 
         if (isSave) {
-            if (cmbProgram.getValue() == null) {
-                cmbProgram.setStyle("-fx-border-color: #e74c3c; -fx-border-width: 1.5; -fx-border-radius: 8;");
-                new Alert(Alert.AlertType.WARNING, "Initial Therapy Program is required for registration.").showAndWait();
-                cmbProgram.requestFocus();
+            if (!chkVerified.isSelected()) {
+                new Alert(Alert.AlertType.WARNING, "Registration blocked: Interview must be passed and documents verified.").showAndWait();
+                chkVerified.requestFocus();
+                return false;
+            }
+
+            boolean anyProgramSelected = false;
+            for (javafx.scene.Node node : vboxPrograms.getChildren()) {
+                if (node instanceof CheckBox && ((CheckBox) node).isSelected()) {
+                    anyProgramSelected = true;
+                    break;
+                }
+            }
+            if (!anyProgramSelected) {
+                new Alert(Alert.AlertType.WARNING, "At least one Therapy Program is required for registration.").showAndWait();
+                return false;
+            }
+
+            if (txtUpfrontPayment.getText().trim().isEmpty()) {
+                ValidationUtil.setInvalid(txtUpfrontPayment);
+                new Alert(Alert.AlertType.WARNING, "Upfront Payment is required.").showAndWait();
+                return false;
+            }
+
+            try {
+                Double.parseDouble(txtUpfrontPayment.getText().trim());
+            } catch (NumberFormatException e) {
+                ValidationUtil.setInvalid(txtUpfrontPayment);
+                new Alert(Alert.AlertType.WARNING, "Invalid Upfront Payment amount.").showAndWait();
+                return false;
+            }
+
+            if (cmbPaymentMethod.getValue() == null) {
+                ValidationUtil.setInvalid(cmbPaymentMethod);
+                new Alert(Alert.AlertType.WARNING, "Payment Method is required.").showAndWait();
                 return false;
             }
         }
@@ -185,13 +270,74 @@ public class PatientManagementController implements Initializable {
                     txtContact.getText().trim(),
                     cmbGender.getValue(),
                     txtMedicalHistory.getText(),
-                    regDateStr
+                    regDateStr,
+                    chkVerified.isSelected()
             );
 
-            String programId = cmbProgram.getValue().split(" - ")[0];
+            List<String> programIds = new java.util.ArrayList<>();
+            for (javafx.scene.Node node : vboxPrograms.getChildren()) {
+                if (node instanceof CheckBox && ((CheckBox) node).isSelected()) {
+                    lk.ijse.theserenitymentalhealththerapycenter.dto.TherapyProgramDTO p = (lk.ijse.theserenitymentalhealththerapycenter.dto.TherapyProgramDTO) ((CheckBox) node).getUserData();
+                    programIds.add(p.getProgramId());
+                }
+            }
 
-            patientBO.registerPatient(dto, programId);
+            double upfrontPayment = Double.parseDouble(txtUpfrontPayment.getText().trim());
+            String paymentMethod = cmbPaymentMethod.getValue();
+
+            patientBO.registerPatient(dto, programIds, upfrontPayment, paymentMethod);
+            
+            // Calculate variables for JasperReport
+            List<RegistrationInvoiceDTO> invoiceItems = new java.util.ArrayList<>();
+            double remainingPayment = upfrontPayment;
+            double totalFee = 0;
+
+            for (javafx.scene.Node node : vboxPrograms.getChildren()) {
+                if (node instanceof CheckBox && ((CheckBox) node).isSelected()) {
+                    lk.ijse.theserenitymentalhealththerapycenter.dto.TherapyProgramDTO p = (lk.ijse.theserenitymentalhealththerapycenter.dto.TherapyProgramDTO) ((CheckBox) node).getUserData();
+                    totalFee += p.getFee();
+                    
+                    double appliedAmount = 0.0;
+                    if (remainingPayment >= p.getFee()) {
+                        appliedAmount = p.getFee();
+                        remainingPayment -= p.getFee();
+                    } else if (remainingPayment > 0) {
+                        appliedAmount = remainingPayment;
+                        remainingPayment = 0;
+                    }
+
+                    int coveredSessions = 0;
+                    if (p.getTotalSessions() > 0) {
+                        double perSessionRate = p.getFee() / p.getTotalSessions();
+                        coveredSessions = (int) Math.floor(appliedAmount / perSessionRate);
+                    }
+                    
+                    invoiceItems.add(new RegistrationInvoiceDTO(p.getName(), p.getFee(), p.getTotalSessions(), coveredSessions));
+                }
+            }
+
+            try {
+                InputStream is = this.getClass().getResourceAsStream("/reports/RegistrationInvoice.jrxml");
+                if (is != null) {
+                    JasperReport jr = JasperCompileManager.compileReport(is);
+                    java.util.Map<String, Object> params = new java.util.HashMap<>();
+                    params.put("PatientId", dto.getId());
+                    params.put("PatientName", dto.getName());
+                    params.put("TotalFee", totalFee);
+                    params.put("UpfrontPayment", upfrontPayment);
+                    params.put("DueBalance", totalFee - upfrontPayment);
+
+                    JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(invoiceItems);
+                    JasperPrint jp = JasperFillManager.fillReport(jr, params, dataSource);
+                    JasperViewer.viewReport(jp, false);
+                }
+            } catch (Exception jasperEx) {
+                new Alert(Alert.AlertType.ERROR, "Failed to generate invoice: " + jasperEx.getMessage()).showAndWait();
+                jasperEx.printStackTrace();
+            }
+
             new Alert(Alert.AlertType.INFORMATION, "Patient registered successfully!").showAndWait();
+            
             loadTable();
             handleClear(null);
         } catch (InvalidInputException ex) {
@@ -217,7 +363,8 @@ public class PatientManagementController implements Initializable {
                     txtContact.getText().trim(),
                     cmbGender.getValue(),
                     txtMedicalHistory.getText(),
-                    regDateStr
+                    regDateStr,
+                    chkVerified.isSelected()
             ));
             new Alert(Alert.AlertType.INFORMATION, "Patient updated successfully!").showAndWait();
             loadTable();
@@ -260,8 +407,20 @@ public class PatientManagementController implements Initializable {
         txtMedicalHistory.clear();
         dpRegDate.setValue(LocalDate.now());
 
-        cmbProgram.setDisable(false);
-        cmbProgram.setValue(null);
+        vboxPrograms.setDisable(false);
+        for (javafx.scene.Node node : vboxPrograms.getChildren()) {
+            if (node instanceof CheckBox) {
+                ((CheckBox) node).setSelected(false);
+            }
+        }
+        chkVerified.setDisable(false);
+        chkVerified.setSelected(false);
+        txtTotalFee.clear();
+        txtUpfrontPayment.setDisable(false);
+        txtUpfrontPayment.clear();
+        txtDueBalance.clear();
+        cmbPaymentMethod.setDisable(false);
+        cmbPaymentMethod.setValue(null);
 
         if (txtSearch != null) txtSearch.clear();
         resetValidationStyles();

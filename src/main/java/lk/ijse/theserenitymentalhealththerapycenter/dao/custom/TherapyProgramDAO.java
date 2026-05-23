@@ -5,4 +5,5 @@ import lk.ijse.theserenitymentalhealththerapycenter.entity.TherapyProgram;
 
 public interface TherapyProgramDAO extends CrudDAO<TherapyProgram, String> {
     String getLastId() throws Exception;
+    java.util.List<TherapyProgram> getProgramsByPatient(String patientId) throws Exception;
 }

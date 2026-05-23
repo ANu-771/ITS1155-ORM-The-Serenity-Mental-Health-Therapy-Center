@@ -23,5 +23,5 @@ public interface PatientBO {
 
     String getNextId() throws Exception;
     
-    boolean registerPatient(PatientDTO patientDTO, String programId) throws Exception;
+    boolean registerPatient(PatientDTO patientDTO, List<String> programIds, double upfrontPayment, String paymentMethod) throws Exception;
 }

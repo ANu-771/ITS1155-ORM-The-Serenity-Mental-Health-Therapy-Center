@@ -22,6 +22,9 @@ public class TherapyProgram {
     @Column(nullable = false)
     private double fee;
 
+    @Column(name = "total_sessions", nullable = false)
+    private int totalSessions;
+
     @Column(length = 500)
     private String description;
 
@@ -40,11 +43,12 @@ public class TherapyProgram {
     public TherapyProgram() {
     }
 
-    public TherapyProgram(String programId, String name, String duration, double fee, String description) {
+    public TherapyProgram(String programId, String name, String duration, double fee, int totalSessions, String description) {
         this.programId = programId;
         this.name = name;
         this.duration = duration;
         this.fee = fee;
+        this.totalSessions = totalSessions;
         this.description = description;
     }
 
@@ -78,6 +82,14 @@ public class TherapyProgram {
 
     public void setFee(double fee) {
         this.fee = fee;
+    }
+
+    public int getTotalSessions() {
+        return totalSessions;
+    }
+
+    public void setTotalSessions(int totalSessions) {
+        this.totalSessions = totalSessions;
     }
 
     public String getDescription() {

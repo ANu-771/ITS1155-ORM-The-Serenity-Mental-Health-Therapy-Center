@@ -84,6 +84,19 @@ public class TherapyProgramDAOImpl implements TherapyProgramDAO {
     }
 
     @Override
+    public List<TherapyProgram> getProgramsByPatient(String patientId) throws Exception {
+        Session session = FactoryConfiguration.getInstance().getSession();
+        try {
+            return session.createQuery(
+                    "SELECT tp FROM Patient p JOIN p.therapyPrograms tp WHERE p.id = :id", TherapyProgram.class)
+                    .setParameter("id", patientId)
+                    .list();
+        } finally {
+            session.close();
+        }
+    }
+
+    @Override
     public String getLastId() throws Exception {
         Session session = FactoryConfiguration.getInstance().getSession();
         try {

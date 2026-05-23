@@ -166,6 +166,26 @@
     -fx-background-color: #1565C0;
 }
 
+/* POS Print Button */
+.btn-print {
+    -fx-background-color: white;
+    -fx-text-fill: #2E7D32;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-padding: 12 28;
+    -fx-background-radius: 8;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 8;
+    -fx-border-width: 1.5;
+    -fx-cursor: hand;
+}
+
+.btn-print:hover {
+    -fx-border-color: #39ff14;
+    -fx-background-color: #39ff14;
+    -fx-text-fill: white;
+}
+
 /* ===== SIDEBAR ===== */
 .sidebar {
     -fx-background-color: #f0f2f5;

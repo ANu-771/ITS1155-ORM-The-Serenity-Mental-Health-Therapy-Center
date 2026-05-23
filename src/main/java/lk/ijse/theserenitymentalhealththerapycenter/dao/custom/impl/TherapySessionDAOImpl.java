@@ -78,7 +78,7 @@ public class TherapySessionDAOImpl implements TherapySessionDAO {
     public List<TherapySession> getAll() throws Exception {
         Session session = FactoryConfiguration.getInstance().getSession();
         try {
-            return session.createQuery("FROM TherapySession", TherapySession.class).list();
+            return session.createQuery("SELECT ts FROM TherapySession ts JOIN FETCH ts.patient JOIN FETCH ts.therapist JOIN FETCH ts.therapyProgram", TherapySession.class).list();
         } finally {
             session.close();
         }
@@ -89,7 +89,7 @@ public class TherapySessionDAOImpl implements TherapySessionDAO {
         Session session = FactoryConfiguration.getInstance().getSession();
         try {
             Query<TherapySession> query = session.createQuery(
-                    "FROM TherapySession ts WHERE ts.therapist.id = :therapistId", TherapySession.class);
+                    "SELECT ts FROM TherapySession ts JOIN FETCH ts.patient JOIN FETCH ts.therapist JOIN FETCH ts.therapyProgram WHERE ts.therapist.id = :therapistId", TherapySession.class);
             query.setParameter("therapistId", therapistId);
             return query.list();
         } finally {
@@ -102,7 +102,7 @@ public class TherapySessionDAOImpl implements TherapySessionDAO {
         Session session = FactoryConfiguration.getInstance().getSession();
         try {
             Query<TherapySession> query = session.createQuery(
-                    "FROM TherapySession ts WHERE ts.patient.id = :patientId", TherapySession.class);
+                    "SELECT ts FROM TherapySession ts JOIN FETCH ts.patient JOIN FETCH ts.therapist JOIN FETCH ts.therapyProgram WHERE ts.patient.id = :patientId", TherapySession.class);
             query.setParameter("patientId", patientId);
             return query.list();
         } finally {

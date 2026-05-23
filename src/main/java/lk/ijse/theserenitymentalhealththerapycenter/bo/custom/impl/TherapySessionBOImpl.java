@@ -9,6 +9,7 @@ import lk.ijse.theserenitymentalhealththerapycenter.dao.custom.TherapyProgramDAO
 import lk.ijse.theserenitymentalhealththerapycenter.dto.TherapySessionDTO;
 import lk.ijse.theserenitymentalhealththerapycenter.entity.*;
 import lk.ijse.theserenitymentalhealththerapycenter.exception.InvalidInputException;
+import lk.ijse.theserenitymentalhealththerapycenter.exception.PaymentRequiredException;
 import lk.ijse.theserenitymentalhealththerapycenter.exception.SchedulingConflictException;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class TherapySessionBOImpl implements TherapySessionBO {
     private final PatientDAO patientDAO = DAOFactory.getInstance().getDAO(DAOFactory.DAOType.PATIENT);
     private final TherapistDAO therapistDAO = DAOFactory.getInstance().getDAO(DAOFactory.DAOType.THERAPIST);
     private final TherapyProgramDAO programDAO = DAOFactory.getInstance().getDAO(DAOFactory.DAOType.THERAPY_PROGRAM);
+    private final lk.ijse.theserenitymentalhealththerapycenter.dao.custom.PaymentDAO paymentDAO = DAOFactory.getInstance().getDAO(DAOFactory.DAOType.PAYMENT);
 
     @Override
     public boolean saveSession(TherapySessionDTO dto) throws Exception {
@@ -27,9 +29,37 @@ public class TherapySessionBOImpl implements TherapySessionBO {
         if (sessionDAO.checkConflict(dto.getTherapistId(), dto.getDate(), dto.getTime())) {
             throw new SchedulingConflictException("Therapist already has a session at " + dto.getDate() + " " + dto.getTime());
         }
+        
+        // POS Logic: canBookSession gatekeeper
+        List<lk.ijse.theserenitymentalhealththerapycenter.entity.Payment> payments = paymentDAO.getPaymentsByPatient(dto.getPatientId());
+        int totalCoveredSessions = 0;
+        double totalPaid = 0;
+        for (lk.ijse.theserenitymentalhealththerapycenter.entity.Payment p : payments) {
+            if (p.getTherapyProgram().getProgramId().equals(dto.getProgramId())) {
+                totalCoveredSessions += p.getCoveredSessions();
+                totalPaid += p.getAmount();
+            }
+        }
+
+        List<TherapySession> existingSessions = sessionDAO.getSessionsByPatient(dto.getPatientId());
+        int bookedSessions = 0;
+        for (TherapySession s : existingSessions) {
+            if (s.getTherapyProgram().getProgramId().equals(dto.getProgramId()) && !s.getStatus().equals("CANCELLED")) {
+                bookedSessions++;
+            }
+        }
+
+        TherapyProgram program = programDAO.search(dto.getProgramId());
+        double dueBalance = program.getFee() - totalPaid;
+
+        if (bookedSessions >= totalCoveredSessions && dueBalance > 0) {
+            throw new PaymentRequiredException("Payment Required: Patient has exhausted prepaid sessions for this program and has a pending balance.");
+        } else if (bookedSessions >= totalCoveredSessions) {
+            throw new SchedulingConflictException("Cannot book session: Patient has exhausted prepaid sessions for this program.");
+        }
+
         Patient patient = patientDAO.search(dto.getPatientId());
         Therapist therapist = therapistDAO.search(dto.getTherapistId());
-        TherapyProgram program = programDAO.search(dto.getProgramId());
         return sessionDAO.save(new TherapySession(dto.getSessionId(), dto.getDate(), dto.getTime(), dto.getStatus(), patient, therapist, program));
     }
 

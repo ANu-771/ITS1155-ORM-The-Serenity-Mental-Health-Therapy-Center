@@ -22,6 +22,12 @@ public class Payment {
     @Column(nullable = false, length = 20)
     private String status;
 
+    @Column(name = "covered_sessions", nullable = false)
+    private int coveredSessions;
+
+    @Column(name = "due_balance", nullable = false)
+    private double dueBalance;
+
     @ManyToOne
     @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
@@ -33,12 +39,14 @@ public class Payment {
     public Payment() {
     }
 
-    public Payment(String paymentId, double amount, String paymentDate, String paymentMethod, String status, Patient patient, TherapyProgram therapyProgram) {
+    public Payment(String paymentId, double amount, String paymentDate, String paymentMethod, String status, int coveredSessions, double dueBalance, Patient patient, TherapyProgram therapyProgram) {
         this.paymentId = paymentId;
         this.amount = amount;
         this.paymentDate = paymentDate;
         this.paymentMethod = paymentMethod;
         this.status = status;
+        this.coveredSessions = coveredSessions;
+        this.dueBalance = dueBalance;
         this.patient = patient;
         this.therapyProgram = therapyProgram;
     }
@@ -81,6 +89,22 @@ public class Payment {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public int getCoveredSessions() {
+        return coveredSessions;
+    }
+
+    public void setCoveredSessions(int coveredSessions) {
+        this.coveredSessions = coveredSessions;
+    }
+
+    public double getDueBalance() {
+        return dueBalance;
+    }
+
+    public void setDueBalance(double dueBalance) {
+        this.dueBalance = dueBalance;
     }
 
     public Patient getPatient() {

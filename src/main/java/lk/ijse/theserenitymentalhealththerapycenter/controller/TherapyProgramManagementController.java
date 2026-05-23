@@ -20,7 +20,7 @@ import java.util.ResourceBundle;
 public class TherapyProgramManagementController implements Initializable {
 
     @FXML
-    private TextField txtProgramId, txtDuration, txtFee, txtSearch, txtProgramName;
+    private TextField txtProgramId, txtDuration, txtFee, txtSearch, txtProgramName, txtTotalSessions;
     @FXML
     private TextArea txtDescription;
     @FXML
@@ -41,6 +41,7 @@ public class TherapyProgramManagementController implements Initializable {
                 txtProgramName.setText(nw.getName());
                 txtDuration.setText(nw.getDuration());
                 txtFee.setText(String.valueOf(nw.getFee()));
+                txtTotalSessions.setText(String.valueOf(nw.getTotalSessions()));
                 txtDescription.setText(nw.getDescription());
                 resetValidationStyles();
             }
@@ -56,7 +57,7 @@ public class TherapyProgramManagementController implements Initializable {
     }
 
     private void resetValidationStyles() {
-        ValidationUtil.resetStyles(txtProgramId, txtProgramName, txtDuration, txtFee);
+        ValidationUtil.resetStyles(txtProgramId, txtProgramName, txtDuration, txtFee, txtTotalSessions);
     }
 
     @FXML
@@ -66,6 +67,7 @@ public class TherapyProgramManagementController implements Initializable {
         boolean allFilled = true;
         if (!ValidationUtil.validateRequired(txtProgramName)) allFilled = false;
         if (!ValidationUtil.validateRequired(txtDuration)) allFilled = false;
+        if (!ValidationUtil.validateRequired(txtTotalSessions)) allFilled = false;
         if (!ValidationUtil.validateRequired(txtFee)) allFilled = false;
 
         if (!allFilled) {
@@ -75,15 +77,17 @@ public class TherapyProgramManagementController implements Initializable {
 
         try {
             double fee = Double.parseDouble(txtFee.getText().trim());
+            int totalSessions = Integer.parseInt(txtTotalSessions.getText().trim());
             programBO.saveProgram(new TherapyProgramDTO(
                     txtProgramId.getText().trim(), txtProgramName.getText().trim(),
-                    txtDuration.getText().trim(), fee, txtDescription.getText()));
+                    txtDuration.getText().trim(), fee, totalSessions, txtDescription.getText()));
             new Alert(Alert.AlertType.INFORMATION, "Program saved successfully!").showAndWait();
             loadTable();
             handleClear(null);
         } catch (NumberFormatException ex) {
             ValidationUtil.setInvalid(txtFee);
-            new Alert(Alert.AlertType.WARNING, "Invalid fee amount. Please enter a valid number.").showAndWait();
+            ValidationUtil.setInvalid(txtTotalSessions);
+            new Alert(Alert.AlertType.WARNING, "Invalid fee or total sessions. Please enter valid numbers.").showAndWait();
         } catch (InvalidInputException ex) {
             new Alert(Alert.AlertType.WARNING, ex.getMessage()).showAndWait();
         } catch (Exception ex) {
@@ -99,6 +103,7 @@ public class TherapyProgramManagementController implements Initializable {
         if (!ValidationUtil.validateRequired(txtProgramId)) allFilled = false;
         if (!ValidationUtil.validateRequired(txtProgramName)) allFilled = false;
         if (!ValidationUtil.validateRequired(txtDuration)) allFilled = false;
+        if (!ValidationUtil.validateRequired(txtTotalSessions)) allFilled = false;
         if (!ValidationUtil.validateRequired(txtFee)) allFilled = false;
 
         if (!allFilled) {
@@ -108,15 +113,17 @@ public class TherapyProgramManagementController implements Initializable {
 
         try {
             double fee = Double.parseDouble(txtFee.getText().trim());
+            int totalSessions = Integer.parseInt(txtTotalSessions.getText().trim());
             programBO.updateProgram(new TherapyProgramDTO(
                     txtProgramId.getText().trim(), txtProgramName.getText().trim(),
-                    txtDuration.getText().trim(), fee, txtDescription.getText()));
+                    txtDuration.getText().trim(), fee, totalSessions, txtDescription.getText()));
             new Alert(Alert.AlertType.INFORMATION, "Program updated successfully!").showAndWait();
             loadTable();
             handleClear(null);
         } catch (NumberFormatException ex) {
             ValidationUtil.setInvalid(txtFee);
-            new Alert(Alert.AlertType.WARNING, "Invalid fee amount. Please enter a valid number.").showAndWait();
+            ValidationUtil.setInvalid(txtTotalSessions);
+            new Alert(Alert.AlertType.WARNING, "Invalid fee or total sessions. Please enter valid numbers.").showAndWait();
         } catch (InvalidInputException ex) {
             new Alert(Alert.AlertType.WARNING, ex.getMessage()).showAndWait();
         } catch (Exception ex) {
@@ -148,6 +155,7 @@ public class TherapyProgramManagementController implements Initializable {
     void handleClear(ActionEvent e) {
         txtProgramName.clear();
         txtDuration.clear();
+        txtTotalSessions.clear();
         txtFee.clear();
         txtDescription.clear();
         if (txtSearch != null) txtSearch.clear();
@@ -166,7 +174,7 @@ public class TherapyProgramManagementController implements Initializable {
             TherapyProgramDTO p = programBO.searchProgram(id);
             ObservableList<TherapyProgramTM> list = FXCollections.observableArrayList();
             if (p != null)
-                list.add(new TherapyProgramTM(p.getProgramId(), p.getName(), p.getDuration(), p.getFee(), p.getDescription()));
+                list.add(new TherapyProgramTM(p.getProgramId(), p.getName(), p.getDuration(), p.getFee(), p.getTotalSessions(), p.getDescription()));
             tblPrograms.setItems(list);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -178,7 +186,7 @@ public class TherapyProgramManagementController implements Initializable {
             List<TherapyProgramDTO> all = programBO.getAllPrograms();
             ObservableList<TherapyProgramTM> list = FXCollections.observableArrayList();
             for (TherapyProgramDTO p : all)
-                list.add(new TherapyProgramTM(p.getProgramId(), p.getName(), p.getDuration(), p.getFee(), p.getDescription()));
+                list.add(new TherapyProgramTM(p.getProgramId(), p.getName(), p.getDuration(), p.getFee(), p.getTotalSessions(), p.getDescription()));
             tblPrograms.setItems(list);
         } catch (Exception e) {
             e.printStackTrace();

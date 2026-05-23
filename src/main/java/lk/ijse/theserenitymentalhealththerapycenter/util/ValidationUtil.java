@@ -41,6 +41,14 @@ public class ValidationUtil {
         field.setStyle("-fx-border-color: #e74c3c; -fx-border-width: 1.5; -fx-border-radius: 8; -fx-background-radius: 8;");
     }
 
+    public static void setValid(ComboBox<?> combo) {
+        combo.setStyle("-fx-border-color: #dee2e6; -fx-border-radius: 8;");
+    }
+
+    public static void setInvalid(ComboBox<?> combo) {
+        combo.setStyle("-fx-border-color: #e74c3c; -fx-border-width: 1.5; -fx-border-radius: 8;");
+    }
+
 
     public static boolean validateField(TextField field, Pattern pattern) {
         if (field.getText() == null || field.getText().trim().isEmpty() || !pattern.matcher(field.getText().trim()).matches()) {

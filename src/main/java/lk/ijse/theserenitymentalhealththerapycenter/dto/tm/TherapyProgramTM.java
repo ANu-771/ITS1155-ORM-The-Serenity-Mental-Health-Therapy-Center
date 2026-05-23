@@ -5,16 +5,18 @@ public class TherapyProgramTM {
     private String name;
     private String duration;
     private double fee;
+    private int totalSessions;
     private String description;
 
     public TherapyProgramTM() {
     }
 
-    public TherapyProgramTM(String programId, String name, String duration, double fee, String description) {
+    public TherapyProgramTM(String programId, String name, String duration, double fee, int totalSessions, String description) {
         this.programId = programId;
         this.name = name;
         this.duration = duration;
         this.fee = fee;
+        this.totalSessions = totalSessions;
         this.description = description;
     }
 
@@ -48,6 +50,14 @@ public class TherapyProgramTM {
 
     public void setFee(double fee) {
         this.fee = fee;
+    }
+
+    public int getTotalSessions() {
+        return totalSessions;
+    }
+
+    public void setTotalSessions(int totalSessions) {
+        this.totalSessions = totalSessions;
     }
 
     public String getDescription() {

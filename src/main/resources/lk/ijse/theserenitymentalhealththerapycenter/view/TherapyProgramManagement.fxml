@@ -13,8 +13,9 @@
             <HBox spacing="16" alignment="CENTER_LEFT">
                 <VBox spacing="4" HBox.hgrow="ALWAYS"><Label text="Program ID" styleClass="form-label"/><TextField fx:id="txtProgramId" promptText="MT1001" styleClass="text-field-modern" prefHeight="38"/></VBox>
                 <VBox spacing="4" HBox.hgrow="ALWAYS"><Label text="Program Name" styleClass="form-label"/><TextField fx:id="txtProgramName" promptText="Enter Therapy Program Name" styleClass="text-field-modern" prefHeight="38"/></VBox>
-                <VBox spacing="4"><Label text="Duration" styleClass="form-label"/><TextField fx:id="txtDuration" promptText="e.g. 12 weeks" styleClass="text-field-modern" prefHeight="38" prefWidth="140"/></VBox>
-                <VBox spacing="4"><Label text="Fee (LKR)" styleClass="form-label"/><TextField fx:id="txtFee" promptText="e.g. 80000.00" styleClass="text-field-modern" prefHeight="38" prefWidth="140"/></VBox>
+                <VBox spacing="4"><Label text="Duration" styleClass="form-label"/><TextField fx:id="txtDuration" promptText="e.g. 12 weeks" styleClass="text-field-modern" prefHeight="38" prefWidth="120"/></VBox>
+                <VBox spacing="4"><Label text="Total Sessions" styleClass="form-label"/><TextField fx:id="txtTotalSessions" promptText="e.g. 10" styleClass="text-field-modern" prefHeight="38" prefWidth="100"/></VBox>
+                <VBox spacing="4"><Label text="Fee (LKR)" styleClass="form-label"/><TextField fx:id="txtFee" promptText="e.g. 80000.00" styleClass="text-field-modern" prefHeight="38" prefWidth="120"/></VBox>
             </HBox>
             <VBox spacing="4">
                 <Label text="Description" styleClass="form-label"/>
@@ -35,8 +36,9 @@
                 <TableColumn fx:id="colId" text="Program ID" prefWidth="100"><cellValueFactory><PropertyValueFactory property="programId"/></cellValueFactory></TableColumn>
                 <TableColumn fx:id="colName" text="Name" prefWidth="220"><cellValueFactory><PropertyValueFactory property="name"/></cellValueFactory></TableColumn>
                 <TableColumn fx:id="colDuration" text="Duration" prefWidth="110"><cellValueFactory><PropertyValueFactory property="duration"/></cellValueFactory></TableColumn>
+                <TableColumn fx:id="colTotalSessions" text="Total Sessions" prefWidth="110"><cellValueFactory><PropertyValueFactory property="totalSessions"/></cellValueFactory></TableColumn>
                 <TableColumn fx:id="colFee" text="Fee (LKR)" prefWidth="120"><cellValueFactory><PropertyValueFactory property="fee"/></cellValueFactory></TableColumn>
-                <TableColumn fx:id="colDescription" text="Description" prefWidth="220"><cellValueFactory><PropertyValueFactory property="description"/></cellValueFactory></TableColumn>
+                <TableColumn fx:id="colDescription" text="Description" prefWidth="180"><cellValueFactory><PropertyValueFactory property="description"/></cellValueFactory></TableColumn>
             </columns>
         </TableView>
     </VBox>

@@ -6,6 +6,8 @@ public class PaymentDTO {
     private String paymentDate;
     private String paymentMethod;
     private String status;
+    private int coveredSessions;
+    private double dueBalance;
     private String patientId;
     private String patientName;
     private String programId;
@@ -14,12 +16,14 @@ public class PaymentDTO {
     public PaymentDTO() {
     }
 
-    public PaymentDTO(String paymentId, double amount, String paymentDate, String paymentMethod, String status, String patientId, String patientName, String programId, String programName) {
+    public PaymentDTO(String paymentId, double amount, String paymentDate, String paymentMethod, String status, int coveredSessions, double dueBalance, String patientId, String patientName, String programId, String programName) {
         this.paymentId = paymentId;
         this.amount = amount;
         this.paymentDate = paymentDate;
         this.paymentMethod = paymentMethod;
         this.status = status;
+        this.coveredSessions = coveredSessions;
+        this.dueBalance = dueBalance;
         this.patientId = patientId;
         this.patientName = patientName;
         this.programId = programId;
@@ -64,6 +68,22 @@ public class PaymentDTO {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public int getCoveredSessions() {
+        return coveredSessions;
+    }
+
+    public void setCoveredSessions(int coveredSessions) {
+        this.coveredSessions = coveredSessions;
+    }
+
+    public double getDueBalance() {
+        return dueBalance;
+    }
+
+    public void setDueBalance(double dueBalance) {
+        this.dueBalance = dueBalance;
     }
 
     public String getPatientId() {
