@@ -18,14 +18,14 @@
 					<textElement textAlignment="Left">
 						<font size="24" isBold="true"/>
 					</textElement>
-					<text><![CDATA[Registration Invoice]]></text>
+					<text><![CDATA[Serenity Mental Health Therapy Center]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="20" y="55" width="300" height="20" forecolor="#E0E7FF" uuid="fb4b00cf-5f40-42db-bb5d-e0bcff27d2c3"/>
 					<textElement textAlignment="Left">
 						<font size="12"/>
 					</textElement>
-					<text><![CDATA[Serenity Mental Health Therapy Center]]></text>
+					<text><![CDATA[Registration Invoice]]></text>
 				</staticText>
 				<textField pattern="EEEEE dd MMMMM yyyy">
 					<reportElement x="395" y="43" width="180" height="20" forecolor="#FFFFFF" uuid="3d1c1a9d-500b-4654-be8c-ffbd848b8981"/>

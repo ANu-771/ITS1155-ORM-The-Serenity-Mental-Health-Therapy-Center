@@ -41,14 +41,14 @@
                     <textElement textAlignment="Center" verticalAlignment="Middle">
                         <font size="26" isBold="true"/>
                     </textElement>
-                    <text><![CDATA[Financial Summary Report]]></text>
+                    <text><![CDATA[Serenity Mental Health Therapy Center]]></text>
                 </staticText>
                 <staticText>
                     <reportElement x="0" y="55" width="555" height="20" forecolor="#E0E7FF"/>
                     <textElement textAlignment="Center" verticalAlignment="Middle">
                         <font size="12"/>
                     </textElement>
-                    <text><![CDATA[Serenity Mental Health Therapy Center]]></text>
+                    <text><![CDATA[Financial Summary Report]]></text>
                 </staticText>
                 <textField pattern="MMMMM dd, yyyy">
                     <reportElement x="380" y="70" width="165" height="15" forecolor="#FFFFFF"/>
