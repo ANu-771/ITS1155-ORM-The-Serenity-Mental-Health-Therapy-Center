@@ -193,7 +193,6 @@ public class SessionManagementController implements Initializable {
             // But to avoid complex math in controller, we'll just set covered sessions to 1
             // for this POS demo unless they pay in full.
 
-            // Let's implement simple proportional covered sessions logic:
             double programFee = currentSummary.getTotalFee();
             int totalSessions = Integer.parseInt(lblPrepaidSessions.getText()); // this is available, but wait, program
                                                                                 // total sessions is better.
