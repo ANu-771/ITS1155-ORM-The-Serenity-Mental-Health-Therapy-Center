@@ -27,7 +27,7 @@ public class LoginController {
     @FXML
     private TextField txtPasswordVisible;
     @FXML
-    private CheckBox chkShowPassword;
+    private ImageView iconEye;
     @FXML
     private Label lblError;
     @FXML
@@ -36,9 +36,9 @@ public class LoginController {
     private final UserBO userBO = BOFactory.getInstance().getBO(BOFactory.BOType.USER);
 
     @FXML
-    public void handleLogin(ActionEvent event) {
+    public void handleLogin(javafx.event.ActionEvent event) {
         String username = txtUsername.getText().trim();
-        String password = chkShowPassword.isSelected()
+        String password = txtPasswordVisible.isVisible()
                 ? txtPasswordVisible.getText().trim()
                 : txtPassword.getText().trim();
 
@@ -75,13 +75,17 @@ public class LoginController {
     }
 
     @FXML
-    public void handleTogglePassword(ActionEvent event) {
-        if (chkShowPassword.isSelected()) {
+    public void handleTogglePassword() {
+        if (!txtPasswordVisible.isVisible()) {
+            // Show password
             txtPasswordVisible.setText(txtPassword.getText());
             txtPassword.setVisible(false);
             txtPassword.setManaged(false);
             txtPasswordVisible.setVisible(true);
             txtPasswordVisible.setManaged(true);
+            
+            // Set Eye icon to visible
+            iconEye.setImage(new javafx.scene.image.Image(getClass().getResource("/lk/ijse/theserenitymentalhealththerapycenter/image/eye.png").toExternalForm()));
             txtPasswordVisible.requestFocus();
         } else {
             // Hide password
@@ -90,6 +94,9 @@ public class LoginController {
             txtPasswordVisible.setManaged(false);
             txtPassword.setVisible(true);
             txtPassword.setManaged(true);
+            
+            // Set Eye-slash icon to hidden
+            iconEye.setImage(new javafx.scene.image.Image(getClass().getResource("/lk/ijse/theserenitymentalhealththerapycenter/image/eye-slash.png").toExternalForm()));
             txtPassword.requestFocus();
         }
     }

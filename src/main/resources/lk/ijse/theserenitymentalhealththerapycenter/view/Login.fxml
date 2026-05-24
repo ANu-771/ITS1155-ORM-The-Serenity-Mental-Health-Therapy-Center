@@ -35,11 +35,21 @@
             <!-- Password with toggle -->
             <VBox spacing="5">
                 <Label styleClass="form-label" text="Password" />
-                <StackPane>
+                <StackPane alignment="CENTER_RIGHT">
                     <PasswordField fx:id="txtPassword" prefHeight="40" promptText="Enter your password" styleClass="password-field-modern" />
                     <TextField fx:id="txtPasswordVisible" prefHeight="40" promptText="Enter your password" styleClass="text-field-modern" visible="false" managed="false" />
+                    <ImageView fx:id="iconEye" fitHeight="24" fitWidth="24" onMouseClicked="#handleTogglePassword" preserveRatio="true">
+                        <image>
+                            <Image url="@../image/eye-slash.png" />
+                        </image>
+                        <StackPane.margin>
+                            <Insets right="10.0" />
+                        </StackPane.margin>
+                        <cursor>
+                            <javafx.scene.Cursor fx:constant="HAND" />
+                        </cursor>
+                    </ImageView>
                 </StackPane>
-                <CheckBox fx:id="chkShowPassword" text="Show Password" onAction="#handleTogglePassword" styleClass="show-password-check" />
             </VBox>
 
             <!-- Forgot Password -->
