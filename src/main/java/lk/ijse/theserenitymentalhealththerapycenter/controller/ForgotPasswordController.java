@@ -78,7 +78,6 @@ public class ForgotPasswordController {
             lblStatus.setVisible(true);
             btnSendOTP.setDisable(true);
 
-            // Send asynchronously to avoid blocking FX UI thread
             new Thread(() -> {
                 try {
                     MailUtil.sendOTP(email, generatedOTP);
