@@ -22,4 +22,8 @@ public interface UserBO {
     String getNextId() throws Exception;
 
     boolean changeCredentials(String userId, String currentPassword, String newUsername, String newPassword) throws Exception;
+
+    UserDTO getUserByUsernameOrEmail(String identifier) throws Exception;
+
+    boolean resetPassword(String usernameOrEmail, String newPassword) throws Exception;
 }

@@ -130,4 +130,16 @@ public class UserDAOImpl implements UserDAO {
             session.close();
         }
     }
+
+    @Override
+    public User findByUsernameOrEmail(String identifier) throws Exception {
+        Session session = FactoryConfiguration.getInstance().getSession();
+        try {
+            Query<User> query = session.createQuery("FROM User WHERE username = :id OR email = :id", User.class);
+            query.setParameter("id", identifier);
+            return query.uniqueResult();
+        } finally {
+            session.close();
+        }
+    }
 }

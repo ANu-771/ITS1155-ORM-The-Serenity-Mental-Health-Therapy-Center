@@ -115,6 +115,20 @@ public class LoginController {
         }
     }
 
+    @FXML
+    public void handleForgotPassword(ActionEvent event) {
+        try {
+            Stage stage = (Stage) txtUsername.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(App.class.getResource("view/ForgotPassword.fxml"));
+            Parent root = loader.load();
+            stage.getScene().setRoot(root);
+            stage.setTitle("Serenity - Forgot Password");
+        } catch (Exception e) {
+            showError("Could not load Forgot Password page.");
+            e.printStackTrace();
+        }
+    }
+
     private void showError(String message) {
         lblError.setText(message);
         lblError.setVisible(true);

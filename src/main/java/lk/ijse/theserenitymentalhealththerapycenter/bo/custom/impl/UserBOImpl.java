@@ -41,7 +41,8 @@ public class UserBOImpl implements UserBO {
                 userDTO.getId(),
                 userDTO.getUsername(),
                 hashedPassword,
-                userDTO.getRole()
+                userDTO.getRole(),
+                userDTO.getEmail()
         );
         return userDAO.save(user);
     }
@@ -69,7 +70,8 @@ public class UserBOImpl implements UserBO {
                 userDTO.getId(),
                 userDTO.getUsername(),
                 password,
-                userDTO.getRole()
+                userDTO.getRole(),
+                userDTO.getEmail()
         );
         return userDAO.update(user);
     }
@@ -83,7 +85,7 @@ public class UserBOImpl implements UserBO {
     public UserDTO searchUser(String id) throws Exception {
         User user = userDAO.search(id);
         if (user == null) return null;
-        return new UserDTO(user.getId(), user.getUsername(), "", user.getRole());
+        return new UserDTO(user.getId(), user.getUsername(), "", user.getRole(), user.getEmail());
     }
 
     @Override
@@ -91,7 +93,7 @@ public class UserBOImpl implements UserBO {
         List<User> users = userDAO.getAll();
         List<UserDTO> userDTOs = new ArrayList<>();
         for (User user : users) {
-            userDTOs.add(new UserDTO(user.getId(), user.getUsername(), "", user.getRole()));
+            userDTOs.add(new UserDTO(user.getId(), user.getUsername(), "", user.getRole(), user.getEmail()));
         }
         return userDTOs;
     }
@@ -114,7 +116,7 @@ public class UserBOImpl implements UserBO {
             throw new AuthenticationException("Invalid username or password");
         }
 
-        return new UserDTO(user.getId(), user.getUsername(), "", user.getRole());
+        return new UserDTO(user.getId(), user.getUsername(), "", user.getRole(), user.getEmail());
     }
 
     @Override
@@ -122,7 +124,7 @@ public class UserBOImpl implements UserBO {
         long count = userDAO.getUserCount();
         if (count == 0) {
             String hashedPassword = BCrypt.hashpw("admin123", BCrypt.gensalt());
-            User admin = new User("U001", "admin", hashedPassword, "Admin");
+            User admin = new User("U001", "admin", hashedPassword, "Admin", "admin@serenity.com");
             userDAO.save(admin);
             System.out.println("Default admin account created (username: admin, password: admin123)");
         }
@@ -157,6 +159,23 @@ public class UserBOImpl implements UserBO {
             user.setPassword(BCrypt.hashpw(newPassword, BCrypt.gensalt()));
         }
 
+        return userDAO.update(user);
+    }
+
+    @Override
+    public UserDTO getUserByUsernameOrEmail(String identifier) throws Exception {
+        User user = userDAO.findByUsernameOrEmail(identifier);
+        if (user == null) return null;
+        return new UserDTO(user.getId(), user.getUsername(), "", user.getRole(), user.getEmail());
+    }
+
+    @Override
+    public boolean resetPassword(String usernameOrEmail, String newPassword) throws Exception {
+        User user = userDAO.findByUsernameOrEmail(usernameOrEmail);
+        if (user == null) {
+            return false;
+        }
+        user.setPassword(BCrypt.hashpw(newPassword, BCrypt.gensalt()));
         return userDAO.update(user);
     }
 }

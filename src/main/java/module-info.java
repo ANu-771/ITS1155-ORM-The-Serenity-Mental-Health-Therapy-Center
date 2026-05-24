@@ -8,6 +8,7 @@ module lk.ijse.theserenitymentalhealththerapycenter {
     requires java.sql;
     requires jasperreports;
     requires java.desktop;
+    requires jakarta.mail;
 
     opens lk.ijse.theserenitymentalhealththerapycenter to javafx.fxml;
     opens lk.ijse.theserenitymentalhealththerapycenter.entity to org.hibernate.orm.core;
