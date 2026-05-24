@@ -54,7 +54,7 @@
 
             <!-- Forgot Password -->
             <HBox alignment="CENTER_RIGHT">
-                <Hyperlink styleClass="forgot-password-link" text="Forgot Password?" />
+                <Hyperlink onAction="#handleForgotPassword" styleClass="forgot-password-link" text="Forgot Password?" />
             </HBox>
 
             <!-- Error Message -->

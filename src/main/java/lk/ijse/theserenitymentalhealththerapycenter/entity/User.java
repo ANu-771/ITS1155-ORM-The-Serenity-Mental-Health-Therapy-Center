@@ -19,6 +19,9 @@ public class User {
     @Column(nullable = false, length = 20)
     private String role;
 
+    @Column(length = 100, unique = true, nullable = true)
+    private String email;
+
     public User() {
     }
 
@@ -27,6 +30,14 @@ public class User {
         this.username = username;
         this.password = password;
         this.role = role;
+    }
+
+    public User(String id, String username, String password, String role, String email) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.role = role;
+        this.email = email;
     }
 
     public String getId() {
@@ -59,5 +70,13 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

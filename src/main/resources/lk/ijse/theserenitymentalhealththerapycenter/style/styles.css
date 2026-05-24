@@ -523,3 +523,46 @@
     -fx-font-size: 13px;
     -fx-text-fill: #4A148C;
 }
+
+/* ===== FORGOT PASSWORD STYLES ===== */
+.btn-green-static {
+    -fx-background-color: white;
+    -fx-border-color: #2e7d32;
+    -fx-border-width: 1.5;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-text-fill: #2e7d32;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.btn-green-static:hover {
+    -fx-background-color: #00E676;
+    -fx-border-color: #00C853;
+    -fx-text-fill: white;
+}
+
+.btn-green-static:pressed {
+    -fx-background-color: #00C853;
+}
+
+.forgot-card-title {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2e7d32;
+}
+
+.forgot-card-subtitle {
+    -fx-font-size: 14px;
+    -fx-text-fill: #555555;
+}
+
+.step-label {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #2e7d32;
+    -fx-background-radius: 4;
+    -fx-padding: 4 8;
+}

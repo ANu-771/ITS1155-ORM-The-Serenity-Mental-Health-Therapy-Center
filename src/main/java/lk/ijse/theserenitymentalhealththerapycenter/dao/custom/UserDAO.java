@@ -11,4 +11,6 @@ public interface UserDAO extends CrudDAO<User, String> {
     long getUserCount() throws Exception;
 
     String getLastId() throws Exception;
+
+    User findByUsernameOrEmail(String identifier) throws Exception;
 }
