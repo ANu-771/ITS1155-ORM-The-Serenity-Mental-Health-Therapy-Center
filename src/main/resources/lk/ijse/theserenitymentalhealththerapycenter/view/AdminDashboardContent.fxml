@@ -65,10 +65,10 @@
             <Label styleClass="card-header" text="Total Revenue Growth (Last 6 Months)" />
             <javafx.scene.chart.AreaChart fx:id="revenueChart" VBox.vgrow="ALWAYS" legendVisible="false">
                 <xAxis>
-                    <javafx.scene.chart.CategoryAxis label="Months" side="BOTTOM" />
+                    <javafx.scene.chart.CategoryAxis fx:id="xAxis" label="Months" side="BOTTOM" />
                 </xAxis>
                 <yAxis>
-                    <javafx.scene.chart.NumberAxis label="Revenue" side="LEFT" />
+                    <javafx.scene.chart.NumberAxis fx:id="yAxis" label="Revenue (LKR)" side="LEFT" />
                 </yAxis>
             </javafx.scene.chart.AreaChart>
         </VBox>

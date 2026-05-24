@@ -566,3 +566,27 @@
     -fx-background-radius: 4;
     -fx-padding: 4 8;
 }
+
+/* ===== PROFESSIONAL CHART STYLES ===== */
+.chart {
+    -fx-padding: 10px;
+}
+
+.axis-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #34495e;
+}
+
+.axis {
+    -fx-font-size: 12px;
+    -fx-tick-label-fill: #7f8c8d;
+}
+
+.chart-horizontal-grid-lines {
+    -fx-stroke: #ecf0f1;
+}
+
+.chart-vertical-grid-lines {
+    -fx-stroke: transparent;
+}

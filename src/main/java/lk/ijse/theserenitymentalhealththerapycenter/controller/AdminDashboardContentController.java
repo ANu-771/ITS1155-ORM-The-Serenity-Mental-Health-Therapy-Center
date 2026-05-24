@@ -28,6 +28,10 @@ public class AdminDashboardContentController implements Initializable {
     private Label lblTotalRevenue;
     @FXML
     private javafx.scene.chart.AreaChart<String, Number> revenueChart;
+    @FXML
+    private javafx.scene.chart.CategoryAxis xAxis;
+    @FXML
+    private javafx.scene.chart.NumberAxis yAxis;
 
     private final PatientBO patientBO = BOFactory.getInstance().getBO(BOFactory.BOType.PATIENT);
     private final TherapistBO therapistBO = BOFactory.getInstance().getBO(BOFactory.BOType.THERAPIST);
@@ -36,6 +40,9 @@ public class AdminDashboardContentController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        if (xAxis != null) xAxis.setLabel("Months");
+        if (yAxis != null) yAxis.setLabel("Revenue (LKR)");
+
         loadStats();
         loadChart();
     }

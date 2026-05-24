@@ -26,6 +26,10 @@ public class ReceptionistDashboardContentController implements Initializable {
     private Label lblNewPatients;
     @FXML
     private javafx.scene.chart.BarChart<String, Number> incomeChart;
+    @FXML
+    private javafx.scene.chart.CategoryAxis xAxis;
+    @FXML
+    private javafx.scene.chart.NumberAxis yAxis;
 
     private final TherapySessionBO sessionBO = BOFactory.getInstance().getBO(BOFactory.BOType.THERAPY_SESSION);
     private final PaymentBO paymentBO = BOFactory.getInstance().getBO(BOFactory.BOType.PAYMENT);
@@ -33,6 +37,9 @@ public class ReceptionistDashboardContentController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        if (xAxis != null) xAxis.setLabel("Dates");
+        if (yAxis != null) yAxis.setLabel("Income (Rs.)");
+        
         loadStats();
         loadChart();
     }
