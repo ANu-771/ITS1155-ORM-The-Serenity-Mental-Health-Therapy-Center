@@ -30,14 +30,14 @@
 
             <VBox spacing="5">
                 <Label styleClass="form-label" text="Username" />
-                <TextField fx:id="txtUsername" prefHeight="48" promptText="Enter your username" styleClass="text-field-modern" />
+                <TextField fx:id="txtUsername" promptText="Enter your username" styleClass="text-field-modern" />
             </VBox>
 
             <VBox spacing="5">
                 <Label styleClass="form-label" text="Password" />
                 <StackPane alignment="CENTER_RIGHT">
-                    <PasswordField fx:id="txtPassword" prefHeight="48" promptText="Enter your password" styleClass="password-field-modern" />
-                    <TextField fx:id="txtPasswordVisible" managed="false" prefHeight="48" promptText="Enter your password" styleClass="text-field-modern" visible="false" />
+                    <PasswordField fx:id="txtPassword" promptText="Enter your password" styleClass="password-field-modern" />
+                    <TextField fx:id="txtPasswordVisible" managed="false" promptText="Enter your password" styleClass="text-field-modern" visible="false" />
                     <ImageView fx:id="iconEye" fitHeight="28" fitWidth="28" onMouseClicked="#handleTogglePassword" preserveRatio="true">
                         <image>
                             <Image url="@../image/eye-slash.png" />
@@ -61,7 +61,7 @@
             <Label fx:id="lblError" styleClass="error-label" visible="false" wrapText="true" />
 
             <!-- Login Button -->
-            <Button fx:id="btnLogin" onAction="#handleLogin" prefHeight="48" maxWidth="1.7976931348623157E308" styleClass="btn-cyan" text="Sign In" />
+            <Button fx:id="btnLogin" onAction="#handleLogin" maxWidth="1.7976931348623157E308" styleClass="btn-cyan" text="Sign In" />
 
             <!-- Sign Up Section -->
             <HBox alignment="CENTER" spacing="5">

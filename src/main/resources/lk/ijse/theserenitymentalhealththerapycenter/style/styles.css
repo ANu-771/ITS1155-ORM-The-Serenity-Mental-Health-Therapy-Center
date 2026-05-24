@@ -42,13 +42,13 @@
 }
 
 .login-card-title {
-    -fx-font-size: 30px;
+    -fx-font-size: 22px;
     -fx-font-weight: bold;
     -fx-text-fill: #1a1a2e;
 }
 
 .login-card-subtitle {
-    -fx-font-size: 15px;
+    -fx-font-size: 13px;
     -fx-text-fill: #78909c;
 }
 
@@ -70,10 +70,10 @@
     -fx-background-color: #f8f9fa;
     -fx-border-color: #dee2e6;
     -fx-border-width: 1;
-    -fx-border-radius: 8;
-    -fx-background-radius: 8;
-    -fx-padding: 12 16;
-    -fx-font-size: 15px;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 8 12;
+    -fx-font-size: 13px;
     -fx-prompt-text-fill: #adb5bd;
 }
 
@@ -107,10 +107,10 @@
 .btn-cyan {
     -fx-background-color: linear-gradient(to right, #0096c7, #90e0ef);
     -fx-text-fill: white;
-    -fx-font-size: 16px;
+    -fx-font-size: 14px;
     -fx-font-weight: bold;
-    -fx-padding: 14 44;
-    -fx-background-radius: 8;
+    -fx-padding: 10 32;
+    -fx-background-radius: 6;
     -fx-cursor: hand;
     -fx-effect: dropshadow(gaussian, rgba(0, 180, 216, 0.3), 6, 0, 0, 2);
 }
@@ -336,7 +336,7 @@
 
 /* ===== FORM LABELS ===== */
 .form-label {
-    -fx-font-size: 14px;
+    -fx-font-size: 13px;
     -fx-font-weight: bold;
     -fx-text-fill: #495057;
     -fx-padding: 0 0 2 2;
@@ -527,34 +527,34 @@
 /* ===== FORGOT PASSWORD STYLES ===== */
 .btn-green-static {
     -fx-background-color: white;
-    -fx-border-color: #2e7d32;
+    -fx-border-color: #0096c7;
     -fx-border-width: 1.5;
-    -fx-border-radius: 8;
-    -fx-background-radius: 8;
-    -fx-text-fill: #2e7d32;
-    -fx-font-size: 15px;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-text-fill: #0096c7;
+    -fx-font-size: 14px;
     -fx-font-weight: bold;
     -fx-cursor: hand;
 }
 
 .btn-green-static:hover {
-    -fx-background-color: #00E676;
-    -fx-border-color: #00C853;
+    -fx-background-color: #64dfdf;
+    -fx-border-color: #48cae4;
     -fx-text-fill: white;
 }
 
 .btn-green-static:pressed {
-    -fx-background-color: #00C853;
+    -fx-background-color: #48cae4;
 }
 
 .forgot-card-title {
-    -fx-font-size: 26px;
+    -fx-font-size: 22px;
     -fx-font-weight: bold;
-    -fx-text-fill: #2e7d32;
+    -fx-text-fill: #0077b6;
 }
 
 .forgot-card-subtitle {
-    -fx-font-size: 14px;
+    -fx-font-size: 13px;
     -fx-text-fill: #555555;
 }
 
@@ -562,7 +562,7 @@
     -fx-font-size: 13px;
     -fx-font-weight: bold;
     -fx-text-fill: #ffffff;
-    -fx-background-color: #2e7d32;
+    -fx-background-color: #0096c7;
     -fx-background-radius: 4;
     -fx-padding: 4 8;
 }

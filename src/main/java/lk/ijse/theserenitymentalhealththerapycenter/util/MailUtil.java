@@ -11,8 +11,8 @@ public class MailUtil {
     private static final String SMTP_PORT = "587";
     
     // NOTE: Update these configuration placeholders with valid Gmail credentials/App Password.
-    private static final String SENDER_EMAIL = "your-email@gmail.com";
-    private static final String SENDER_PASSWORD = "your-app-password";
+    private static final String SENDER_EMAIL = "kavindusasanka11@gmail.com";
+    private static final String SENDER_PASSWORD = "qporsopqlowppaid";
 
     public static void sendOTP(String recipientEmail, String otp) throws MessagingException {
         Properties properties = new Properties();

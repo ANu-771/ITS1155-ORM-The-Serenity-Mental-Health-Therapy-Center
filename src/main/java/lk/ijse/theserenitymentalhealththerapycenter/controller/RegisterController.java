@@ -21,6 +21,8 @@ public class RegisterController implements Initializable {
     @FXML
     private TextField txtUsername;
     @FXML
+    private TextField txtEmail;
+    @FXML
     private PasswordField txtPassword;
     @FXML
     private ComboBox<String> cmbRole;
@@ -41,17 +43,26 @@ public class RegisterController implements Initializable {
         String password = txtPassword.getText();
         String role = cmbRole.getValue();
 
+        String email = txtEmail.getText();
+
         if (username == null || username.trim().isEmpty() ||
+                email == null || email.trim().isEmpty() ||
                 password == null || password.trim().isEmpty() ||
                 role == null || role.trim().isEmpty()) {
             showError("Please fill in all fields.");
             return;
         }
 
+        // Validate email format
+        if (!lk.ijse.theserenitymentalhealththerapycenter.util.ValidationUtil.isValidEmail(email.trim())) {
+            showError("Please enter a valid email address.");
+            return;
+        }
+
         try {
 
             String newUserId = userBO.getNextId();
-            UserDTO newUser = new UserDTO(newUserId, username.trim(), password, role);
+            UserDTO newUser = new UserDTO(newUserId, username.trim(), password, role, email.trim());
             userBO.saveUser(newUser);
             new Alert(Alert.AlertType.INFORMATION, "Registration successful! You can now log in.").showAndWait();
             handleBackToLogin(event);

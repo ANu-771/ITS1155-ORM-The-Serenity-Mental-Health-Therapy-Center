@@ -21,7 +21,7 @@ import java.util.ResourceBundle;
 public class UserManagementController implements Initializable {
 
     @FXML
-    private TextField txtId, txtUsername, txtSearch;
+    private TextField txtId, txtUsername, txtSearch, txtEmail;
     @FXML
     private PasswordField txtPassword;
     @FXML
@@ -42,8 +42,9 @@ public class UserManagementController implements Initializable {
                 txtId.setText(newVal.getId());
                 txtUsername.setText(newVal.getUsername());
                 cmbRole.setValue(newVal.getRole());
+                txtEmail.setText(newVal.getEmail() != null ? newVal.getEmail() : "");
                 txtPassword.clear();
-                ValidationUtil.resetStyles(txtId, txtUsername);
+                ValidationUtil.resetStyles(txtId, txtUsername, txtEmail);
             }
         });
     }
@@ -58,10 +59,11 @@ public class UserManagementController implements Initializable {
 
     @FXML
     void handleSave(ActionEvent event) {
-        ValidationUtil.resetStyles(txtId, txtUsername);
+        ValidationUtil.resetStyles(txtId, txtUsername, txtEmail);
 
         boolean allFilled = true;
         if (!ValidationUtil.validateRequired(txtUsername)) allFilled = false;
+        if (!ValidationUtil.validateEmail(txtEmail)) allFilled = false;
         if (!ValidationUtil.validateRequired(txtPassword)) allFilled = false;
         if (!ValidationUtil.validateRequired(cmbRole)) allFilled = false;
 
@@ -71,7 +73,7 @@ public class UserManagementController implements Initializable {
         }
 
         try {
-            UserDTO dto = new UserDTO(txtId.getText().trim(), txtUsername.getText().trim(), txtPassword.getText(), cmbRole.getValue());
+            UserDTO dto = new UserDTO(txtId.getText().trim(), txtUsername.getText().trim(), txtPassword.getText(), cmbRole.getValue(), txtEmail.getText().trim());
             userBO.saveUser(dto);
             new Alert(Alert.AlertType.INFORMATION, "User saved successfully!").showAndWait();
             loadTable();
@@ -86,11 +88,12 @@ public class UserManagementController implements Initializable {
 
     @FXML
     void handleUpdate(ActionEvent event) {
-        ValidationUtil.resetStyles(txtId, txtUsername);
+        ValidationUtil.resetStyles(txtId, txtUsername, txtEmail);
 
         boolean allFilled = true;
         if (!ValidationUtil.validateRequired(txtId)) allFilled = false;
         if (!ValidationUtil.validateRequired(txtUsername)) allFilled = false;
+        if (!ValidationUtil.validateEmail(txtEmail)) allFilled = false;
         if (!ValidationUtil.validateRequired(cmbRole)) allFilled = false;
 
         if (!allFilled) {
@@ -100,7 +103,7 @@ public class UserManagementController implements Initializable {
 
 
         try {
-            UserDTO dto = new UserDTO(txtId.getText().trim(), txtUsername.getText().trim(), txtPassword.getText(), cmbRole.getValue());
+            UserDTO dto = new UserDTO(txtId.getText().trim(), txtUsername.getText().trim(), txtPassword.getText(), cmbRole.getValue(), txtEmail.getText().trim());
             userBO.updateUser(dto);
             new Alert(Alert.AlertType.INFORMATION, "User updated successfully!").showAndWait();
             loadTable();
@@ -135,10 +138,11 @@ public class UserManagementController implements Initializable {
     @FXML
     void handleClear(ActionEvent event) {
         txtUsername.clear();
+        txtEmail.clear();
         txtPassword.clear();
         cmbRole.setValue(null);
         if (txtSearch != null) txtSearch.clear();
-        ValidationUtil.resetStyles(txtId, txtUsername);
+        ValidationUtil.resetStyles(txtId, txtUsername, txtEmail);
         generateNextId();
     }
 
@@ -152,7 +156,7 @@ public class UserManagementController implements Initializable {
         try {
             UserDTO user = userBO.searchUser(id);
             ObservableList<UserTM> list = FXCollections.observableArrayList();
-            if (user != null) list.add(new UserTM(user.getId(), user.getUsername(), user.getRole()));
+            if (user != null) list.add(new UserTM(user.getId(), user.getUsername(), user.getRole(), user.getEmail()));
             tblUsers.setItems(list);
         } catch (Exception e) {
             e.printStackTrace();
@@ -163,7 +167,7 @@ public class UserManagementController implements Initializable {
         try {
             List<UserDTO> users = userBO.getAllUsers();
             ObservableList<UserTM> list = FXCollections.observableArrayList();
-            for (UserDTO u : users) list.add(new UserTM(u.getId(), u.getUsername(), u.getRole()));
+            for (UserDTO u : users) list.add(new UserTM(u.getId(), u.getUsername(), u.getRole(), u.getEmail()));
             tblUsers.setItems(list);
         } catch (Exception e) {
             e.printStackTrace();

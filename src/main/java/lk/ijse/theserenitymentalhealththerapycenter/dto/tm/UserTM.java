@@ -4,6 +4,7 @@ public class UserTM {
     private String id;
     private String username;
     private String role;
+    private String email;
 
     public UserTM() {
     }
@@ -12,6 +13,13 @@ public class UserTM {
         this.id = id;
         this.username = username;
         this.role = role;
+    }
+
+    public UserTM(String id, String username, String role, String email) {
+        this.id = id;
+        this.username = username;
+        this.role = role;
+        this.email = email;
     }
 
     public String getId() {
@@ -36,5 +44,13 @@ public class UserTM {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
