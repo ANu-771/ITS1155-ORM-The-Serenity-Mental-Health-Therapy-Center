@@ -15,7 +15,6 @@
 
 <HBox prefHeight="550.0" prefWidth="900.0" styleClass="login-container" stylesheets="@../style/styles.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.theserenitymentalhealththerapycenter.controller.RegisterController">
 
-    <!-- ===== LEFT SIDE — Register Form ===== -->
     <VBox alignment="CENTER" styleClass="login-left-panel" HBox.hgrow="ALWAYS">
         <padding><Insets bottom="50" left="60" right="60" top="50" /></padding>
 
